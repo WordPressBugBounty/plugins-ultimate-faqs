@@ -1,0 +1,212 @@
+#ewd-ufaq-ai-faqs-open {
+	margin: 10px;
+}
+
+#ewd-ufaq-ai-faqs-modal,
+#ewd-ufaq-ai-faqs-modal * {
+	box-sizing: border-box;
+}
+#ewd-ufaq-ai-faqs-modal {
+	position: fixed;
+	z-index: 9999;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	max-width: none !important;
+	top: 0;
+	left: 0;
+	background: rgba(0,0,0,0.8);
+}
+.ewd-ufaq-ai-faqs-modal-inside {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	background-color: #fff;
+	width: 80%;
+	max-width: 900px;
+	max-height: 80vh;
+	overflow-y: auto;
+	padding: 20px 24px;
+	border-radius: 14px;
+}
+.ewd-ufaq-ai-faqs-modal-close {
+	position: absolute;
+	top: 16px;
+	right: 16px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 32px;
+	height: 32px;
+	border-radius: 8px;
+	background: #f3f3f3;
+	cursor: pointer;
+}
+.ewd-ufaq-ai-faqs-modal-close-inside {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: #000;
+}
+.ewd-ufaq-ai-faqs-modal-inside h4 {
+	margin: 0;
+}
+.ewd-ufaq-ai-faqs-modal-warning {
+	display: flex;
+	align-items: center;
+	font-size: 11px;
+	font-style: italic;
+	margin: 20px 0 14px;
+}
+.ewd-ufaq-ai-faqs-modal-warning span {
+	margin-right: 4px;
+	font-size: 14px;
+	width: 14px;
+	height: 14px;
+}
+.ewd-ufaq-ai-faqs-field {
+	margin: 14px 0;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	width: 100%;
+}
+.ewd-ufaq-ai-faqs-field label {
+	width: 136px;
+}
+.ewd-ufaq-ai-faqs-field input,
+.ewd-ufaq-ai-faqs-field select {
+	width: calc(100% - 376px);
+	max-width: 360px;
+	border: 2px solid #ccc;
+	border-radius: 5px;
+	display: flex;
+	align-items: center;
+}
+.ewd-ufaq-ai-faqs-field input {
+	height: 36px;
+	line-height: 1.5;
+}
+.ewd-ufaq-ai-no-premium-explanation {
+	width: 240px;
+	margin-left: 16px;
+	margin-top: 0;
+}
+.ewd-ufaq-ai-faqs-button {
+	padding: 9px 32px;
+	background: #6026B4;
+	color:  #fff;
+	font-size: 13px;
+	font-weight: normal;
+	text-decoration: none;
+	border: none;
+	border-radius: 10px;
+	cursor: pointer;
+	transition: background .35s;
+}
+.ewd-ufaq-ai-faqs-button:hover {
+	background: #7333cb;
+}
+
+#ewd-ufaq-ai-faqs-results {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+#ewd-ufaq-ai-faqs-created-faqs {
+	margin-bottom: 8px;
+}
+.ewd-ufaq-ai-faq {
+	margin: 14px 0;
+	display: flex;
+	width: 100%;
+}
+.ewd-ufaq-ai-faq-title-and-content {
+	display: flex;
+	flex-direction: row;
+}
+.ewd-ufaq-ai-faq input,
+.ewd-ufaq-ai-faq textarea {
+	border: 2px solid #ccc;
+	border-radius: 5px;
+	width: 240px;
+	height: 36px;
+	margin: 0 4px 0 0;
+	display: flex;
+	align-items: center;
+	line-height: 1.5;
+}
+.ewd-ufaq-ai-faq input[type="checkbox"] {
+	width: 36px;
+	justify-content: center;
+}
+.ewd-ufaq-ai-faq textarea {
+	height: auto;
+	min-height: 120px;
+}
+#ewd-ufaq-ai-faqs-back-to-params {
+	align-self: flex-start;
+	padding: 9px 16px;
+	margin: 12px 0 14px;
+	background: #f3f3f3;
+	font-size: 13px;
+	font-weight: normal;
+	text-decoration: none;
+	border: none;
+	border-radius: 10px;
+	cursor: pointer;
+	transition: background .35s;
+}
+#ewd-ufaq-ai-faqs-back-to-params:hover {
+	background: #f3f3f3;
+}
+#ewd-ufaq-ai-faqs-back-to-params span {
+	margin-right: 4px;
+}
+
+@media screen and (max-width: 1200px) {
+	.ewd-ufaq-ai-faqs-field input,
+	.ewd-ufaq-ai-faqs-field select {
+		width: calc(100% - 136px);
+	}
+		.ewd-ufaq-ai-no-premium-explanation {
+		width: calc(100% - 136px);
+		margin-left: 136px;
+		margin-top: 4px;
+	}
+}
+
+@media screen and (max-width: 600px) {
+	.ewd-ufaq-ai-faqs-modal-inside {
+		padding: 16px;
+	}
+		.ewd-ufaq-ai-faqs-field label {
+		width: 96px;
+	}
+	.ewd-ufaq-ai-faqs-field input,
+	.ewd-ufaq-ai-faqs-field select {
+		width: calc(100% - 96px);
+	}
+	.ewd-ufaq-ai-no-premium-explanation {
+		width: 100%;
+		margin-left: 0;
+	}
+	.ewd-ufaq-ai-faq-title-and-content {
+		flex-direction: column;
+	}	
+	.ewd-ufaq-ai-faq input,
+	.ewd-ufaq-ai-faq textarea {
+		width: 180px;
+	}
+	.ewd-ufaq-ai-faq input {
+		margin-bottom: 2px;
+		min-height: auto;
+	}
+}
+
+#ewd-ufaq-ai-faqs-modal.ewd-ufaq-hidden,
+#ewd-ufaq-ai-faqs-results.ewd-ufaq-hidden {
+	display: none;
+}
