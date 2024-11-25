@@ -2,8 +2,8 @@
 Contributors: rustaurius
 Tags: faq, faqs, woocommerce faq, faq block, faq shortcode, accordion, documentation, knowledge base, mobile faq, responsive faq
 Requires at least: 6.0
-Tested up to: 6.6
-Stable tag: 2.3.0
+Tested up to: 6.7
+Stable tag: 2.3.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -221,6 +221,10 @@ For more info on installing and activating the plugin, and on the walk-through, 
 - [Our Support Center](https://www.etoilewebdesign.com/support-center/)
 
 == Changelog ==
+
+= 2.3.1 (2024-11-25) =
+- Small update to AI-generated FAQs for increased compatibility with ChatGPT.
+- Tested with WordPress 6.7.
 
 = 2.3.0 (2024-07-25) =
 - Introducing AI-generated FAQs. Instead of manually creating all your FAQs, you can now let the plugin automatically create them for you using Open AI integration. Read more [here](https://doc.etoilewebdesign.com/plugins/ultimate-faq/user/faqs/ai).

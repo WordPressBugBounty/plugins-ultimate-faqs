@@ -237,7 +237,7 @@ class ewdufaqAIAssist {
 
 		foreach ( $posts as $post ) {
 
-			$content .= wp_strip_all_tags( $post->post_content );
+			$content .= wp_strip_all_tags( $post->post_content ) . ' ';
 		}
 
 		$categories = '';
@@ -265,7 +265,7 @@ class ewdufaqAIAssist {
 		);
 
 		$args = array(
-			'body'		=> array( $content ),
+			'body'		=> $content,
 			'timeout'	=> 30,
 		);
 
