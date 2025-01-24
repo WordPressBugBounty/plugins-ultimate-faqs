@@ -446,7 +446,7 @@ class ewdufaqViewFAQs extends ewdufaqView {
 				}
 				elseif ( $this->include_category_children ) { 
 				
-					$this->check_child_faq_categories( $category, $faq_view->faq, get_term_children( $category->term_id, EWD_UFAQ_FAQ_CATEGORY_TAXONOMY ) );
+					$this->check_child_faq_categories( $category, $faq_view, get_term_children( $category->term_id, EWD_UFAQ_FAQ_CATEGORY_TAXONOMY ) );
 				}
 			}
 		}
