@@ -2,8 +2,8 @@
 Contributors: rustaurius
 Tags: faq, faqs, woocommerce faq, faq block, faq shortcode, accordion, documentation, knowledge base, mobile faq, responsive faq
 Requires at least: 6.0
-Tested up to: 6.7
-Stable tag: 2.3.2
+Tested up to: 6.8
+Stable tag: 2.3.3
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -221,6 +221,9 @@ For more info on installing and activating the plugin, and on the walk-through, 
 - [Our Support Center](https://www.etoilewebdesign.com/support-center/)
 
 == Changelog ==
+
+= 2.3.3 (2025-04-29) =
+- Tested with WordPress 6.8.
 
 = 2.3.2 (2025-01-24) =
 - Fixed error when using the include_category_children shortcode attribute.

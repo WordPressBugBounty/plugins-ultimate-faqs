@@ -3,7 +3,7 @@
  * Plugin Name: Ultimate FAQ Accordion Plugin
  * Plugin URI: https://www.etoilewebdesign.com/plugins/ultimate-faq/
  * Description: Full-featured FAQ and accordion plugin with advanced search, simple UI and easy-to-use Gutenberg blocks and shortcodes.
- * Version: 2.3.2
+ * Version: 2.3.3
  * Author: Etoile Web Design
  * Author URI: https://www.etoilewebdesign.com/
  * Text Domain: ultimate-faqs
@@ -11,7 +11,7 @@
  * Requires at least: 6.0
  * Requires PHP: 7.4
  * WC requires at least: 7.1
- * WC tested up to: 9.6
+ * WC tested up to: 9.8
  */
 
 if ( ! defined( 'ABSPATH' ) )
@@ -62,7 +62,7 @@ class ewdufaqInit {
 		define( 'EWD_UFAQ_PLUGIN_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
 		define( 'EWD_UFAQ_PLUGIN_FNAME', plugin_basename( __FILE__ ) );
 		define( 'EWD_UFAQ_TEMPLATE_DIR', 'ewd-ufaq-templates' );
-		define( 'EWD_UFAQ_VERSION', '2.3.2' );
+		define( 'EWD_UFAQ_VERSION', '2.3.3' );
 
 		define( 'EWD_UFAQ_FAQ_POST_TYPE', 'ufaq' );
 		define( 'EWD_UFAQ_FAQ_CATEGORY_TAXONOMY', 'ufaq-category' );
