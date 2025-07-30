@@ -3,7 +3,7 @@ Contributors: rustaurius
 Tags: faq, faqs, woocommerce faq, faq block, faq shortcode, accordion, documentation, knowledge base, mobile faq, responsive faq
 Requires at least: 6.0
 Tested up to: 6.8
-Stable tag: 2.3.3
+Stable tag: 2.3.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -221,6 +221,9 @@ For more info on installing and activating the plugin, and on the walk-through, 
 - [Our Support Center](https://www.etoilewebdesign.com/support-center/)
 
 == Changelog ==
+
+= 2.3.4 (2025-07-30) =
+- Fix for deprecated notice sometimes causing an error in newer PHP versions.
 
 = 2.3.3 (2025-04-29) =
 - Tested with WordPress 6.8.

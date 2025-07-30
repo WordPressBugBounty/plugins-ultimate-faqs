@@ -351,6 +351,8 @@ function ewd_ufaq_decrypt_catpcha_code( $modifiedcode ) {
 if ( ! function_exists( 'ewd_ufaq_decode_infinite_table_setting' ) ) {
 function ewd_ufaq_decode_infinite_table_setting( $values ) {
 	
+	if ( empty( $values ) ) { return array(); }
+	
 	return is_array( json_decode( html_entity_decode( $values ) ) ) ? json_decode( html_entity_decode( $values ) ) : array();
 }
 }
