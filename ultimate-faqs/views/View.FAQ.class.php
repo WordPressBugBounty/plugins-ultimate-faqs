@@ -749,13 +749,135 @@ class ewdufaqViewFAQ extends ewdufaqView {
 		
 		if ( ! empty( $this->search_string ) and $ewd_ufaq_controller->settings->get_setting( 'highlight-search-term' ) ) {
 
-			$this->faq_title = preg_replace( '/\b(' . $this->search_string . ')\b/i', '<span class="ewd-ufaq-highlight-search-term">$0</span>', $this->faq_title );
-			$this->faq_answer = preg_replace( '/\b(' . $this->search_string . ')\b/i', '<span class="ewd-ufaq-highlight-search-term">$0</span>', $this->faq_answer );
+			$this->faq_title  = $this->highlight_across_tags( $this->faq_title,  $this->search_string );
+			$this->faq_answer = $this->highlight_across_tags( $this->faq_answer, $this->search_string );
 		}
-
+		
 		remove_filter( 'siteorigin_panels_filter_content_enabled', array( $this, 'disable_site_origin_page_builder' ) );
 
 		wp_reset_postdata();
+	}
+
+	/**
+	 * Highlight a search term in $html across element boundaries (e.g., through <a> tags),
+	 * wrapping only text nodes and splitting the highlight where needed.
+	 *
+	 * @since 2.0.0
+	 */
+	public function highlight_across_tags( $html, $term, $class = 'ewd-ufaq-highlight-search-term' ) {
+
+		$term = trim( $term );
+		if ( $term === '' ) { return $html; }
+
+		$pattern = '/' . preg_quote( $term, '/' ) . '/iu';
+
+		// Parse HTML
+		$dom = new DOMDocument( '1.0', 'UTF-8' );
+		libxml_use_internal_errors( true );
+		$dom->loadHTML( '<?xml encoding="utf-8" ?>' . $html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD );
+		libxml_clear_errors();
+
+		$xpath = new DOMXPath( $dom );
+
+		// Collect all text nodes in document order and build a flat text map
+		$nodes  = array();
+		$full   = '';
+		$offset = 0;
+
+		// Include empty text nodes too (a match might begin/end at their edges)
+		foreach ( $xpath->query( '//text()' ) as $t ) {
+			$text    = isset( $t->nodeValue ) ? $t->nodeValue : '';
+			$len     = mb_strlen( $text, 'UTF-8' );
+			$nodes[] = array( 'node' => $t, 'start' => $offset, 'end' => $offset + $len );
+			$full   .= $text;
+			$offset += $len;
+		}
+
+		if ( $full === '' || empty( $nodes ) ) {
+			// Nothing to do
+			$result = $dom->saveHTML();
+			return preg_replace( '/^<\?xml.*?\?>/u', '', $result ) ? preg_replace( '/^<\?xml.*?\?>/u', '', $result ) : $html;
+		}
+
+		// Find matches in the flattened text
+		if ( ! preg_match_all( $pattern, $full, $m, PREG_OFFSET_CAPTURE ) ) {
+			$result = $dom->saveHTML();
+			return preg_replace( '/^<\?xml.*?\?>/u', '', $result ) ? preg_replace( '/^<\?xml.*?\?>/u', '', $result ) : $html;
+		}
+
+		// Build match list (convert byte offsets to Unicode codepoint offsets)
+		$matches = array();
+		foreach ( $m[0] as $mm ) {
+			$match_text = $mm[0];
+			$start_byte = $mm[1];
+
+			$pre    = mb_substr( $full, 0, $start_byte, 'UTF-8' );
+			$start  = mb_strlen( $pre, 'UTF-8' );
+			$length = mb_strlen( $match_text, 'UTF-8' );
+
+			$matches[] = array( 'start' => $start, 'length' => $length );
+		}
+
+		if ( empty( $matches ) ) {
+			$result = $dom->saveHTML();
+			return preg_replace( '/^<\?xml.*?\?>/u', '', $result ) ? preg_replace( '/^<\?xml.*?\?>/u', '', $result ) : $html;
+		}
+
+		// Process matches from right to left so earlier offsets aren't invalidated
+		usort(
+			$matches,
+			function( $a, $b ) {
+				if ( $a['start'] === $b['start'] ) { return 0; }
+				return ( $a['start'] < $b['start'] ) ? 1 : -1;
+			}
+		);
+
+		foreach ( $matches as $match ) {
+			$m_start = $match['start'];
+			$m_end   = $match['start'] + $match['length'];
+
+			// Walk text nodes and wrap overlapping slices
+			foreach ( $nodes as $entry ) {
+
+				/** @var DOMText $text_node */
+				$text_node = $entry['node'];
+				$n_start   = $entry['start'];
+				$n_end     = $entry['end'];
+
+				// No overlap?
+				if ( $m_end <= $n_start || $m_start >= $n_end ) { continue; }
+
+				// Local offsets in this node
+				$local_start = max( 0, $m_start - $n_start );
+				$local_end   = min( $n_end, $m_end ) - $n_start;
+
+				// Split into [before][target][after]
+				// Note: DOMText::splitText uses UTF-16 offsets internally but PHP maps by characters.
+				// Using mb_* derived offsets aligns with DOM for BMP; for safety we keep to mb_strlen logic.
+				if ( $local_end < mb_strlen( $text_node->data, 'UTF-8' ) ) {
+					$after_node = $text_node->splitText( $local_end );
+				} else {
+					$after_node = null;
+				}
+
+				$target_node = $text_node;
+				if ( $local_start > 0 ) {
+					$target_node = $text_node->splitText( $local_start );
+				}
+
+				// Wrap the target slice
+				$span = $dom->createElement( 'span' );
+				$span->setAttribute( 'class', $class );
+				$target_node->parentNode->replaceChild( $span, $target_node );
+				$span->appendChild( $target_node );
+			}
+		}
+
+		// Return HTML without the XML declaration we prepended
+		$result = $dom->saveHTML();
+		$result = preg_replace( '/^<\?xml.*?\?>/u', '', $result );
+
+		return $result ? $result : $html;
 	}
 
 	/**

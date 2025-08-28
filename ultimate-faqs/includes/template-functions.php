@@ -24,9 +24,13 @@ function ewd_ufaq_faqs_shortcode( $atts ) {
 		'order' 					=> '',
 		'display_all_answers' 		=> '',
 		'group_by_category'			=> '',
+		'category_orderby'			=> '',
+		'category_order'			=> '',
+		'category_hierarchical'		=> '',
 		'faq_accordion'				=> '',
 		'category_accordion'		=> '',
 		'faq_page' 					=> 1,
+		'faqs_per_page'				=> null,
 		'post_count' 				=> -1
 	);
 

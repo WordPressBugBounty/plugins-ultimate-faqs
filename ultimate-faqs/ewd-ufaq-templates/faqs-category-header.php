@@ -4,7 +4,7 @@
 		
 		<<?php echo esc_attr( $this->get_option( 'styling-category-heading-type' ) ); ?> title="<?php echo esc_attr( sprintf( __( 'Click here to open %s', 'ultimate-faqs' ), $this->get_category_name() ) ); ?>">
 			<?php echo esc_html( $this->get_category_name() ); ?>
-			<?php if ( $this->get_option( 'group-by-category-count' ) ) { ?> <span>(<?php echo esc_html( $this->get_category_count() ); ?>)</span><?php } ?>
+			<?php if ( $this->get_option( 'group-by-category-count' ) ) { ?> <span>(<?php echo esc_html( $this->get_category_count( $this->current_category ) ); ?>)</span><?php } ?>
 		</<?php echo esc_attr( $this->get_option( 'styling-category-heading-type' ) ); ?>>
 	
 	</div>

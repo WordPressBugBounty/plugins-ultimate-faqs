@@ -303,53 +303,6 @@ List Style
 }
 
 
-
-/***********************
-Minimalist Style
-***********************/
-.ewd-ufaq-faq-display-style-minimalist {
-border-bottom: 1px solid #aaa;
-padding: 8px 0;
-}
-.ewd-ufaq-faq-display-style-minimalist .ewd-ufaq-post-margin-symbol {
-float: right;
-height: auto;
-}
-.ewd-ufaq-faq-display-style-minimalist .ewd-ufaq-post-margin-symbol span {
-font-size: 22px;
-}
-
-.ewd-ufaq-faq-display-style-minimalist .ewd-ufaq-faq-body {
-padding: 20px 25px 10px;
-padding-left: 40px;
-}
-.ewd-ufaq-faq-display-style-minimalist .ewd-ufaq-faq-tags, .ewd-ufaq-faq-display-style-minimalist .ewd-ufaq-social-links {
-margin-top: 4px;
-}
-.ewd-ufaq-faq-display-style-minimalist .ewd-ufaq-social-links ul {
-float: left;
-margin-bottom: 14px;
-position: relative;
-width: auto;
-}
-.ewd-ufaq-faq-display-style-minimalist .ewd-ufaq-permalink {
-margin: 24px 0;
-}
-.ewd-ufaq-faq-display-style-minimalist .ewd-ufaq-permalink-image {
-margin-top: -32px;
-margin-left: 112px;
-}
-
-.ewd-ufaq-faq-display-style-minimalist .ewd-ufaq-author-date {
-  margin-bottom: 14px;
-}
-
-.ewd-ufaq-faq-display-style-minimalist .ewd-ufaq-faq-categories {
-  margin: 14px 0;
-}
-
-
-
 /***********************
 Border Block Style
 ***********************/
@@ -700,4 +653,176 @@ BLOCK PATTERNS
 .ewd-ufaq-pattern-search,
 .ewd-ufaq-pattern-submit {
 	width: 100%;
+}
+
+/***************
+CATEGORY TABS
+***************/
+.ewd-ufaq-category-tabs-1 .ewd-ufaq-faqs {
+  display: flex;
+  width: 100%;
+  position: relative;
+}
+.ewd-ufaq-category-tabs-1 .ewd-ufaq-faq-category {
+  display: flex;
+  flex-direction: column;
+  margin-right: 40px;
+}
+.ewd-ufaq-category-tabs-1 .ewd-ufaq-category-tab-selected h3 {
+  font-weight: bold;
+  text-decoration: underline;
+}
+.ewd-ufaq-category-tabs-1 .ewd-ufaq-faq-category-inner {
+  position: absolute;
+  left: 0;
+  top: 72px;
+  width: 100%;
+}
+.ewd-ufaq-category-tabs-1 .ewd-ufaq-faq-category .ewd-ufaq-faq-category {
+  position: relative;
+  margin-right: 0;
+  margin-top: 24px;
+  width: 100%;
+  clear: both;
+  display: flex;
+  flex-direction: column;
+}
+
+.ewd-ufaq-faq-category-body-hidden {
+  display: none;
+}
+
+
+/**********************/
+/** NEW META BUBBLES **/
+/**********************/
+
+.ewd-ufaq-faq-categories,
+.ewd-ufaq-faq-tags {
+	margin: 14px 0;
+	display: flex;
+	align-items: center;
+	width: 100%;
+	gap: 12px;
+	color: #212427;
+}
+.ewd-ufaq-faq-categories a,
+.ewd-ufaq-faq-tags a {
+	text-decoration: none;
+	padding: 4px 12px;
+	color: #212427;
+	border: 1px solid #b1b1b1;
+	border-radius: 100px;
+}
+.ewd-ufaq-faq-custom-fields {
+  margin-bottom: 14px;
+}
+.ewd-ufaq-custom-field-label {
+  color: #212427;
+}
+
+/**********************/
+/**** COMPACT META ****/
+/**********************/
+
+.ewd-ufaq-compact-faq-meta {
+	display: flex;
+	width: 100%;
+	flex-wrap: wrap;
+	justify-content: right;
+	align-items: center;
+	gap: 0;
+}
+.ewd-ufaq-compact-faq-meta > div {
+	width: 100%;
+}
+.ewd-ufaq-compact-faq-meta .ewd-ufaq-permalink {
+	width: auto;
+	order: 25;
+}
+.ewd-ufaq-compact-faq-meta .ewd-ufaq-permalink a {
+	font-size: 16px;
+	color: #7a7a7a;
+	font-weight: normal;
+	text-decoration: none;
+}
+.ewd-ufaq-compact-faq-meta .ewd-ufaq-permalink-image {
+	display: none;
+}
+.ewd-ufaq-compact-faq-meta .ewd-ufaq-social-links {
+	width: auto;
+	order: 26;
+}
+.ewd-ufaq-compact-faq-meta .ewd-ufaq-social-links-label {
+	display: none;
+}
+.ewd-ufaq-compact-faq-meta .rrssb-buttons {
+	height: auto;
+	display: flex;
+	align-items: center;
+	margin: 0;
+	float: none;
+	gap: 4px;
+}
+.ewd-ufaq-compact-faq-meta .rrssb-buttons li {
+	float: none;
+	height: auto;
+	line-height: initial;
+	padding: 0;
+	margin: 0;
+}
+.ewd-ufaq-compact-faq-meta .rrssb-buttons li a {
+	height: auto;
+	padding: 0;
+	font-weight: normal;
+	font-size: 16px;
+	text-align: left;
+	width: auto;
+	border-radius: 0;
+}
+.ewd-ufaq-compact-faq-meta .rrssb-buttons li.rrssb-facebook a,
+.ewd-ufaq-compact-faq-meta .rrssb-buttons li.rrssb-twitter a,
+.ewd-ufaq-compact-faq-meta .rrssb-buttons li.rrssb-linkedin a,
+.ewd-ufaq-compact-faq-meta .rrssb-buttons li.rrssb-pinterest a,
+.ewd-ufaq-compact-faq-meta .rrssb-buttons li.rrssb-email a {
+	background-color: transparent;
+}
+.ewd-ufaq-compact-faq-meta .rrssb-buttons li a .rrssb-icon,
+.ewd-ufaq-compact-faq-meta .rrssb-buttons li a .rrssb-text {
+	display: none;
+}
+.ewd-ufaq-compact-faq-meta .ewd-ufaq-ratings {
+	width: auto;
+	order: 27;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	align-items: center;
+}
+.ewd-ufaq-compact-faq-meta .ewd-ufaq-rating-button {
+	float: none;
+	width: auto;
+	height: auto;
+	margin: 0;
+	line-height: initial;
+	font-weight: normal;
+  display: flex;
+}
+.ewd-ufaq-compact-faq-meta .ewd-ufaq-rating-button img {
+	display: none !important;
+}
+.ewd-ufaq-compact-faq-meta .ewd-ufaq-rating-button span {
+	width: auto;
+  margin-left: 2px;
+}
+.ewd-ufaq-compact-faq-meta .ewd-ufaq-down-vote {
+	height: auto !important;
+	margin-left: 4px;
+}
+.ewd-ufaq-compact-faq-meta .ewd-ufaq-ratings-label {
+	display: none;
+}
+
+.ewd-ufaq-hidden {
+  display: none;
 }

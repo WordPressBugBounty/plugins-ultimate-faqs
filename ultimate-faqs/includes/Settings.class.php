@@ -62,6 +62,8 @@ class ewdufaqSettings {
 				)
 			),
 
+			'submit-required-fields'	=> array( 'answer' ),
+
 			'wpforms-faq-location' 				=> 'above',
 			'wpforms-minimum-characters' 	=> 12,
 
@@ -134,7 +136,7 @@ class ewdufaqSettings {
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/lib/simple-admin-pages/simple-admin-pages.php' );
 		$sap = sap_initialize_library(
 			$args = array(
-				'version' => '2.6.20',
+				'version' => '2.7.1',
 				'lib_url' => EWD_UFAQ_PLUGIN_URL . '/lib/simple-admin-pages/',
 				'theme'   => 'purple',
 			)
@@ -159,7 +161,8 @@ class ewdufaqSettings {
 				'id'            	=> 'ewd-ufaq-basic-tab',
 				'title'         	=> __( 'Basic', 'ultimate-faqs' ),
 				'is_tab'			=> true,
-				'tutorial_yt_id'	=> 'MUuFQxywjsA'
+				'tutorial_yt_id'	=> 'MUuFQxywjsA',
+				'icon'				=> 'text'
 			)
 		);
 
@@ -349,8 +352,8 @@ class ewdufaqSettings {
 				'id'			=> 'faq-category-accordion',
 				'title'			=> __( 'FAQ Category Accordion', 'ultimate-faqs' ),
 				'description'	=> __( 'Should it only be possible to open one FAQ category at a time, if FAQ categories are being toggled ("FAQ Category Toggle" must be enabled above)?', 'ultimate-faqs' ),
-				'conditional_on'		=> 'faq-category-toggle',
-				'conditional_on_value'	=> true
+				'conditional_on'		=> array( 'faq-category-toggle', 'category-hierarchical', 'category-tabs' ),
+				'conditional_on_value'	=> array( true, false, false )
 			)
 		);
 
@@ -448,7 +451,9 @@ class ewdufaqSettings {
 				'id'            	=> 'ewd-ufaq-ordering-tab',
 				'title'         	=> __( 'Ordering', 'ultimate-faqs' ),
 				'is_tab'			=> true,
-				'tutorial_yt_id'	=> 'sTzcb20tjc0'
+				'tutorial_yt_id'	=> 'sTzcb20tjc0',
+				'icon'				=> 'list-view'
+
 			)
 		);
 
@@ -503,6 +508,19 @@ class ewdufaqSettings {
 				'conditional_on_value'	=> true
 			)
 		);
+
+		$sap->add_setting(
+			'ewd-ufaq-settings',
+			'ewd-ufaq-ordering-settings',
+			'toggle',
+			array(
+				'id'			=> 'category-hierarchical',
+				'title'			=> __( 'Nested FAQ Categories', 'ultimate-faqs' ),
+				'description'	=> __( 'If FAQs are grouped by category, should sub-categories appear under their parent categories?', 'ultimate-faqs' ),
+				'conditional_on'		=> array( 'group-by-category', 'faq-category-accordion' ),
+				'conditional_on_value'	=> array( true, false )
+			)
+		);	
 
 		$sap->add_setting(
 			'ewd-ufaq-settings',
@@ -566,7 +584,8 @@ class ewdufaqSettings {
         'title'  				=> __( 'Premium', 'ultimate-faqs' ),
         'is_tab' 				=> true,
         'tutorial_yt_id'		=> 'gV0mAkKWSXg',
-        'show_submit_button' 	=> $this->show_submit_button( 'premium' )
+        'show_submit_button' 	=> $this->show_submit_button( 'premium' ),
+		'icon'					=> 'awards'
       )
     );
     $sap->add_section(
@@ -586,7 +605,8 @@ class ewdufaqSettings {
         'title'  				=> __( 'Fields', 'ultimate-faqs' ),
         'is_tab' 				=> true,
         'tutorial_yt_id'		=> 'yo2PcuirlnY',
-        'show_submit_button' 	=> $this->show_submit_button( 'fields' )
+        'show_submit_button' 	=> $this->show_submit_button( 'fields' ),
+		'icon'					=> 'editor-insertmore'
       )
     );
     $sap->add_section(
@@ -606,7 +626,8 @@ class ewdufaqSettings {
         'title'  				=> __( 'Labelling', 'ultimate-faqs' ),
         'is_tab' 				=> true,
         'tutorial_yt_id'		=> 'ziuY0Tj75MQ',
-        'show_submit_button' 	=> $this->show_submit_button( 'labelling' )
+        'show_submit_button' 	=> $this->show_submit_button( 'labelling' ),
+		'icon'					=> 'translation'
       )
     );
     $sap->add_section(
@@ -626,7 +647,8 @@ class ewdufaqSettings {
         'title'  				=> __( 'Styling', 'ultimate-faqs' ),
         'is_tab' 				=> true,
         'tutorial_yt_id'		=> 'OenPtDrNBjg',
-        'show_submit_button' 	=> $this->show_submit_button( 'styling' )
+        'show_submit_button' 	=> $this->show_submit_button( 'styling' ),
+		'icon'					=> 'welcome-widgets-menus'
       )
     );
     $sap->add_section(
@@ -667,20 +689,28 @@ class ewdufaqSettings {
 		$content = '';
 
 		$premium_features = '
-			<p><strong>' . __( 'The premium version also gives you access to the following features:', 'ultimate-faqs' ) . '</strong></p>
-			<ul class="ewd-ufaq-dashboard-new-footer-one-benefits">
-				<li>' . __( 'Unlimited FAQs', 'ultimate-faqs' ) . '</li>
-				<li>' . __( 'FAQ Search', 'ultimate-faqs' ) . '</li>
-				<li>' . __( 'Custom Fields', 'ultimate-faqs' ) . '</li>
-				<li>' . __( 'WooCommerce FAQs', 'ultimate-faqs' ) . '</li>
-				<li>' . __( '15 Different Icon Sets', 'ultimate-faqs' ) . '</li>
-				<li>' . __( 'Import/Export FAQs', 'ultimate-faqs' ) . '</li>
-				<li>' . __( 'Advanced Styling Options', 'ultimate-faqs' ) . '</li>
-				<li>' . __( 'Social Sharing', 'ultimate-faqs' ) . '</li>
-				<li>' . __( 'Email Support', 'ultimate-faqs' ) . '</li>
-			</ul>
-			<div class="ewd-ufaq-dashboard-new-footer-one-buttons">
-				<a class="ewd-ufaq-dashboard-new-upgrade-button" href="https://www.etoilewebdesign.com/license-payment/?Selected=UFAQ&Quantity=1&utm_source=ufaq_settings&utm_content=' . $section_and_perm_type . '" target="_blank">' . __( 'UPGRADE NOW', 'ultimate-faqs' ) . '</a>
+			<div class="ewd-ufaq-settings-preview-other-features">
+				<div id="ewd-ufaq-dashboard-new-footer-one">
+					<div class="ewd-ufaq-dashboard-new-footer-one-inside">
+						<div class="ewd-ufaq-dashboard-new-footer-one-left">
+							<div class="ewd-ufaq-dashboard-new-footer-one-title">' . __( 'The premium version also gives you access to the following features:', 'ultimate-product-catalogue' ) . '</div>
+							<ul class="ewd-ufaq-dashboard-new-footer-one-benefits">
+								<li>' . __( 'Unlimited FAQs', 'ultimate-faqs' ) . '</li>
+								<li>' . __( 'AI-Generated FAQs', 'ultimate-faqs' ) . '</li>
+								<li>' . __( 'FAQ Search', 'ultimate-faqs' ) . '</li>
+								<li>' . __( 'Custom Fields', 'ultimate-faqs' ) . '</li>
+								<li>' . __( 'WooCommerce FAQs', 'ultimate-faqs' ) . '</li>
+								<li>' . __( '15 Different Icon Sets', 'ultimate-faqs' ) . '</li>
+								<li>' . __( 'Import/Export FAQs', 'ultimate-faqs' ) . '</li>
+								<li>' . __( 'Advanced Styling Options', 'ultimate-faqs' ) . '</li>
+								<li>' . __( 'Email Support', 'ultimate-faqs' ) . '</li>
+							</ul>
+						</div>
+						<div class="ewd-ufaq-dashboard-new-footer-one-buttons">
+							<a class="ewd-ufaq-dashboard-new-upgrade-button" href="https://www.etoilewebdesign.com/license-payment/?Selected=UFAQ&Quantity=1&utm_source=ufaq_settings&utm_content=' . $section_and_perm_type . '" target="_blank">' . __( 'UPGRADE NOW', 'ultimate-faqs' ) . '</a>
+						</div>
+					</div>
+				</div>
 			</div>
 		';
 

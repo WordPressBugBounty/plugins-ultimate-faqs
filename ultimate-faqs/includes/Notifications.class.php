@@ -76,6 +76,58 @@ class ewdufaqNotifications {
 			 
 			ewd_uwpm_send_email( $params );
 		}
+		else {
+
+			$author_emails = $faq->faq_author_email ? explode( ',', $faq->faq_author_email ) : array();
+	
+			$subject_line = apply_filters( 'ewd_ufaq_user_question_submitted_subject_line', __( 'New Question', 'ultimate-faqs' ) );
+
+			$message_body = __( 'Hello,', 'ultimate-faqs' ) . '<br/><br/>';
+			$message_body .= sprintf( __( 'Thank you for submitting your FAQ, %s. ', 'ultimate-faqs' ), $faq->question ) . '<br/><br/>';
+			$message_body .= get_bloginfo( 'name' );
+
+			$message_body = apply_filters( 'ewd_ufaq_user_question_submitted_message_body', $message_body );
+
+			$headers = array( 'Content-Type: text/html; charset=UTF-8' );
+
+			foreach ( $author_emails as $author_email ) {
+
+				if ( ! filter_var( $author_email, FILTER_VALIDATE_EMAIL ) ) { continue;}
+
+				$success = wp_mail( $author_email, $subject_line, $message_body, $headers );
+			}
+
+			return $success;
+		}
+	}
+
+	/**
+	 * Send an email to the FAQ author once their question has been answered
+	 *
+	 * @since 2.4.0
+	 */
+	public function user_question_updated( $faq ) {
+
+		$author_emails = $faq->faq_author_email ? explode( ',', $faq->faq_author_email ) : array();
+	
+		$subject_line = apply_filters( 'ewd_ufaq_user_question_answered_subject_line', __( 'New Question Answer', 'ultimate-faqs' ) );
+	
+		$message_body = __( 'Hello,', 'ultimate-faqs' ) . '<br/><br/>';
+		$message_body .= sprintf( __( 'Your FAQ, %s, has received a new question answer: ', 'ultimate-faqs' ), $faq->question ) . '<br/><br/>' . $faq->answer . '<br/><br/>';
+		$message_body .= __( 'Thank You,', 'ultimate-faqs' ) . '<br/><br/>';
+
+		$message_body = apply_filters( 'ewd_ufaq_user_question_answered_message_body', $message_body );
+	
+		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
+
+		foreach ( $author_emails as $author_email ) {
+
+			if ( ! filter_var( $author_email, FILTER_VALIDATE_EMAIL ) ) { continue;}
+
+			$success = wp_mail( $author_email, $subject_line, $message_body, $headers );
+		}
+
+		return $success;
 	}
 }
 } // endif;

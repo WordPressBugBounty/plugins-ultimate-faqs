@@ -3,7 +3,7 @@ Contributors: rustaurius
 Tags: faq, faqs, woocommerce faq, faq block, faq shortcode, accordion, documentation, knowledge base, mobile faq, responsive faq
 Requires at least: 6.0
 Tested up to: 6.8
-Stable tag: 2.3.4
+Stable tag: 2.4.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -17,7 +17,8 @@ With the Ultimate FAQ plugin and its simple UI, you can quickly create FAQs and 
 
 All this in an accordion layout that is automatically responsive and adapts your FAQs to any site!
 
-[Check out the FAQ demo!](https://www.etoilewebdesign.com/ultimate-faq-demo/)
+👩‍💻 [Demo](https://www.etoilewebdesign.com/ultimate-faq-demo/) | 🌟 [Premium](https://www.etoilewebdesign.com/plugins/ultimate-faq/) | ℹ️ [Support](https://www.etoilewebdesign.com//support-center/)
+
 
 ### Key Features
 
@@ -222,20 +223,15 @@ For more info on installing and activating the plugin, and on the walk-through, 
 
 == Changelog ==
 
-= 2.3.4 (2025-07-30) =
-- Fix for deprecated notice sometimes causing an error in newer PHP versions.
-
-= 2.3.3 (2025-04-29) =
-- Tested with WordPress 6.8.
-
-= 2.3.2 (2025-01-24) =
-- Fixed error when using the include_category_children shortcode attribute.
-
-= 2.3.1 (2024-11-25) =
-- Small update to AI-generated FAQs for increased compatibility with ChatGPT.
-- Tested with WordPress 6.7.
-
-= 2.3.0 (2024-07-25) =
-- Introducing AI-generated FAQs. Instead of manually creating all your FAQs, you can now let the plugin automatically create them for you using Open AI integration. Read more [here](https://doc.etoilewebdesign.com/plugins/ultimate-faq/user/faqs/ai).
+= 2.4.0 (2025-08-28) =
+- **IMPORTANT NOTE: Significant updates have been made to the styling of several layouts, especially the "Minimalist" FAQ display style. We highly recommend, especially if you are using this display style, that you install the update on a staging environment first and test with with the updated style, especially if you have customized the layout and/or CSS.**
+- Refresh of the "Minimalist" FAQ display style.
+- Redesign of the plugin admin.
+- Added: Option to have nested categories (i.e. sub-categories can now appear nested within categories).
+- Added: New Category Tabs option (displays categories as horizontal tabs).
+- Changed: It is now possible to include an FAQ search shortcode or block on the same page as a regular FAQ shortcode or block.
+- Changed: Updated conditional options on the settings page, to reduce the likelihood of using conflicting styles/options and to make it cleaner.
+- Fixed: Broken links in FAQs when there was highlighted search text within them.
+- Fixed: FAQ search querying also being applied to other FAQ shortcodes or blocks on the same page.
 
 [See changelog for all versions](https://www.etoilewebdesign.com/changelogs/ultimate-faqs.txt).

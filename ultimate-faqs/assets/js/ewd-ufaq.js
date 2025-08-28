@@ -64,7 +64,7 @@ var ajax_ctrlr = {
 		params.action      = 'ewd_ufaq_record_search_term';
 
 		var data = jQuery.param( params );
-    	jQuery.post(ajaxurl, data, function(response) {});
+		jQuery.post(ajaxurl, data, function(response) {});
 	},
 	save_search_schdl_to_run_reset: function() {
 
@@ -89,30 +89,30 @@ var ajax_ctrlr = {
 };
 
 jQuery(function(){ //DOM Ready
-    ufaqSetClickHandlers();
-    UFAQSetAutoCompleteClickHandlers();
-    UFAQSetRatingHandlers();
-    UFAQSetExpandCollapseHandlers();
-    UFAQSetPaginationHandlers();
+	ufaqSetClickHandlers();
+	UFAQSetAutoCompleteClickHandlers();
+	UFAQSetRatingHandlers();
+	UFAQSetExpandCollapseHandlers();
+	UFAQSetPaginationHandlers();
 
-    UFAQWPFormsHandler();
+	UFAQWPFormsHandler();
 });
 
 function ewd_ufaq_run_effect( display, faq_element ) {
 
-    var selected_effect = typeof ewd_ufaq_php_data != 'undefined' ? ewd_ufaq_php_data.reveal_effect : 'none';
+	var selected_effect = typeof ewd_ufaq_php_data != 'undefined' ? ewd_ufaq_php_data.reveal_effect : 'none';
 
-    // most effect types need no options passed by default
-    var options = {};
+	// most effect types need no options passed by default
+	var options = {};
 
-    // some effects have required parameters
-    if ( selected_effect === 'size' ) {
+	// some effects have required parameters
+	if ( selected_effect === 'size' ) {
 
-      options = { to: { width: 200, height: 60 } };
-    }
+	options = { to: { width: 200, height: 60 } };
+	}
 
-    // run the effect
-    if ( display == 'show' ) { faq_element.find( '.ewd-ufaq-faq-body' ).show( selected_effect, options, 500, ewd_ufaq_toggle_hidden_class( faq_element ) ); }
+	// run the effect
+	if ( display == 'show' ) { faq_element.find( '.ewd-ufaq-faq-body' ).show( selected_effect, options, 500, ewd_ufaq_toggle_hidden_class( faq_element ) ); }
 	if ( display == 'hide' ) { faq_element.find( '.ewd-ufaq-faq-body' ).hide( selected_effect, options, 500, ewd_ufaq_toggle_hidden_class( faq_element ) ); }
 };
 
@@ -150,10 +150,19 @@ function ufaqSetClickHandlers() {
 		
 		var category = jQuery( this ).parent();
 		var category_inner = category.find( '.ewd-ufaq-faq-category-inner' );
+		var category_inner_height = category_inner.outerHeight( true );
+		var faqs_list = category_inner.parent();
+		var faqs_list_height = faqs_list.outerHeight( true );
+		var total_faqs_height = category_inner_height + faqs_list_height;
+
+		jQuery( '.ewd-ufaq-category-tabs-1' ).css( 'height', total_faqs_height + 'px' );
+
+		jQuery( '.ewd-ufaq-category-tabs-1 .ewd-ufaq-faq-category-title-toggle' ).removeClass( 'ewd-ufaq-category-tab-selected' );
+		jQuery( this ).addClass( 'ewd-ufaq-category-tab-selected' );
 		
 		category_inner.toggleClass( 'ewd-ufaq-faq-category-body-hidden' );
 
-		if ( typeof ewd_ufaq_php_data == 'undefined' || ! ewd_ufaq_php_data.category_accordion ) { return; }
+		if ( typeof ewd_ufaq_php_data == 'undefined' || ! ewd_ufaq_php_data.category_accordion ) { return; } 
 
 		jQuery( '.ewd-ufaq-faq-category-inner' ).each( function( index, object ) {
 			
@@ -212,9 +221,9 @@ function EWD_UFAQ_Reveal_FAQ( faq_element ) {
 	params.action  = 'ewd_ufaq_record_view';
 
 	var data = jQuery.param( params );
-    jQuery.post(ajaxurl, data, function(response) {});
+	jQuery.post(ajaxurl, data, function(response) {});
 
-    faq_element.find( '.ewd-ufaq-post-margin-symbol' ).html( faq_element.find( '.ewd-ufaq-post-margin-symbol' ).html().toUpperCase() );
+	faq_element.find( '.ewd-ufaq-post-margin-symbol' ).html( faq_element.find( '.ewd-ufaq-post-margin-symbol' ).html().toUpperCase() );
 
 	faq_element.find( '.ewd-ufaq-faq-excerpt' ).addClass( 'ewd-ufaq-hidden' );
 	
@@ -227,7 +236,7 @@ function EWD_UFAQ_Reveal_FAQ( faq_element ) {
 
 			if ( jQuery( this ).prop( 'id' ) != faq_element.prop( 'id' ) ) {
 
-		  		EWD_UFAQ_Hide_FAQ( jQuery(this) );
+				EWD_UFAQ_Hide_FAQ( jQuery(this) );
 			} 
 			else {
 
@@ -274,7 +283,7 @@ jQuery(document).ready(function() {
 	jQuery( '#ewd-ufaq-jquery-ajax-search' ).on( 'click', '.clear-field', function() {
 		let elm = jQuery( '#ewd-ufaq-jquery-ajax-search .ewd-ufaq-text-input' ).eq(0);
 		jQuery(elm).val('');
-		ajax_ctrlr.run_search_ajax( elm );
+		ajax_ctrlr.run_search_ajax( elm[0] );
 	});
 
 	jQuery( '.ewd-ufaq-text-input ' ).on( 'search', function() {
@@ -298,67 +307,67 @@ function ewd_ufaq_ajax_reload( pagination, append_results, search_string ) {
 
 	filtering_running = true;
 
-    var search_string = search_string ? search_string : jQuery( '.ewd-ufaq-text-input' ).val();
-    var include_cat = jQuery( '#ewd-ufaq-include-category' ).val();
-    var exclude_cat = jQuery( '#ewd-ufaq-exclude-category' ).val();
-    var orderby = jQuery( '#ewd-ufaq-orderby' ).val();
-    var order = jQuery( '#ewd-ufaq-order' ).val();
-    var post_count = jQuery( '#ewd-ufaq-post-count' ).val();
-    var current_url = jQuery( '#ewd-ufaq-current-url' ).val();
-    var show_on_load = jQuery( '#ewd-ufaq-show-on-load' ).val();
+	var search_string = search_string ? search_string : jQuery( '.ewd-ufaq-text-input' ).val();
+	var include_cat = jQuery( '#ewd-ufaq-include-category' ).val();
+	var exclude_cat = jQuery( '#ewd-ufaq-exclude-category' ).val();
+	var orderby = jQuery( '#ewd-ufaq-orderby' ).val();
+	var order = jQuery( '#ewd-ufaq-order' ).val();
+	var post_count = jQuery( '#ewd-ufaq-post-count' ).val();
+	var current_url = jQuery( '#ewd-ufaq-current-url' ).val();
+	var show_on_load = jQuery( '#ewd-ufaq-show-on-load' ).val();
 
-    if ( search_string == undefined ) { search_string = ''; }
+	if ( search_string == undefined ) { search_string = ''; }
 
-    if ( pagination == 'Yes' ) {
+	if ( pagination == 'Yes' ) {
 
-    	var faqs_only = 'Yes';
-    	var faq_page = jQuery( '.ewd-ufaq-bottom' ).data( 'current_page' );
-    }
-    else {
+		var faqs_only = 'Yes';
+		var faq_page = jQuery( '.ewd-ufaq-bottom' ).data( 'current_page' );
+	}
+	else {
 
-    	var retrieving_results = typeof ewd_ufaq_php_data != 'undefined' ? ewd_ufaq_php_data.retrieving_results : 'Retrieving Results';
+		var retrieving_results = typeof ewd_ufaq_php_data != 'undefined' ? ewd_ufaq_php_data.retrieving_results : 'Retrieving Results';
 
-    	jQuery( '.ewd-ufaq-faqs' ).html( '<h3>' + retrieving_results + '</h3>' );
+		jQuery( '.ewd-ufaq-search .ewd-ufaq-faqs' ).html( '<h3>' + retrieving_results + '</h3>' );
 
-    	var faqs_only = 'No';
-    	var faq_page = 0;
-    	jQuery( '.ewd-ufaq-bottom' ).remove();
-    }
+		var faqs_only = 'No';
+		var faq_page = 0;
+		jQuery( '.ewd-ufaq-bottom' ).remove();
+	}
 
-    request_count = request_count + 1;
+	request_count = request_count + 1;
 
     if ( jQuery( '.ewd-ufaq-text-input' ).length && 'yes' != show_on_load.toLocaleLowerCase() && search_string.length == 0 ) {
-    	jQuery('.ewd-ufaq-faqs').html('');
+    	jQuery( '.ewd-ufaq-search .ewd-ufaq-faqs' ).html('');
     	return;
     }
 
-    var params = {};
+	var params = {};
 
-    params.search_string    = search_string;
-    params.include_category = include_cat;
-    params.exclude_category = exclude_cat;
-    params.orderby = orderby;
-    params.order   = order;
-    params.post_count    = post_count;
-    params.request_count = request_count;
-    params.current_url   = current_url;
-    params.faqs_only = faqs_only;
-    params.faq_page  = faq_page;
-    params.show_on_load = show_on_load;
-    params.action = 'ewd_ufaq_search';
-    params.nonce  = typeof ewd_ufaq_php_data != 'undefined' ? ewd_ufaq_php_data.nonce : '';
+	params.search_string    = search_string;
+	params.include_category = include_cat;
+	params.exclude_category = exclude_cat;
+	params.orderby = orderby;
+	params.order   = order;
+	params.post_count    = post_count;
+	params.request_count = request_count;
+	params.current_url   = current_url;
+	params.faqs_only = faqs_only;
+	params.faq_page  = faq_page;
+	params.show_on_load = show_on_load;
+	params.action = 'ewd_ufaq_search';
+	params.nonce  = typeof ewd_ufaq_php_data != 'undefined' ? ewd_ufaq_php_data.nonce : '';
 
-    var data = jQuery.param( params );
+	var data = jQuery.param( params );
 
-    jQuery.post( ajaxurl, data, function( response ) {
+	jQuery.post( ajaxurl, data, function( response ) {
 		
 		if ( response.data.request_count == request_count ) {
 
 			if ( append_results == 'Yes' ) {
-				jQuery( '.ewd-ufaq-faqs' ).append( response.data.output );
+				jQuery( '.ewd-ufaq-search .ewd-ufaq-faqs' ).append( response.data.output );
 			}
 			else {
-				jQuery( '.ewd-ufaq-faqs' ).html( response.data.output );
+				jQuery( '.ewd-ufaq-search .ewd-ufaq-faqs' ).html( response.data.output );
 				if( '' != response.data.pagination ) {
 					jQuery('.ewd-ufaq-faq-list .ewd-ufaq-bottom').remove();
 					jQuery('.ewd-ufaq-faq-list').append(response.data.pagination);
@@ -370,15 +379,15 @@ function ewd_ufaq_ajax_reload( pagination, append_results, search_string ) {
 			jQuery( '.ewd-ufaq-expand-all' ).removeClass( 'ewd-ufaq-hidden' );
 			jQuery( '.ewd-ufaq-collapse-all' ).addClass( 'ewd-ufaq-hidden' );
 
-       		ufaqSetClickHandlers();
-       		UFAQSetRatingHandlers();
-       		UFAQSetPaginationHandlers();
-       		UFAQUpdatePaginationButtons();
-       		UFAQSetExpandCollapseHandlers();
+			ufaqSetClickHandlers();
+			UFAQSetRatingHandlers();
+			UFAQSetPaginationHandlers();
+			UFAQUpdatePaginationButtons();
+			UFAQSetExpandCollapseHandlers();
 
-       		filtering_running = false;
-       	}
-    });
+			filtering_running = false;
+		}
+	});
 }
 
 function UFAQSetRatingHandlers() {
@@ -546,28 +555,40 @@ function UFAQWPFormsHandler() {
 }
 
 /*jQuery(document).ready(function() {
-  jQuery('a[href*=#]:not([href=#])').click(function() {
-  	var post_id = jQuery(this).attr("data-postid"); 
-    var selectedIDString = 'ewd-ufaq-body-'+post_id;
-    
-    if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
-      var target = jQuery(this.hash);
-      target = target.length ? target : jQuery('[name=' + this.hash.slice(1) +']');
-      if (target.length) {
+jQuery('a[href*=#]:not([href=#])').click(function() {
+	var post_id = jQuery(this).attr("data-postid"); 
+	var selectedIDString = 'ewd-ufaq-body-'+post_id;
+	
+	if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+	var target = jQuery(this.hash);
+	target = target.length ? target : jQuery('[name=' + this.hash.slice(1) +']');
+	if (target.length) {
 
-    jQuery('html,body').on("scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove", function(){
-       jQuery('html,body').stop();
-    });
+	jQuery('html,body').on("scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove", function(){
+	jQuery('html,body').stop();
+	});
 		
 		if (jQuery('#'+selectedIDString).hasClass("ewd-ufaq-hidden")) {
 			EWD_UFAQ_Reveal_FAQ(post_id, selectedIDString);
 		}
 
-        jQuery('html,body').animate({
-          scrollTop: target.offset().top
-        }, 1000);
-        //return false;
-      }
-    }
-  });
+		jQuery('html,body').animate({
+		scrollTop: target.offset().top
+		}, 1000);
+		//return false;
+	}
+	}
+});
 });*/
+
+jQuery( document ).ready( function() {
+	
+	jQuery( '.ewd-ufaq-compact-faq-meta .ewd-ufaq-permalink a' ).html( '<span class="dashicons dashicons-admin-links"></span>' );
+	jQuery( '.ewd-ufaq-compact-faq-meta .rrssb-buttons li.rrssb-facebook a' ).html( '<span class="dashicons dashicons-facebook-alt"></span>' );
+	jQuery( '.ewd-ufaq-compact-faq-meta .rrssb-buttons li.rrssb-twitter a' ).html( '<span class="dashicons dashicons-twitter-alt"></span>' );
+	jQuery( '.ewd-ufaq-compact-faq-meta .rrssb-buttons li.rrssb-linkedin a' ).html( '<span class="dashicons dashicons-linkedin"></span>' );
+	jQuery( '.ewd-ufaq-compact-faq-meta .rrssb-buttons li.rrssb-pinterest a' ).html( '<span class="dashicons dashicons-pinterest"></span>' );
+	jQuery( '.ewd-ufaq-compact-faq-meta .rrssb-buttons li.rrssb-email a' ).html( '<span class="dashicons dashicons-email-alt"></span>' );
+	jQuery( '.ewd-ufaq-compact-faq-meta .ewd-ufaq-up-vote' ).prepend( '<span class="dashicons dashicons-thumbs-up"></span>' );
+	jQuery( '.ewd-ufaq-compact-faq-meta .ewd-ufaq-down-vote' ).prepend( '<span class="dashicons dashicons-thumbs-down"></span>' );
+} );

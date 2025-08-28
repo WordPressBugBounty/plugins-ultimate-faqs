@@ -11,8 +11,6 @@ if ( !class_exists( 'ewdufaqWooCommerce' ) ) {
 
 		public function __construct() {
 
-			add_filter( 'woocommerce_product_tabs', array( $this, 'add_woocommerce_tab' ) );
-
 			add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue' ) );
 
 			add_filter( 'woocommerce_product_data_tabs', array( $this, 'add_admin_product_page_faq_tab' ), 10, 1 );
@@ -21,6 +19,22 @@ if ( !class_exists( 'ewdufaqWooCommerce' ) ) {
 			add_action( 'wp_ajax_ewd_ufaq_add_wc_faqs', array( $this, 'add_wc_faqs' ) );
 			add_action( 'wp_ajax_ewd_ufaq_delete_wc_faqs', array( $this, 'delete_wc_faqs' ) );
 			add_action( 'wp_ajax_ewd_ufaq_wc_faq_category', array( $this, 'wc_faq_category' ) );
+
+			add_action( 'plugins_loaded', array( $this, 'set_faq_display_hook' ) );
+		}
+
+		/**
+		 * Add the correct hook to display the created WC FAQs
+		 * @since 2.0.0
+		 */
+		public function set_faq_display_hook() {
+			global $ewd_ufaq_controller;
+
+			if ( empty( $ewd_ufaq_controller->settings->get_setting( 'woocommerce-faqs-location' ) ) or $ewd_ufaq_controller->settings->get_setting( 'woocommerce-faqs-location' ) == 'tabs' ) { add_filter( 'woocommerce_product_tabs', array( $this, 'add_woocommerce_tab' ) ); }
+			elseif ( $ewd_ufaq_controller->settings->get_setting( 'woocommerce-faqs-location' ) == 'before_add_to_cart' ) { add_action( 'woocommerce_before_add_to_cart_button', array( $this, 'faq_content' ) ); }
+			elseif ( $ewd_ufaq_controller->settings->get_setting( 'woocommerce-faqs-location' ) == 'after_add_to_cart' ) { add_action( 'woocommerce_after_add_to_cart_button', array( $this, 'faq_content' ) ); }
+			elseif ( $ewd_ufaq_controller->settings->get_setting( 'woocommerce-faqs-location' ) == 'after_product_summary' ) { add_action( 'woocommerce_after_single_product_summary', array( $this, 'faq_content' ) ); }
+			elseif ( $ewd_ufaq_controller->settings->get_setting( 'woocommerce-faqs-location' ) == 'after_product' ) { add_action( 'woocommerce_after_single_product', array( $this, 'faq_content' ) ); }
 		}
 
 		/**
@@ -56,7 +70,7 @@ if ( !class_exists( 'ewdufaqWooCommerce' ) ) {
 				$tabs['faq_tab'] = array(
 					'title' 	=> $ewd_ufaq_controller->settings->get_setting( 'label-woocommerce-tab' ),
 					'priority' 	=> 50,
-					'callback' 	=> array( $this, 'faq_tab_content' )
+					'callback' 	=> array( $this, 'faq_content' )
 				);
 		
 				return $tabs;
@@ -86,7 +100,7 @@ if ( !class_exists( 'ewdufaqWooCommerce' ) ) {
     		);
 		}
 
-		public function faq_tab_content() {
+		public function faq_content() {
 			global $product;
 			global $ewd_ufaq_controller;
 		

@@ -61,40 +61,44 @@ class ewdufaqOrderingTable {
 
 		?>
 
-		<h2>FAQ Ordering Table</h2>
+		<div class='wrap'>
 
-		<div id='ewd-ufaq-ordering-table-container'>
+			<h1><?php _e( 'FAQ Ordering Table', 'ultimate-faqs' ); ?></h1>
 
-			<div id='ewd-ufaq-ordering-table-explanation'>
-				<?php _e( 'Use the table below to set the order for your FAQs, either overall or within their categories depending on your selected settings.', 'ultimate-faqs' ); ?>
-			</div>
+			<div id='ewd-ufaq-ordering-table-container'>
 
-			<table class='ewd-ufaq-ordering-table form-table wp-list-table widefat sorttable ewd-ufaq-list'>
-				<thead>
-					<tr>
-						<th><?php _e( 'Question', 'ultimate-faqs' ); ?></th>
-						<th><?php _e( 'Views', 'ultimate-faqs' ); ?></th>
-						<th><?php _e( 'Categories', 'ultimate-faqs' ); ?></th>
-						<th><?php _e( 'Tags', 'ultimate-faqs' ); ?></th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php foreach ( $faqs as $faq ) { ?>
+				<div id='ewd-ufaq-ordering-table-explanation'>
+					<?php _e( 'Use the table below to set the order for your FAQs, either overall or within their categories depending on your selected settings.', 'ultimate-faqs' ); ?>
+				</div>
 
-						<?php $faq_views = get_post_meta( $faq->ID, 'ufaq_view_count', true ); ?>
-						<?php $faq_categories = get_the_term_list($faq->ID, 'ufaq-category', '', ', ', ''); ?>
-						<?php $faq_tags = get_the_term_list($faq->ID, 'ufaq-tag', '', ', ', ''); ?>
-
-						<tr id='ewd-ufaq-item-<?php echo esc_attr( $faq->ID ); ?>' class='ewd-ufaq-item'>
-							<td class='ewd-ufaq-title'><?php echo esc_html( $faq->post_title ); ?></td>
-							<td class='ewd-ufaq-title'><?php echo esc_html( $faq_views ); ?></td>
-							<td class='ewd-ufaq-title'><?php echo esc_html( strip_tags( $faq_categories ) ); ?></td>
-							<td class='ewd-ufaq-title'><?php echo esc_html( strip_tags( $faq_tags ) ); ?></td>
+				<table class='ewd-ufaq-ordering-table form-table wp-list-table widefat sorttable ewd-ufaq-list'>
+					<thead>
+						<tr>
+							<th><?php _e( 'Question', 'ultimate-faqs' ); ?></th>
+							<th><?php _e( 'Views', 'ultimate-faqs' ); ?></th>
+							<th><?php _e( 'Categories', 'ultimate-faqs' ); ?></th>
+							<th><?php _e( 'Tags', 'ultimate-faqs' ); ?></th>
 						</tr>
+					</thead>
+					<tbody>
+						<?php foreach ( $faqs as $faq ) { ?>
 
-					<?php } ?>
-				</tbody>
-			</table>
+							<?php $faq_views = get_post_meta( $faq->ID, 'ufaq_view_count', true ); ?>
+							<?php $faq_categories = get_the_term_list($faq->ID, 'ufaq-category', '', ', ', ''); ?>
+							<?php $faq_tags = get_the_term_list($faq->ID, 'ufaq-tag', '', ', ', ''); ?>
+
+							<tr id='ewd-ufaq-item-<?php echo esc_attr( $faq->ID ); ?>' class='ewd-ufaq-item'>
+								<td class='ewd-ufaq-title'><?php echo esc_html( $faq->post_title ); ?></td>
+								<td class='ewd-ufaq-title'><?php echo esc_html( $faq_views ); ?></td>
+								<td class='ewd-ufaq-title'><?php echo esc_html( strip_tags( $faq_categories ) ); ?></td>
+								<td class='ewd-ufaq-title'><?php echo esc_html( strip_tags( $faq_tags ) ); ?></td>
+							</tr>
+
+						<?php } ?>
+					</tbody>
+				</table>
+
+			</div>
 
 		</div>
 

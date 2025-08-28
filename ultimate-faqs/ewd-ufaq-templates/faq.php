@@ -1,10 +1,12 @@
 <div <?php echo ewd_format_classes( $this->classes ); ?> id='<?php echo esc_attr( $this->get_id() ); ?>' data-post_id='<?php echo esc_attr( $this->faq->post->ID ); ?>'>
 
+	<?php global $ewd_ufaq_controller; ?>
+	
 	<?php $this->print_faq_title(); ?>
 
 	<?php $this->maybe_print_faq_preview(); ?>
 
-	<div class='ewd-ufaq-faq-body <?php echo ( ! $this->display_all_answers ? 'ewd-ufaq-hidden' : '' ); ?>' >
+	<div class='ewd-ufaq-faq-body<?php echo ( ! $this->display_all_answers ? ' ewd-ufaq-hidden' : '' ); ?><?php echo ( $ewd_ufaq_controller->settings->get_setting( 'compact-faq-meta' ) ? ' ewd-ufaq-compact-faq-meta' : '' ); ?>' >
 
 		<?php foreach ( $this->get_order_elements() as $element => $label ) { ?>
 

@@ -34,6 +34,12 @@ class ewdufaqCustomPostTypes {
 		// Add the option to bulk reset views from FAQs
 		add_filter( 'bulk_actions-edit-ufaq', 			array( $this, 'add_reset_view_count_bulk_action' ) );
 		add_filter( 'handle_bulk_actions-edit-ufaq', 	array( $this, 'handle_reset_view_count_bulk_action' ), 10, 3 );
+
+		// Possibly notify FAQ submitted if user-submitted
+		add_action( 'pre_post_update',	array( $this, 'maybe_notify_author_on_update' ), 10, 2 );
+
+		// Sort taxonomy tables by custom ordering, if no other ordering set
+		//add_action( 'terms_clauses', array( $this, 'sort_categories_by_order' ), 10, 2 );
 	}
 
 	/**
@@ -597,6 +603,49 @@ SQL;
 		}
 
 		return $redirect_to;
+	}
+
+	/**
+	 * Sort the category taxonomy terms by the user-set custom order
+	 * @since 2.4.0
+	 */
+	public function sort_categories_by_order( $clauses, $taxonomies ) {
+		global $wpdb;
+
+		if ( ! in_array( EWD_UFAQ_FAQ_CATEGORY_TAXONOMY, $taxonomies ) ) { return $clauses; }
+		if ( ! empty( $clauses['orderby'] ) and $clauses['orderby'] != 'ORDER BY t.name' ) { return $clauses; }
+
+		$clauses['join'] .= ' INNER JOIN ' . $wpdb->prefix . 'termmeta AS tm ON t.term_id = tm.term_id';
+
+		$clauses['where'] .= ' AND tm.meta_key = "ufaq_category_order"';
+
+		$clauses['orderby'] = 'ORDER BY tm.meta_value+0';
+
+		return $clauses;
+	}
+
+	/**
+	 * Handles notifying user-submitted FAQ authors, if necessary
+	 * @since 2.4.0
+	 */
+	public function maybe_notify_author_on_update( $post_id, $data ) {
+		global $ewd_ufaq_controller;
+
+		if ( get_post_type( $post_id ) != EWD_UFAQ_FAQ_POST_TYPE ) { return; }
+
+		if ( empty( $ewd_ufaq_controller->settings->get_setting( 'submit-faq-updates' ) ) ) { return; }
+
+		remove_action( 'pre_post_update',	array( $this, 'maybe_notify_author_on_update' ) );
+
+		$post = get_post( $post_id );
+
+		if ( $ewd_ufaq_controller->settings->get_setting( 'submit-faq-updates' ) == 'first_answer' and ! empty( $post->post_content ) ) { return; }
+		
+		$faq = new ewdufaqFAQ();
+
+		$faq->load_post( $post );
+
+		$ewd_ufaq_controller->notifications->user_question_updated( $faq );
 	}
 }
 } // endif;

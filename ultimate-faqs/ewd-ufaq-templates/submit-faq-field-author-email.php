@@ -4,7 +4,7 @@
 		<?php echo esc_html( $this->get_label( 'label-question-author-email' ) ); ?>:
 	</label>
 
-	<input type='text' name='post_author_email' id='post_author_email' value='<?php echo ( ! empty( $_POST['post_author_email'] ) ? esc_attr( $_POST['post_author_email'] ) : ''); ?>' />
+	<input type='text' name='post_author_email' id='post_author_email' value='<?php echo ( ! empty( $_POST['post_author_email'] ) ? esc_attr( $_POST['post_author_email'] ) : ''); ?>' <?php echo $this->get_field_required( 'author_email' ); ?> />
 		
 	<div id='ewd-ufaq-author-email-explanation' class='ewd-ufaq-field-explanation'>
 		

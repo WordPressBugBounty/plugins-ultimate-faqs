@@ -4,7 +4,7 @@
 		<?php echo esc_html( $this->get_label( 'label-question-title' ) ); ?>:
 	</label>
 
-	<input type='text' name='faq_question' id='faq_question' value='<?php echo ( ! empty( $_POST['faq_question'] ) ? esc_attr( $_POST['faq_question'] ) : '' ); ?>' />
+	<input type='text' name='faq_question' id='faq_question' value='<?php echo ( ! empty( $_POST['faq_question'] ) ? esc_attr( $_POST['faq_question'] ) : '' ); ?>'  <?php echo $this->get_field_required( 'question' ); ?> />
 
 	<div id='ewd-ufaq-faq-question' class='ewd-ufaq-field-explanation'>
 		

@@ -1,5 +1,5 @@
 <?php
-if ( !class_exists( 'sapLibrary_2_6_20' ) ) {
+if ( !class_exists( 'sapLibrary_2_7_1' ) ) {
 /**
  * This library class loads and provides access to the correct version of the
  * Simple Admin Pages library.
@@ -7,10 +7,10 @@ if ( !class_exists( 'sapLibrary_2_6_20' ) ) {
  * @since 1.0
  * @package Simple Admin Pages
  */
-class sapLibrary_2_6_20 {
+class sapLibrary_2_7_1 {
 
 	// Version of the library
-	private $version = '2.6.20';
+	private $version = '2.7.1';
 
 	// A full URL to the library which is used to correctly link scripts and
 	// stylesheets.
@@ -49,7 +49,7 @@ class sapLibrary_2_6_20 {
 	public function __construct( $args ) {
 
 		if ( ! defined( 'SAP_VERSION' ) ) {
-			define( 'SAP_VERSION', '2.6.20' );
+			define( 'SAP_VERSION', '2.7.1' );
 		}
 
 		// If no URL path to the library is passed, we won't be able to add the

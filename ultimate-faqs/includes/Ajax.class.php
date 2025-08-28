@@ -25,7 +25,9 @@ if ( !class_exists( 'ewdufaqAJAX' ) ) {
 			add_action( 'wp_ajax_ewd_ufaq_update_rating', array( $this, 'update_rating' ) );
 			add_action( 'wp_ajax_nopriv_ewd_ufaq_update_rating', array( $this, 'update_rating' ) );
 
-			add_action( 'wp_ajax_ewd_ufaq_update_order', array( $this, 'update_order' ) );
+			add_action( 'wp_ajax_ewd_ufaq_update_faq_order', array( $this, 'update_faq_order' ) );
+
+			add_action( 'wp_ajax_ewd_ufaq_update_category_order', array( $this, 'update_category_order' ) );
 		}
 
 		/**
@@ -168,7 +170,7 @@ if ( !class_exists( 'ewdufaqAJAX' ) ) {
 		 * Updates the order of the FAQ, based on the ordering table
 		 * @since 2.0.0
 		 */
-		public function update_order() {
+		public function update_faq_order() {
 			global $ewd_ufaq_controller;
 
 			if (
@@ -187,6 +189,30 @@ if ( !class_exists( 'ewdufaqAJAX' ) ) {
     		}
 
    			die();
+		}
+
+		/**
+		 * Save the user-set custom order for the category taxonomy terms
+		 * @since 2.4.0
+		 */
+		public function update_category_order() {
+			global $ewd_ufaq_controller;
+
+			// Authenticate request
+			if (
+				! check_ajax_referer( 'ewd-ufaq-admin-js', 'nonce' ) 
+				|| 
+				! current_user_can( $ewd_ufaq_controller->settings->get_setting( 'access-role' ) )
+			) {
+				ewdufaqHelper::admin_nopriv_ajax();
+			}
+
+			$ids = is_array( $_POST['tag'] ) ? array_map( 'intval', $_POST['tag'] ) : array();
+		
+			foreach ( $ids as $order => $term_id ) {
+
+				update_term_meta( $term_id, 'ufaq_category_order', $order );
+			}
 		}
 
 		/**

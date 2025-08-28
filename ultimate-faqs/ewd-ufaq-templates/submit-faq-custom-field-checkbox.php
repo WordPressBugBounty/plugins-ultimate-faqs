@@ -11,7 +11,7 @@
 		<?php foreach ( $this->get_custom_field_options() as $option ) { ?>
 
 			<div class='ewd-ufaq-submit-faq-radio-checkbox-each'>
-				<input type='checkbox' name='<?php echo esc_attr( $input_name ); ?>[]' value='<?php echo esc_attr( $option ); ?>' <?php echo ( ( ! empty( $_POST[ $input_name ] ) and is_array( $_POST[ $input_name ] ) and in_array( $option, $_POST[ $input_name ] ) ) ? 'checked' : '' ); ?>/><?php echo esc_html( $option ); ?>
+				<input type='checkbox' name='<?php echo esc_attr( $input_name ); ?>[]' value='<?php echo esc_attr( $option ); ?>' <?php echo ( ( ! empty( $_POST[ $input_name ] ) and is_array( $_POST[ $input_name ] ) and in_array( $option, $_POST[ $input_name ] ) ) ? 'checked' : '' ); ?> <?php echo $this->get_field_required(); ?>/><?php echo esc_html( $option ); ?>
 			</div>
 			
 		<?php } ?>

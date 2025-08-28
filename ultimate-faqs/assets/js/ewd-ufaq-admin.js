@@ -72,11 +72,32 @@ jQuery(document).ready(function($) {
 		axis: 'y',
 		update: function() {
 				var order = jQuery( this ).sortable( 'serialize' ) 
-				  + '&action=ewd_ufaq_update_order'
+				  + '&action=ewd_ufaq_update_faq_order'
 				  + '&nonce='+ewd_ufaq_php_data.nonce;
 				jQuery.post( ajaxurl, order, function( response ) {} );
 		}
 	});
+
+	if ( jQuery( 'input[name="taxonomy"]' ).length && jQuery( 'input[name="taxonomy"]' ).val() == 'ufaq-category' ) {
+
+    	jQuery( 'table.wp-list-table tbody' ).sortable({
+    		items: 'tr.level-0',
+    		opacity: 0.6,
+    		cursor: 'move',
+    		update: function() {
+
+				var params = {
+					nonce: ewd_ufaq_php_data.nonce,
+					action: 'ewd_ufaq_update_category_order'
+				};
+
+				var query_string = jQuery( this ).sortable('serialize');
+				var data = jQuery.param( params ) + '&' + query_string;
+
+				jQuery.post( ajaxurl, data, function( response ) {});
+    		}
+    	})
+    }
 });
 
 jQuery(document).ready(function($) {

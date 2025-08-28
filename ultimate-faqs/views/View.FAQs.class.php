@@ -28,6 +28,9 @@ class ewdufaqViewFAQs extends ewdufaqView {
 	public $faq_page;
 	public $post_count;	
 
+	// used by FAQ search
+	public $is_search;
+
 	// Array containing all of the FAQs that could be displayed
 	public $faqs = array();
 
@@ -48,14 +51,15 @@ class ewdufaqViewFAQs extends ewdufaqView {
 
 	public $show_on_load = '';
 
-	// Whether an FAQ container is currently open to display a set of FAQs
-	public $faqs_container_open  = false;
+	// The count of how many FAQ category containers are currently open to display a set of FAQs
+	public $faqs_container_open  = 0;
 
 	//FAQs options
 	public $current_url;
 
 	public $category_order;
 	public $category_orderby;
+	public $category_hierarchical;
 	public $faqs_per_page;
 
 	// pagination
@@ -200,36 +204,145 @@ class ewdufaqViewFAQs extends ewdufaqView {
 
 		$faq_count = 0;
 
-		foreach ( $this->category_faqs as $term_id => $category_faqs ) {
+		$args = array(
+			'taxonomy'		=> EWD_UFAQ_FAQ_CATEGORY_TAXONOMY,
+			'hide_empty'	=> false,
+			'order' 		=> ! empty( $this->category_order ) ? $this->category_order : '',
+		);
+
+		if ( ! empty( $this->category_orderby ) and $this->category_orderby != 'manual' ) {
+
+			$args[ 'orderby' ] = $this->category_orderby;
+		}
+		elseif ( ! empty( $this->category_orderby ) ) {
+
+			$args[ 'meta_key' ] = 'ufaq_category_order';
+			$args[ 'orderby' ] = 'meta_value_num';
+
+		}
+
+		$categories = get_terms( $args ); 
+
+		if ( $this->category_hierarchical ) {
+
+			$categories = $this->sort_terms_hierarchically( $categories );
+		}
+
+		foreach ( $categories as $category ) {
 			
-			if ( ! empty( $this->include_categories ) and ! in_array( $term_id, $this->include_categories ) ) { continue; }
+			if ( ! empty( $this->include_categories ) and ! $this->has_eligible_faq_categories( $category ) ) { continue; }
 		
 			if ( $faq_count < $this->faqs_per_page * ( $this->faq_page - 1 ) ) { 
 
-				$faq_count += sizeof( $category_faqs );
+				$faq_count += $this->get_faq_count( $category );
 
 				continue;
 			}
 
 			if ( $faq_count >= $this->faqs_per_page * ( $this->faq_page ) ) { continue; }
+
+			$this->faq_count = $faq_count;
 			
-			$this->current_category = get_term( $term_id );
-
-			$this->open_category_header();
-
-			foreach ( $category_faqs as $faq_view ) {
-
-				$this->faq_count = $faq_count;
-
-				$this->displayed_faqs[] = $faq_view->faq->post->ID;
-
-				echo $faq_view->render();
-
-				$faq_count++;
-			}
-
-			$this->close_categories_container();
+			$this->print_category_faqs( $category );
 		}
+	}
+
+	/**
+	 * Print FAQs within a given category, along with the category header
+	 *
+	 * @since 2.4.0
+	 */
+	public function print_category_faqs( $category ) {
+
+		if ( ! $this->category_has_faqs( $category ) ) { return false; }
+
+		$this->current_category = $category;
+
+		$this->open_category_header();
+
+		if ( ! empty( $this->category_faqs[ $category->term_id ] ) ) {
+
+			foreach ( $this->category_faqs[ $category->term_id ] as $faq_view ) {
+	
+				$this->displayed_faqs[] = $faq_view->faq->post->ID;
+	
+				echo $faq_view->render();
+	
+				$this->faq_count++;
+			}
+		}
+
+		if ( ! empty( $category->children ) ) {
+
+			foreach ( $category->children as $child_category ) {
+
+				$this->print_category_faqs( $child_category );
+			}
+		}
+
+		$this->close_categories_container();
+	}
+
+	/**
+	 * Check whether a category or its child categories are eligible, if include categories attribute is set
+	 *
+	 * @since 2.4.0
+	 */
+	public function has_eligible_faq_categories( $category ) {
+
+		if ( empty( $this->include_categories ) ) { return true; }
+
+		if ( in_array( $category->term_id, $this->include_categories ) ) { return true; }
+
+		if ( ! empty( $category->children ) ) {
+
+			foreach ( $category->children as $child_category ) {
+
+				if ( $this->has_eligible_faq_categories( $child_category ) ) { return true; }
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check whether FAQs exist within a category or its child categories
+	 *
+	 * @since 2.4.0
+	 */
+	public function category_has_faqs( $category ) {
+
+		if ( ! empty( $this->category_faqs[ $category->term_id ] ) ) { return true; }
+
+		if ( ! empty( $category->children ) ) {
+
+			foreach ( $category->children as $child_category ) {
+
+				if ( $this->category_has_faqs( $child_category ) ) { return true; }
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Get the count of all FAQs in a category and its children
+	 *
+	 * @since 2.4.0
+	 */
+	public function get_faq_count( $category ) {
+
+		$count = ! empty( $this->category_faqs[ $category->term_id ] ) ? sizeof( $this->category_faqs[ $category->term_id ] ) : 0;
+
+		if ( ! empty( $category->children ) ) {
+
+			foreach ( $category->children as $child_category ) {
+
+				$count += $this->get_faq_count( $child_category );
+			}
+		}
+
+		return $count;
 	}
 
 	/**
@@ -258,9 +371,7 @@ class ewdufaqViewFAQs extends ewdufaqView {
 	public function open_category_header() {
 		global $ewd_ufaq_controller;
 		
-		if ( ! empty( $this->faqs_container_open ) ) { return; }
-
-		$this->faqs_container_open = true;
+		$this->faqs_container_open++;
 		
 		$template = $this->find_template( 'faqs-category-header' );
 		
@@ -278,7 +389,7 @@ class ewdufaqViewFAQs extends ewdufaqView {
 
 		if ( empty( $this->faqs_container_open ) ) { return; }
 
-		$this->faqs_container_open = false;
+		$this->faqs_container_open--;
 
 		$template = $this->find_template( 'faqs-category-footer' );
 		
@@ -349,9 +460,21 @@ class ewdufaqViewFAQs extends ewdufaqView {
 	 *
 	 * @since 2.0.0
 	 */
-  	public function get_category_count() {
+  	public function get_category_count( $category = null ) {
 
-  		return ( ! empty( $this->current_category ) and ! empty( $this->category_faqs[ $this->current_category->term_id ] ) ) ? sizeof( $this->category_faqs[ $this->current_category->term_id ] ) : 0;
+  		if ( empty( $category ) ) { return 0; }
+
+  		$count = ( ! empty( $category->term_id ) and ! empty( $this->category_faqs[ $category->term_id ] ) ) ? sizeof( $this->category_faqs[ $category->term_id ] ) : 0;
+
+  		if ( ! empty( $category->children ) ) {
+
+  			foreach ( $category->children as $child_category ) { 
+
+  				$count += $this->get_category_count( $child_category );
+  			}
+  		}
+
+  		return $count;
   	}
 
 	/**
@@ -366,6 +489,7 @@ class ewdufaqViewFAQs extends ewdufaqView {
 			array(
 				'ewd-ufaq-faq-list',
 				'ewd-ufaq-page-type-' . $ewd_ufaq_controller->settings->get_setting( 'page-type' ),
+				'ewd-ufaq-category-tabs-' . $ewd_ufaq_controller->settings->get_setting( 'category-tabs' )
 			)
 		);
 
@@ -429,10 +553,20 @@ class ewdufaqViewFAQs extends ewdufaqView {
 
 		$args = array(
 			'taxonomy'		=> EWD_UFAQ_FAQ_CATEGORY_TAXONOMY,
-			'orderby'		=> ! empty( $this->category_orderby ) ? $this->category_orderby : '',
-			'order'			=> ! empty( $this->category_order ) ? $this->category_order : '',
-			'hide_empty'	=> false
+			'hide_empty'	=> false,
+			'order' 		=> ! empty( $this->category_order ) ? $this->category_order : '',
 		);
+
+		if ( ! empty( $this->category_orderby ) and $this->category_orderby != 'manual' ) {
+
+			$args[ 'orderby' ] = $this->category_orderby;
+		}
+		elseif ( ! empty( $this->category_orderby ) ) {
+
+			$args[ 'meta_key' ] = 'ufaq_category_order';
+			$args[ 'orderby' ] = 'meta_value_num';
+
+		}
 
 		$categories = get_terms( $args ); 
 
@@ -440,7 +574,7 @@ class ewdufaqViewFAQs extends ewdufaqView {
 
 			foreach( $this->faqs as $faq_view ) {
 
-				if ( in_array( $category, $faq_view->faq->categories ) ) {
+				if ( in_array( $category->term_id, array_column( $faq_view->faq->categories, 'term_id' ) ) ) {
 
 					if ( ! $this->faq_not_in_category( $category->term_id, $faq_view ) ) { $this->category_faqs[ $category->term_id ][] = $faq_view; }
 				}
@@ -450,6 +584,32 @@ class ewdufaqViewFAQs extends ewdufaqView {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Sort the categories hierarchically with their children
+	 * @since 2.4.0
+	 */
+	public function sort_terms_hierarchically( $cats, $parent_id = 0 ) {
+
+		$sorted_categories = array();
+
+		foreach ( $cats as $index => $cat ) {
+
+			if ( $cat->parent == $parent_id ) {
+
+				$sorted_categories[] = $cat;
+
+				unset( $cats[ $index ] );
+			}
+		}
+
+		foreach ( $sorted_categories as $top_cat ) {
+
+			$top_cat->children = $this->sort_terms_hierarchically( $cats, $top_cat->term_id );
+		}
+
+		return $sorted_categories;
 	}
 
 	/**
@@ -463,7 +623,7 @@ class ewdufaqViewFAQs extends ewdufaqView {
 
 			$child_category = get_term( $child_term_id, EWD_UFAQ_FAQ_CATEGORY_TAXONOMY );
 
-			if ( in_array( $child_category, $faq_view->faq->categories ) ) { 
+			if ( in_array( $child_category->term_id, array_column( $faq_view->faq->categories, 'term_id' ) ) ) {
 
 				if ( ! $this->faq_not_in_category( $category->term_id, $faq_view ) ) { $this->category_faqs[ $category->term_id ][] = $faq_view; }
 			}
@@ -501,6 +661,7 @@ class ewdufaqViewFAQs extends ewdufaqView {
 		
 		$this->category_order = empty( $this->category_order ) ? $ewd_ufaq_controller->settings->get_setting( 'category-order' ) : $this->category_order;
 		$this->category_orderby = empty( $this->category_orderby ) ? $ewd_ufaq_controller->settings->get_setting( 'category-order-by' ) : $this->category_orderby;
+		$this->category_hierarchical = empty( $this->category_hierarchical ) ? $ewd_ufaq_controller->settings->get_setting( 'category-hierarchical' ) : $this->category_hierarchical;
 		$this->faqs_per_page = empty( $this->faqs_per_page ) ? $ewd_ufaq_controller->settings->get_setting( 'faqs-per-page' ) : $this->faqs_per_page;
 		
 		$this->no_comments = ! empty( $this->no_comments ) ? $this->no_comments : ! $ewd_ufaq_controller->settings->get_setting( 'comments-on' );
@@ -537,6 +698,9 @@ class ewdufaqViewFAQs extends ewdufaqView {
 		wp_enqueue_style( 'ewd-ufaq-rrssb' );
 		wp_enqueue_style( 'ewd-ufaq-jquery-ui' );
 		wp_enqueue_style( 'ewd-ufaq-css' );
+		if ( $ewd_ufaq_controller->settings->get_setting( 'display-style' ) == 'minimalist' ) {
+			wp_enqueue_style( 'ewd-ufaq-minimalist' );
+		}
 
 		wp_enqueue_style( 'ewd-ufaq-rrssb' );
 		wp_enqueue_style( 'ewd-ufaq-jquery-ui' );

@@ -18,8 +18,8 @@ class ewdufaqFAQ {
 	public $post_status;
 
 	// post terms
-	public $categories;
-	public $tags;
+	public $categories = array();
+	public $tags = array();
 
 	// post meta
 	public $faq_author;
@@ -27,6 +27,7 @@ class ewdufaqFAQ {
 	public $views;
 	public $up_votes;
 	public $down_votes;
+	public $user_submitted;
 
 	// custom fields
 	public $custom_fields = array();
@@ -130,6 +131,8 @@ class ewdufaqFAQ {
 
 		$this->up_votes = get_post_meta( $this->ID, 'FAQ_Up_Votes', true );
 		$this->down_votes = get_post_meta( $this->ID, 'FAQ_Down_Votes', true );
+
+		$this->user_submitted = get_post_meta( $this->ID, 'FAQ_User_Submitted', true );
 	}
 
 	/**
@@ -179,6 +182,12 @@ class ewdufaqFAQ {
 		global $ewd_ufaq_controller;
 
 		$this->validation_errors = array();
+
+		// USER-SUBMITTED FLAG
+		if ( isset( $_POST['user_submitted'] ) and ! empty( $_POST['user_submitted'] ) ) {
+
+			$this->user_submitted = true;
+		}
 
 		// CAPTCHA
 		if ( $ewd_ufaq_controller->settings->get_setting( 'submit-question-captcha' ) ) {
@@ -257,7 +266,6 @@ class ewdufaqFAQ {
 			}
 			else { $this->custom_fields[ $custom_field->id ] = empty( $_POST[ $input_name ] ) ? false : sanitize_text_field( $_POST[ $input_name ] ); }
 		}
-
 		
 		$this->post_status = 'draft';
 

@@ -6,6 +6,6 @@
 
 	<?php $input_name = $this->get_custom_field_input_name(); ?>
 
-	<textarea name='<?php echo esc_attr( $input_name ); ?>' class='ewd-ufaq-faq-textarea'><?php echo ( ! empty( $_POST[ $input_name ] ) ? esc_attr( $_POST[ $input_name ] ) : '' ); ?></textarea>
+	<textarea name='<?php echo esc_attr( $input_name ); ?>' class='ewd-ufaq-faq-textarea' <?php echo $this->get_field_required(); ?>><?php echo ( ! empty( $_POST[ $input_name ] ) ? esc_attr( $_POST[ $input_name ] ) : '' ); ?></textarea>
 
 </div>

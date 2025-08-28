@@ -7,7 +7,7 @@
  * @package Simple Admin Pages
  */
 
-class sapAdminPageSettingColorPicker_2_6_20 extends sapAdminPageSetting_2_6_20 {
+class sapAdminPageSettingColorPicker_2_7_1 extends sapAdminPageSetting_2_7_1 {
 
 	public $sanitize_callback = 'sanitize_text_field';
 

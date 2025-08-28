@@ -6,7 +6,7 @@
 
 	<?php $input_name = $this->get_custom_field_input_name(); ?>
 
-	<select name='<?php echo esc_attr( $input_name ); ?>' >
+	<select name='<?php echo esc_attr( $input_name ); ?>' <?php echo $this->get_field_required(); ?>>
 		
 		<?php foreach ( $this->get_custom_field_options() as $option ) { ?>
 			<option value='<?php echo esc_attr( $option ); ?>' <?php echo ( ! empty( $_POST[ $input_name ] ) and $option == $_POST[ $input_name ] ? 'selected' : '' ); ?>><?php echo esc_html( $option ); ?></option>

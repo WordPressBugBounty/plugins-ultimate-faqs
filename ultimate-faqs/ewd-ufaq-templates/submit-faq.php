@@ -4,6 +4,8 @@
 
 	<form id='question_form' method='post' action='#'>
 
+		<input type='hidden' name='user_submitted' value='1' />
+
 		<?php $this->print_nonce_field(); ?>
 
 		<?php $this->print_referer_field(); ?>

@@ -131,6 +131,8 @@ class ewdufaqBlocks {
 			'hide_empty' => false,
 		) );
 
+		$faq_category_options = array();
+
 		foreach ( $faq_categories as $faq_category ) {
 
 			$faq_category_options[] = array(
@@ -172,7 +174,7 @@ class ewdufaqBlocks {
 	 */
 	public function enqueue_assets() {
 
-		wp_register_style( 'ewd-ufaq-css', EWD_UFAQ_PLUGIN_URL . '/assets/css/ewd-ufaq.css', EWD_UFAQ_VERSION );
+		wp_register_style( 'ewd-ufaq-css', EWD_UFAQ_PLUGIN_URL . '/assets/css/ewd-ufaq.css', array(), EWD_UFAQ_VERSION );
 		wp_register_style( 'ewd-ufaq-blocks-css', EWD_UFAQ_PLUGIN_URL . '/assets/css/ewd-ufaq-blocks.css', array( 'wp-edit-blocks' ), EWD_UFAQ_VERSION );
 		wp_register_script( 'ewd-ufaq-blocks-js', EWD_UFAQ_PLUGIN_URL . '/assets/js/ewd-ufaq-blocks.js', array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor', 'wp-server-side-render' ), EWD_UFAQ_VERSION );
 	}

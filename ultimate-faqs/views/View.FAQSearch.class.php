@@ -108,11 +108,12 @@ class ewdufaqViewFAQSearch extends ewdufaqViewFAQs {
 			array(
 				'ewd-ufaq-faq-list',
 				'ewd-ufaq-page-type-' . $ewd_ufaq_controller->settings->get_setting( 'page-type' ),
+				'ewd-ufaq-category-tabs-' . $ewd_ufaq_controller->settings->get_setting( 'category-tabs' ),
 				'ewd-ufaq-search'
 			)
 		);
 
-		if ( $ewd_ufaq_controller->settings->get_setting( 'faq-category-accordion' ) ) {
+		if ( $ewd_ufaq_controller->settings->get_setting( 'faq-category-accordion' ) or $ewd_ufaq_controller->settings->get_setting( 'category-tabs' ) ) {
 			$classes[] = 'ewd-ufaq-faq-category-title-accordion';
 		}
 

@@ -177,7 +177,7 @@ class ewdufaqViewSubmitFAQ extends ewdufaqView {
 	public function maybe_print_author_email_field() {
 		global $ewd_ufaq_controller;
 		
-		if ( ! $ewd_ufaq_controller->settings->get_setting( 'submit-faq-email' ) ) { return; }
+		if ( ! $ewd_ufaq_controller->settings->get_setting( 'submit-faq-author-email' ) ) { return; }
 		
 		$template = $this->find_template( 'submit-faq-field-author-email' );
 		
@@ -277,6 +277,23 @@ class ewdufaqViewSubmitFAQ extends ewdufaqView {
 		}
 
 		return explode( ',', $this->current_field->options );
+	}
+
+	/**
+	 * Returns an array of options for the current faq field, or an empty array if not set
+	 *
+	 * @since 2.4.0
+	 */
+	public function get_field_required( $field_name = '' ) {
+		global $ewd_ufaq_controller;
+
+		if ( empty( $field_name ) and ! empty( $this->current_field ) ) { $field_name = $this->current_field->id; }
+
+		if ( empty( $field_name ) ) { return ''; }
+
+		$required_fields = $ewd_ufaq_controller->settings->get_setting( 'submit-required-fields' );
+
+		return in_array( $field_name, $required_fields ) ? 'required' : '';
 	}
 
 	/**

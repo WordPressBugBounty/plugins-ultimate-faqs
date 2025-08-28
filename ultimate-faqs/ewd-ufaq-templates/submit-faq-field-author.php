@@ -4,7 +4,7 @@
 		<?php echo esc_html( $this->get_label( 'label-question-author' ) ); ?>:
 	</label>
 
-	<input type='text' name='post_author' id='post_author' value='<?php echo ( ! empty( $_POST['post_author'] ) ? esc_attr( $_POST['post_author'] ) : ''); ?>' />
+	<input type='text' name='post_author' id='post_author' value='<?php echo ( ! empty( $_POST['post_author'] ) ? esc_attr( $_POST['post_author'] ) : ''); ?>' <?php echo $this->get_field_required( 'author' ); ?> />
 		
 	<div id='ewd-ufaq-author-explanation' class='ewd-ufaq-field-explanation'>
 		

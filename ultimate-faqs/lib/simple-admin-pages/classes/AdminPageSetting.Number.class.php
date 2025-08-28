@@ -7,7 +7,7 @@
  * @package Simple Admin Pages
  */
 
-class sapAdminPageSettingNumber_2_6_20 extends sapAdminPageSetting_2_6_20 {
+class sapAdminPageSettingNumber_2_7_1 extends sapAdminPageSetting_2_7_1 {
 
 	public $sanitize_callback = 'sanitize_text_field';
 
@@ -26,7 +26,7 @@ class sapAdminPageSettingNumber_2_6_20 extends sapAdminPageSetting_2_6_20 {
 
 		<fieldset <?php $this->print_conditional_data(); ?>>
 
-			<input name="<?php echo $this->get_input_name(); ?>" type="number" id="<?php echo esc_attr( $this->get_input_name() ); ?>" value="<?php echo esc_attr( $this->value ); ?>"<?php echo !empty( $this->placeholder ) ? ' placeholder="' . esc_attr( $this->placeholder ) . '"' : ''; ?> class="regular-text" <?php echo ( $this->disabled ? 'disabled' : ''); ?> />
+			<input name="<?php echo esc_attr( $this->get_input_name() ); ?>" type="number" id="<?php echo esc_attr( $this->get_input_name() ); ?>" value="<?php echo esc_attr( $this->value ); ?>"<?php echo !empty( $this->placeholder ) ? ' placeholder="' . esc_attr( $this->placeholder ) . '"' : ''; ?> class="regular-text" <?php echo ( $this->disabled ? 'disabled' : ''); ?> />
 
 			<?php $this->display_disabled(); ?>	
 			
