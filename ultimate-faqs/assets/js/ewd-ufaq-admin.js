@@ -155,3 +155,18 @@ jQuery( document ).ready( function() {
 	jQuery( '.ewd-ufaq-settings-preview' ).prevAll( '.sap-tutorial-toggle' ).hide();
 	jQuery( '.ewd-ufaq-settings-preview .sap-tutorial-toggle' ).hide();
 });
+
+// NEW PLUGIN NOTICE
+
+jQuery( document ).ready( function( $ ) {
+
+  jQuery(document).on( 'click', '.ait-iat-new-plugin-notice .notice-dismiss', function( event ) {
+    var data = jQuery.param({
+      action: 'ewd_ufaq_hide_new_plugin_notice',
+      plugin: 'ait_iat',
+      nonce: ewd_ufaq_php_data.nonce
+    });
+
+    jQuery.post( ajaxurl, data, function() {} );
+  });
+});

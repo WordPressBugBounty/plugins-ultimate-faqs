@@ -3,7 +3,7 @@ Contributors: rustaurius
 Tags: faq, faqs, woocommerce faq, faq block, faq shortcode, accordion, documentation, knowledge base, mobile faq, responsive faq
 Requires at least: 6.0
 Tested up to: 6.8
-Stable tag: 2.4.0
+Stable tag: 2.4.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -222,6 +222,9 @@ For more info on installing and activating the plugin, and on the walk-through, 
 - [Our Support Center](https://www.etoilewebdesign.com/support-center/)
 
 == Changelog ==
+
+= 2.4.1 (2025-09-23) =
+- Updated WooCommerce compatibility.
 
 = 2.4.0 (2025-08-28) =
 - **IMPORTANT NOTE: Significant updates have been made to the styling of several layouts, especially the "Minimalist" FAQ display style. We highly recommend, especially if you are using this display style, that you install the update on a staging environment first and test with with the updated style, especially if you have customized the layout and/or CSS.**

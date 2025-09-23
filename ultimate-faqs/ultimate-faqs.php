@@ -3,7 +3,7 @@
  * Plugin Name: Ultimate FAQ Accordion Plugin
  * Plugin URI: https://www.etoilewebdesign.com/plugins/ultimate-faq/
  * Description: Full-featured FAQ and accordion plugin with advanced search, simple UI and easy-to-use Gutenberg blocks and shortcodes.
- * Version: 2.4.0
+ * Version: 2.4.1
  * Author: Etoile Web Design
  * Author URI: https://www.etoilewebdesign.com/
  * Text Domain: ultimate-faqs
@@ -11,7 +11,7 @@
  * Requires at least: 6.0
  * Requires PHP: 7.4
  * WC requires at least: 7.1
- * WC tested up to: 10.1
+ * WC tested up to: 10.2
  */
 
 if ( ! defined( 'ABSPATH' ) )
@@ -63,7 +63,7 @@ class ewdufaqInit {
 		define( 'EWD_UFAQ_PLUGIN_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
 		define( 'EWD_UFAQ_PLUGIN_FNAME', plugin_basename( __FILE__ ) );
 		define( 'EWD_UFAQ_TEMPLATE_DIR', 'ewd-ufaq-templates' );
-		define( 'EWD_UFAQ_VERSION', '2.4.0' );
+		define( 'EWD_UFAQ_VERSION', '2.4.1' );
 
 		define( 'EWD_UFAQ_FAQ_POST_TYPE', 'ufaq' );
 		define( 'EWD_UFAQ_FAQ_CATEGORY_TAXONOMY', 'ufaq-category' );
@@ -169,8 +169,9 @@ class ewdufaqInit {
 
 		add_action( 'plugins_loaded', 			array( $this, 'load_textdomain' ) );
 
-		add_action( 'admin_notices', 			array( $this, 'display_header_area' ) );
+		add_action( 'admin_notices', 			array( $this, 'display_header_area' ), 99 );
 		add_action( 'admin_notices', 			array( $this, 'maybe_display_helper_notice' ) );
+		add_action( 'admin_notices', 			array( $this, 'maybe_display_new_plugin_notice' ) );
 
 		add_action( 'admin_enqueue_scripts', 	array( $this, 'enqueue_admin_assets' ), 10, 1 );
 		add_action( 'wp_enqueue_scripts', 		array( $this, 'register_assets' ) );
@@ -180,6 +181,7 @@ class ewdufaqInit {
 		add_filter( 'plugin_action_links', 		array( $this, 'plugin_action_links' ), 10, 2);
 
 		add_action( 'wp_ajax_ewd_ufaq_hide_helper_notice', array( $this, 'hide_helper_notice' ) );
+		add_action( 'wp_ajax_ewd_ufaq_hide_new_plugin_notice', array( $this, 'hide_new_plugin_notice' ) );
 
 		add_action( 'before_woocommerce_init', array( $this, 'declare_wc_hpos' ) );
 	}
@@ -647,6 +649,54 @@ class ewdufaqInit {
 		}
 
 		set_transient( 'ewd-helper-notice-dismissed', true, 3600*24*7 );
+
+		die();
+	}
+
+	public function maybe_display_new_plugin_notice() {
+
+		$screen = get_current_screen();
+        if (!isset($screen->id) || strpos($screen->id, 'ufaq_page_') === false) { return; }
+
+		if ( get_transient( 'ewd-ufaq-ait-iat-plugin-notice-dismissed' ) ) { return; }
+
+		// October 17th, 2025
+		if ( time() > 1760759940 ) { return; }
+
+		?>
+
+		<div class='notice notice-error is-dismissible ait-iat-new-plugin-notice'>
+			
+			<div class='ewd-ufaq-new-plugin-notice-img'>
+				<img src='<?php echo EWD_UFAQ_PLUGIN_URL . '/assets/img/ait-iat-plugin-icon.png' ; ?>' />
+			</div>
+
+			<div class='ewd-ufaq-new-plugin-notice-txt'>
+				<p><?php _e( 'Want to improve your search rankings? Try our new <strong>AI Image Alt Text</strong> plugin!', 'ultimate-faqs' ); ?></p>
+				<p><?php echo sprintf( __( 'As a thank you to our customers, for a limited time you can get a <strong>free pro license</strong>! Try the <a target=\'_blank\' href=\'%s\'>free version</a> today or use code <code>early_adopter_pro</code> to <a target=\'_blank\' href=\'%s\'>get your pro version license</a>!', 'ultimate-faqs' ), admin_url( 'plugin-install.php?tab=plugin-information&plugin=ai-image-alt-text' ), 'https://www.wpaiplugins.dev/wordpress-image-alt-text-ai-plugin/' ); ?></p>
+			</div>
+
+			<div class='ewd-ufaq-clear'></div>
+
+		</div>
+
+		<?php 
+	}
+
+	public function hide_new_plugin_notice() {
+		global $ewd_ufaq_controller;
+
+		// Authenticate request
+		if (
+			! check_ajax_referer( 'ewd-ufaq-admin-js', 'nonce' )
+			||
+			! current_user_can( $ewd_ufaq_controller->settings->get_setting( 'access-role' ) )
+		) {
+			ewdufaqHelper::admin_nopriv_ajax();
+
+		}
+
+		set_transient( 'ewd-ufaq-ait-iat-plugin-notice-dismissed', true, 3600*24*7 );
 
 		die();
 	}
