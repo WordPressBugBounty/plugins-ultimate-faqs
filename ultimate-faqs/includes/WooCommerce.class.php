@@ -73,8 +73,9 @@ if ( !class_exists( 'ewdufaqWooCommerce' ) ) {
 					'callback' 	=> array( $this, 'faq_content' )
 				);
 		
-				return $tabs;
 			}
+
+			return $tabs;
 		}
 
 		public function admin_enqueue( $hook ) {

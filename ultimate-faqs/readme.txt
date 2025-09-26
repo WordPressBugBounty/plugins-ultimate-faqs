@@ -3,7 +3,7 @@ Contributors: rustaurius
 Tags: faq, faqs, woocommerce faq, faq block, faq shortcode, accordion, documentation, knowledge base, mobile faq, responsive faq
 Requires at least: 6.0
 Tested up to: 6.8
-Stable tag: 2.4.1
+Stable tag: 2.4.2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -223,7 +223,11 @@ For more info on installing and activating the plugin, and on the walk-through, 
 
 == Changelog ==
 
+= 2.4.2 (2025-09-26) =
+- Fix: Tabs not displaying on WooCommerce product page when no FAQs assigned to that product.
+
 = 2.4.1 (2025-09-23) =
+- AI feature now uses GPT-5.
 - Updated WooCommerce compatibility.
 
 = 2.4.0 (2025-08-28) =
