@@ -63,8 +63,8 @@ if ( !class_exists( 'ewdufaqWooCommerce' ) ) {
 				}
 			}
 		
-			$current_faqs = is_array( get_post_meta( $product_post->ID, 'EWD_UFAQ_WC_Selected_FAQs', true ) ) ? get_post_meta( $product_post->ID, 'EWD_UFAQ_WC_Selected_FAQs', true ) : array();
-		
+			$current_faqs = is_array( get_post_meta( $product_post->ID, 'EWD_UFAQ_WC_Selected_FAQs', true ) ) ? array_filter( get_post_meta( $product_post->ID, 'EWD_UFAQ_WC_Selected_FAQs', true ) ) : array();
+			 
 			if ( ( $ufaq_product_category or $ufaq_wccat_category or ! empty( $current_faqs ) ) ) {
 
 				$tabs['faq_tab'] = array(
@@ -109,10 +109,10 @@ if ( !class_exists( 'ewdufaqWooCommerce' ) ) {
 			
 			$ufaq_product_category = get_term_by( 'name', $product_post->post_title, EWD_UFAQ_FAQ_CATEGORY_TAXONOMY );
 		
-			echo '<h2>' . esc_html( $ewd_ufaq_controller->settings->get_setting( 'label-woocommerce-tab' ) ) . '</h2>';
+			echo '<h2 class=\'ewd-ufaq-woocommerce-heading\'>' . esc_html( $ewd_ufaq_controller->settings->get_setting( 'label-woocommerce-tab' ) ) . '</h2>';
 		
-			$current_faqs = is_array( get_post_meta( $product_post->ID, 'EWD_UFAQ_WC_Selected_FAQs', true ) ) ? get_post_meta( $product_post->ID, 'EWD_UFAQ_WC_Selected_FAQs', true ) : array();
-		
+			$current_faqs = is_array( get_post_meta( $product_post->ID, 'EWD_UFAQ_WC_Selected_FAQs', true ) ) ? array_filter( get_post_meta( $product_post->ID, 'EWD_UFAQ_WC_Selected_FAQs', true ) ) : array();
+			
 			if ( ! empty( $current_faqs ) ) {
 
 				$faq_list = implode( ',', $current_faqs );
@@ -265,7 +265,7 @@ if ( !class_exists( 'ewdufaqWooCommerce' ) ) {
 		        $added_faqs[] = array( 'ID' => $faq, 'Name' => $faq_post->post_title);
 		    }
 		
-		    update_post_meta( $post_id, 'EWD_UFAQ_WC_Selected_FAQs', $current_faqs );
+		    update_post_meta( $post_id, 'EWD_UFAQ_WC_Selected_FAQs', array_filter( $current_faqs ) );
 		
 		    echo json_encode( $added_faqs );
 		
@@ -292,7 +292,7 @@ if ( !class_exists( 'ewdufaqWooCommerce' ) ) {
 
 			$remaining_faqs = array_diff( $current_faqs, $faqs );
 
-			update_post_meta( $post_id, 'EWD_UFAQ_WC_Selected_FAQs', $remaining_faqs );
+			update_post_meta( $post_id, 'EWD_UFAQ_WC_Selected_FAQs', array_filter( $remaining_faqs ) );
 
 			die();
 		}

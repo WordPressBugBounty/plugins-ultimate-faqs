@@ -260,7 +260,7 @@ class ewdufaqDashboard {
 					<li>SOCIAL</li>
 					<li><a href="https://www.facebook.com/EtoileWebDesign/" target="_blank">Facebook</a></li>
 					<li><a href="https://twitter.com/EtoileWebDesign" target="_blank">Twitter</a></li>
-					<li><a href="https://www.etoilewebdesign.com/category/blog/?utm_source=upcp_dashboard&utm_content=footer_blog" target="_blank">Blog</a></li>
+					<li><a href="https://www.etoilewebdesign.com/category/blog/?utm_source=ufaq_dashboard&utm_content=footer_blog" target="_blank">Blog</a></li>
 				</ul>
 			</div>
 		</div> <!-- ewd-ufaq-dashboard-new-footer-two -->

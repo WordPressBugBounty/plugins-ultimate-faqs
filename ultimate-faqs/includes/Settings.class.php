@@ -69,9 +69,10 @@ class ewdufaqSettings {
 
 			'faq-fields' => array(),
 
-			'styling-toggle-symbol'         => 'A',
-			'styling-category-heading-type' => 'h3',
-			'styling-faq-heading-type'      => 'h4',
+			'styling-toggle-symbol'          => 'A',
+			'styling-category-toggle-symbol' => '',
+			'styling-category-heading-type'  => 'h3',
+			'styling-faq-heading-type'       => 'h4',
 
 			'label-retrieving-results' 				=> __( 'Retrieving Results', 'ultimate-faqs' ),
 			'label-no-results-found'   				=> __( 'No result FAQ\'s contained the term \'%s\'', 'ultimate-faqs' ),
@@ -262,7 +263,7 @@ class ewdufaqSettings {
 			array(
 				'id'			=> 'permalink-type',
 				'title'			=> __( 'Permalink Destination', 'ultimate-faqs' ),
-				'description'	=> __( 'Should the permalink link to the main FAQ page or the individual FAQ page?', 'ultimate-faqs' ),
+				'description'	=> __( 'Should the permalink link to the main FAQ page or the individual FAQ page? Any FAQs not visible on page load will default to "Individual FAQ Page" regardless of what you choose here. (For example, if you have "FAQs Per Page" set to 5, FAQs 6 and up, which are not visible on page load, will default to "Individual FAQ Page.")', 'ultimate-faqs' ),
 				'options'		=> array(
 					'same_page'			=> __( 'Main FAQ Page', 'ultimate-faqs' ),
 					'individual_page'	=> __( 'Individual FAQ Page', 'ultimate-faqs' ),

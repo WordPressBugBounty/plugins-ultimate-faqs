@@ -161,6 +161,13 @@ class ewdufaqView extends ewdufaqBase {
 			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-toggle-border-radius' ) != '' ) { $css .= '.ewd-ufaq-post-margin-symbol { border-radius: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-toggle-border-radius' ) . ' !important; }'; }
 			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-toggle-symbol-size' ) != '' ) { $css .= '.ewd-ufaq-faq-title .ewd-ufaq-post-margin-symbol span { font-size: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-toggle-symbol-size' ) . ' !important; }'; }
 			
+			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-category-toggle-background-color' ) != '' ) { $css .= '.ewd-ufaq-category-post-margin-symbol { background-color: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-category-toggle-background-color' ) . ' !important; }'; }
+			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-category-toggle-font-color' ) != '' ) { $css .= '.ewd-ufaq-category-post-margin-symbol { color: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-category-toggle-font-color' ) . ' !important; }'; }
+			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-category-toggle-border-size' ) != '' ) { $css .= '.ewd-ufaq-category-post-margin-symbol { border-width: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-category-toggle-border-size' ) . ' !important; }'; }
+			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-category-toggle-border-color' ) != '' ) { $css .= '.ewd-ufaq-category-post-margin-symbol { border-color: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-category-toggle-border-color' ) . ' !important; }'; }
+			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-category-toggle-border-radius' ) != '' ) { $css .= '.ewd-ufaq-category-post-margin-symbol { border-radius: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-category-toggle-border-radius' ) . ' !important; }'; }
+			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-category-toggle-symbol-size' ) != '' ) { $css .= '.ewd-ufaq-faq-category-title .ewd-ufaq-category-post-margin-symbol span { font-size: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-category-toggle-symbol-size' ) . ' !important; }'; }
+			
 			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-block-background-color' ) != '' ) { 
 
 				$css .= ".ewd-ufaq-faq-display-style-block.ewd-ufaq-post-active, .ewd-ufaq-faq-display-style-block.ewd-ufaq-post-active a,.ewd-ufaq-faq-display-style-block:hover, .ewd-ufaq-faq-display-style-block:hover a, .ewd-ufaq-faq-display-style-block:hover $heading_type { background-color: " . $ewd_ufaq_controller->settings->get_setting( 'styling-block-background-color' ) . ' !important; }';
@@ -171,8 +178,8 @@ class ewdufaqView extends ewdufaqBase {
 
 			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-block-font-color' ) != '' ) { 
 
-				$css .= ".ewd-ufaq-faq-display-style-block:hover .ewd-ufaq-post-margin-symbol, .ewd-ufaq-faq-display-style-block:hover $heading_type { color: " . $ewd_ufaq_controller->settings->get_setting( 'styling-block-font-color' ) . ' !important; }';
-				$css .= ".ewd-ufaq-faq-display-style-border_block:hover .ewd-ufaq-post-margin-symbol, .ewd-ufaq-faq-display-style-border_block:hover $heading_type { color: " . $ewd_ufaq_controller->settings->get_setting( 'styling-block-font-color' ) . ' !important; }';
+				$css .= ".ewd-ufaq-faq-display-style-block:hover .ewd-ufaq-post-margin-symbol, .ewd-ufaq-category-post-margin-symbol, .ewd-ufaq-faq-display-style-block:hover $heading_type { color: " . $ewd_ufaq_controller->settings->get_setting( 'styling-block-font-color' ) . ' !important; }';
+				$css .= ".ewd-ufaq-faq-display-style-border_block:hover .ewd-ufaq-post-margin-symbol, .ewd-ufaq-category-post-margin-symbol, .ewd-ufaq-faq-display-style-border_block:hover $heading_type { color: " . $ewd_ufaq_controller->settings->get_setting( 'styling-block-font-color' ) . ' !important; }';
 			}
 
 			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-list-font' ) != '' ) { $css .= '.ewd-ufaq-faq-header-title a { font-family: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-list-font' ) . ' !important; }'; }

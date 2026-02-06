@@ -3,7 +3,7 @@
  * Plugin Name: Ultimate FAQ Accordion Plugin
  * Plugin URI: https://www.etoilewebdesign.com/plugins/ultimate-faq/
  * Description: Full-featured FAQ and accordion plugin with advanced search, simple UI and easy-to-use Gutenberg blocks and shortcodes.
- * Version: 2.4.2
+ * Version: 2.4.6
  * Author: Etoile Web Design
  * Author URI: https://www.etoilewebdesign.com/
  * Text Domain: ultimate-faqs
@@ -11,7 +11,7 @@
  * Requires at least: 6.0
  * Requires PHP: 7.4
  * WC requires at least: 7.1
- * WC tested up to: 10.2
+ * WC tested up to: 10.4
  */
 
 if ( ! defined( 'ABSPATH' ) )
@@ -63,7 +63,7 @@ class ewdufaqInit {
 		define( 'EWD_UFAQ_PLUGIN_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
 		define( 'EWD_UFAQ_PLUGIN_FNAME', plugin_basename( __FILE__ ) );
 		define( 'EWD_UFAQ_TEMPLATE_DIR', 'ewd-ufaq-templates' );
-		define( 'EWD_UFAQ_VERSION', '2.4.2' );
+		define( 'EWD_UFAQ_VERSION', '2.4.6' );
 
 		define( 'EWD_UFAQ_FAQ_POST_TYPE', 'ufaq' );
 		define( 'EWD_UFAQ_FAQ_CATEGORY_TAXONOMY', 'ufaq-category' );
@@ -171,7 +171,10 @@ class ewdufaqInit {
 
 		add_action( 'admin_notices', 			array( $this, 'display_header_area' ), 99 );
 		add_action( 'admin_notices', 			array( $this, 'maybe_display_helper_notice' ) );
+		add_action( 'admin_notices', 			array( $this, 'maybe_display_shortcode_notice' ) );
 		add_action( 'admin_notices', 			array( $this, 'maybe_display_new_plugin_notice' ) );
+
+		add_action( 'admin_init',	 			array( $this, 'display_help_bubble' ) );
 
 		add_action( 'admin_enqueue_scripts', 	array( $this, 'enqueue_admin_assets' ), 10, 1 );
 		add_action( 'wp_enqueue_scripts', 		array( $this, 'register_assets' ) );
@@ -653,6 +656,31 @@ class ewdufaqInit {
 		die();
 	}
 
+	public function maybe_display_shortcode_notice() {
+
+		$screen = get_current_screen();
+        if ( empty( $screen->parent_file ) or $screen->parent_file != 'edit.php?post_type=ufaq' ) { return; }
+
+        $counts    = wp_count_posts( EWD_UFAQ_FAQ_POST_TYPE );
+		$faq_count = isset( $counts->publish ) ? (int) $counts->publish : 0;
+
+		if ( $faq_count > 3 ) { return; }
+
+		?>
+
+		<div class='notice notice-info is-dismissible'>
+
+			<div class='ewd-ufaq-shortcode-helper'>
+				<p><?php _e( 'Thanks for installing! Add FAQs to your site using the [ultimate-faqs] shortcode or the Display FAQs block.', 'ultimate-faqs' ); ?></p>
+			</div>
+
+			<div class='ewd-ufaq-clear'></div>
+
+		</div>
+
+		<?php 
+	}
+
 	public function maybe_display_new_plugin_notice() {
 
 		$screen = get_current_screen();
@@ -699,6 +727,11 @@ class ewdufaqInit {
 		set_transient( 'ewd-ufaq-ait-iat-plugin-notice-dismissed', true, 3600*24*7 );
 
 		die();
+	}
+
+	public function display_help_bubble() {
+
+		ewdufaqHelper::display_help_button();
 	}
 
 	public function admin_menu_optional( $menu_list ) {

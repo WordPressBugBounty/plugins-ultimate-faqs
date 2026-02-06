@@ -2,8 +2,8 @@
 Contributors: rustaurius
 Tags: faq, faqs, woocommerce faq, faq block, faq shortcode, accordion, documentation, knowledge base, mobile faq, responsive faq
 Requires at least: 6.0
-Tested up to: 6.8
-Stable tag: 2.4.2
+Tested up to: 6.9
+Stable tag: 2.4.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -222,6 +222,23 @@ For more info on installing and activating the plugin, and on the walk-through, 
 - [Our Support Center](https://www.etoilewebdesign.com/support-center/)
 
 == Changelog ==
+
+= 2.4.6 (2026-02-03) =
+- New: You can now add a featured image to an FAQ and it will display on the single post page if your theme supports it.
+- New: Helper button with info/support/tutorials for admin and settings pages.
+- Update: Added a class to the h2 output for the FAQs heading on the WooCommerce product page.
+- Fix: Linebreaks/spacing not being applied.
+- Fix: WP Forms FAQs not working.
+
+= 2.4.5 (2026-01-08) =
+- Fixed issue with pagination not working in certain cases. 
+- Updated the Permalink Destination option description to more clearly explain the fallback behaviour when pagination is being used.
+
+= 2.4.4 (2025-11-19) =
+- Added a new option to display a toggle icon for the category toggle feature.
+
+= 2.4.3 (2025-10-16) =
+- Fix to prevent all FAQs from being displayed if an FAQ is added to a WooCommerce product and then subsequently deleted.
 
 = 2.4.2 (2025-09-26) =
 - Fix: Tabs not displaying on WooCommerce product page when no FAQs assigned to that product.

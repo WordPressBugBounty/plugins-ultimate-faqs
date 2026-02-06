@@ -650,6 +650,43 @@ class ewdufaqViewFAQs extends ewdufaqView {
 	}
 
 	/**
+	 * Detemines whether to display a category toggle symbol or not
+	 *
+	 * @since 2.4.3
+	 */
+	public function display_category_toggle_symbol() {
+		global $ewd_ufaq_controller;
+
+		if ( empty( $ewd_ufaq_controller->settings->get_setting( 'styling-category-toggle-symbol' ) ) ) { return false; }
+
+		if ( empty( $ewd_ufaq_controller->settings->get_setting( 'faq-category-toggle' ) ) ) { return false; }
+
+		return true;
+	}
+
+	/**
+	 * Returns the class for the color block, if any
+	 *
+	 * @since 2.4.3
+	 */
+  	public function get_color_block_shape() {
+  		global $ewd_ufaq_controller;
+
+  		return 'ewd-ufaq-' . $ewd_ufaq_controller->settings->get_setting( 'color-block-shape' );
+  	}
+
+  	/**
+	 * Returns the selected toggle symbol
+	 *
+	 * @since 2.4.3
+	 */
+  	public function get_category_toggle_symbol() {
+  		global $ewd_ufaq_controller;
+
+  		return strtolower( $ewd_ufaq_controller->settings->get_setting( 'styling-category-toggle-symbol' ) );
+  	}
+
+	/**
 	 * Add in default options if not overwritten by shortcode attributes
 	 *
 	 * @since 2.0.0

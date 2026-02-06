@@ -210,7 +210,7 @@ class ewdufaqViewSubmitFAQ extends ewdufaqView {
 	 */
 	public function print_nonce_field() {
 		
-		echo wp_nonce_field( -1, '_wp_nonce', true, false);
+		echo wp_nonce_field( 'ewd_ufaq_nonce_value', 'ewd_ufaq_nonce', true, false);
 	}
 
 	/**

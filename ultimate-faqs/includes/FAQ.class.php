@@ -183,6 +183,18 @@ class ewdufaqFAQ {
 
 		$this->validation_errors = array();
 
+		// NONCE Validation
+		if ( ! isset( $_POST['ewd_ufaq_nonce'] ) || ! wp_verify_nonce( $_POST['ewd_ufaq_nonce'], 'ewd_ufaq_nonce_value' ) ) {
+
+			$this->validation_errors[] = array(
+				'field'		=> 'nonce',
+				'error_msg'	=> 'Invalid Nonce',
+				'message'	=> __( 'Please refresh the page and try submitting again.', 'ultimate-faqs' ),
+			);
+
+			return false; // End early if nonce validation fails
+		}
+
 		// USER-SUBMITTED FLAG
 		if ( isset( $_POST['user_submitted'] ) and ! empty( $_POST['user_submitted'] ) ) {
 

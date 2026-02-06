@@ -78,7 +78,8 @@ class ewdufaqCustomPostTypes {
 				'editor', 
 				'author',
 				'excerpt',
-				'comments'
+				'comments',
+				'thumbnail',
 			),
 			'show_in_rest' => true,
 		);

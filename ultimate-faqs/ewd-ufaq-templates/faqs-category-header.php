@@ -6,6 +6,12 @@
 			<?php echo esc_html( $this->get_category_name() ); ?>
 			<?php if ( $this->get_option( 'group-by-category-count' ) ) { ?> <span>(<?php echo esc_html( $this->get_category_count( $this->current_category ) ); ?>)</span><?php } ?>
 		</<?php echo esc_attr( $this->get_option( 'styling-category-heading-type' ) ); ?>>
+
+		<?php if ( $this->display_category_toggle_symbol() ) { ?>
+			<div class='ewd-ufaq-category-post-margin-symbol <?php echo esc_attr( $this->get_color_block_shape() ); ?>'>
+      			<span ><?php echo esc_attr( $this->get_category_toggle_symbol() ); ?></span>
+      		</div>
+      	<?php } ?>
 	
 	</div>
 	

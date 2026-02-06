@@ -36,6 +36,9 @@
 .ewd-ufaq-faq-category-title {
   width: 100%;
   clear: both;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .ewd-ufaq-faq-category{
@@ -515,6 +518,7 @@ Toggle Font
 }
 
 .ewd-ufaq-faq-title .ewd-ufaq-post-margin-symbol,
+.ewd-ufaq-faq-category-title .ewd-ufaq-category-post-margin-symbol,
 .ewd-ufaq-toggle-all-symbol {
   font-family: 'ewd-toggle-icon';
 }
