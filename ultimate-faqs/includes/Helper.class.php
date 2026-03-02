@@ -152,7 +152,7 @@ class ewdufaqHelper {
     if ( isset( $_GET['post'] ) ) {
 
       $post = get_post( intval( $_GET['post'] ) );
-      $post_type = $post->post_type;
+      $post_type = $post ? $post->post_type : '';
     }
     else {
       
@@ -249,6 +249,10 @@ class ewdufaqHelper {
           ),
         )
       ),
+      'ewd-ufaq-dashboard' => array(
+        'description' => __( 'This is the dashboard screen. Here you can view a summary of your FAQs as well as get quick access to to help, support and documentation.', 'ultimate-faqs' ),
+        'tutorials'   => array()
+      ),
       'ewd-ufaq-settings-ewd-ufaq-basic-tab' => array(
         'description' => __( 'The Basic Settings page lets you customize how FAQs behave and appear on your site, including layout toggles, comment support, permalink options, and display preferences. It also includes access control settings and a custom CSS field to fine-tune the style and functionality of your FAQ section.', 'ultimate-faqs' ),
         'tutorials'   => array(
@@ -324,7 +328,7 @@ class ewdufaqHelper {
     if ( isset( $_GET['post'] ) ) {
 
       $post = get_post( intval( $_GET['post'] ) );
-      $post_type = $post->post_type;
+      $post_type = $post ? $post->post_type : '';
     }
     else {
       
@@ -339,7 +343,7 @@ class ewdufaqHelper {
 
     if ( in_array( $post_type, array_keys( $page_details ) ) ) { return $page_details[ $post_type ]; }
 
-    return array( 'description', 'tutorials' => array() );
+    return array( 'description' => '', 'tutorials' => array() );
   }
 }
 
