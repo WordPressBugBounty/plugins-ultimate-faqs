@@ -204,14 +204,10 @@ class ewdufaqViewFAQ extends ewdufaqView {
 	public function print_faq_answer() {
 		
 		$template = $this->find_template( 'faq-answer' );
-
-		add_filter( 'wp_kses_allowed_html', array( $this, 'get_allowed_faq_content_tags' ) );
 		
 		if ( $template ) {
 			include( $template );
 		}
-
-		remove_filter( 'wp_kses_allowed_html', array( $this, 'get_allowed_faq_content_tags' ) );
 	}
 
 	/**
@@ -670,23 +666,6 @@ class ewdufaqViewFAQ extends ewdufaqView {
   	}
 
 	/**
-	* Get the initial submit faq css classes
-	* @since 2.1.6
-	*/
-	public function get_allowed_faq_content_tags( $tags ) {
-
-		$tags['iframe'] = array(
-			'src'				=> true,
-			'height'			=> true,
-			'width'				=> true,
-			'frameborder'		=> true,
-			'allowfullscreen'	=> true,
-		);
-
-		return apply_filters( 'ewd_ufaq_kses_allowed_html', $tags );
-	}
-
-	/**
 	 * Get the initial submit faq css classes
 	 * @since 2.0.0
 	 */
@@ -743,8 +722,8 @@ class ewdufaqViewFAQ extends ewdufaqView {
 
 		$this->unique_id = $this->faq->post->ID . '-' . ewd_random_string();
 		$this->faq_title = apply_filters( 'the_title', $this->faq->post->post_title, $this->faq->post->ID );
-		$this->faq_answer = apply_filters( 'the_content', html_entity_decode( $this->faq->post->post_content ) );
-		$this->faq_preview = apply_filters( 'the_content', html_entity_decode( $this->faq->post->post_excerpt ) );
+		$this->faq_answer = apply_filters( 'the_content', $this->faq->post->post_content );
+		$this->faq_preview = apply_filters( 'the_content', $this->faq->post->post_excerpt );
 		$this->date = get_the_date( '', $this->faq->post->ID );
 		
 		if ( ! empty( $this->search_string ) and $ewd_ufaq_controller->settings->get_setting( 'highlight-search-term' ) ) {
@@ -878,6 +857,187 @@ class ewdufaqViewFAQ extends ewdufaqView {
 		$result = preg_replace( '/^<\?xml.*?\?>/u', '', $result );
 
 		return $result ? $result : $html;
+	}
+
+	/**
+	 * Extended KSES allowlist for FAQ answers.
+	 *
+	 * Starts with WordPress's normal post allowlist, then adds a few useful tags
+	 * and carefully chosen attributes for richer content.
+	 */
+	public function get_faq_allowed_tags() {
+		$allowed = wp_kses_allowed_html( 'post' );
+	
+		// Media
+		$allowed['video'] = array(
+			'src'      => true,
+			'controls' => true,
+			'autoplay' => true,
+			'loop'     => true,
+			'muted'    => true,
+			'poster'   => true,
+			'preload'  => true,
+			'width'    => true,
+			'height'   => true,
+			'class'    => true,
+			'id'       => true,
+			'style'    => true,
+			'playsinline' => true,
+		);
+		$allowed['source'] = array(
+			'src'  => true,
+			'type' => true,
+			'media' => true,
+		);
+		$allowed['track'] = array(
+			'kind'    => true,
+			'src'     => true,
+			'srclang' => true,
+			'label'   => true,
+			'default' => true,
+		);
+		$allowed['audio'] = array(
+			'src'      => true,
+			'controls' => true,
+			'autoplay' => true,
+			'loop'     => true,
+			'muted'    => true,
+			'preload'  => true,
+			'class'    => true,
+			'id'       => true,
+			'style'    => true,
+		);
+	
+		// Embedded content
+		$allowed['iframe'] = array(
+			'src'             => true,
+			'width'           => true,
+			'height'          => true,
+			'title'           => true,
+			'class'           => true,
+			'id'              => true,
+			'style'           => true,
+			'loading'         => true,
+			'allow'           => true,
+			'allowfullscreen' => true,
+			'referrerpolicy'  => true,
+			'sandbox'         => true,
+		);
+	
+		// Forms
+		$allowed['form'] = array(
+			'action'         => true,
+			'method'         => true,
+			'enctype'        => true,
+			'accept-charset' => true,
+			'target'         => true,
+			'name'           => true,
+			'class'          => true,
+			'id'             => true,
+		);
+		$allowed['input'] = array(
+			'type'        => true,
+			'name'        => true,
+			'value'       => true,
+			'placeholder' => true,
+			'checked'     => true,
+			'selected'    => true,
+			'disabled'    => true,
+			'readonly'    => true,
+			'required'    => true,
+			'min'         => true,
+			'max'         => true,
+			'step'        => true,
+			'maxlength'   => true,
+			'size'        => true,
+			'pattern'     => true,
+			'multiple'    => true,
+			'accept'      => true,
+			'src'         => true,
+			'alt'         => true,
+			'class'       => true,
+			'id'          => true,
+		);
+		$allowed['textarea'] = array(
+			'name'        => true,
+			'rows'        => true,
+			'cols'        => true,
+			'placeholder' => true,
+			'disabled'    => true,
+			'readonly'    => true,
+			'required'    => true,
+			'class'       => true,
+			'id'          => true,
+		);
+		$allowed['select'] = array(
+			'name'     => true,
+			'multiple' => true,
+			'disabled' => true,
+			'required' => true,
+			'class'    => true,
+			'id'       => true,
+		);
+		$allowed['option'] = array(
+			'value'    => true,
+			'selected' => true,
+			'disabled' => true,
+			'label'    => true,
+		);
+		$allowed['optgroup'] = array(
+			'label'    => true,
+			'disabled' => true,
+		);
+		$allowed['button'] = array(
+			'type'     => true,
+			'name'     => true,
+			'value'    => true,
+			'disabled' => true,
+			'class'    => true,
+			'id'       => true,
+		);
+		$allowed['label'] = array(
+			'for'   => true,
+			'class' => true,
+			'id'    => true,
+		);
+		$allowed['fieldset'] = array(
+			'class' => true,
+			'id'    => true,
+		);
+		$allowed['legend'] = array(
+			'class' => true,
+			'id'    => true,
+		);
+	
+		//Semantic/layout tags
+		$allowed['figure'] = array(
+			'class' => true,
+			'id'    => true,
+			'style' => true,
+		);
+		$allowed['figcaption'] = array(
+			'class' => true,
+			'id'    => true,
+			'style' => true,
+		);
+		$allowed['details'] = array(
+			'open'  => true,
+			'class' => true,
+			'id'    => true,
+		);
+		$allowed['summary'] = array(
+			'class' => true,
+			'id'    => true,
+		);
+		$allowed['mark'] = array(
+			'class' => true,
+		);
+		$allowed['time'] = array(
+			'datetime' => true,
+			'class'    => true,
+		);
+	
+		return $allowed;
 	}
 
 	/**

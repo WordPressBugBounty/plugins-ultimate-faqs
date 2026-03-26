@@ -1,3 +1,3 @@
 <div class='ewd-ufaq-post-margin ewd-ufaq-faq-post'>
-	<?php echo $this->faq_answer; /* sanitized by the_content filter */ ?>
+	<?php echo wp_kses( $this->faq_answer, $this->get_faq_allowed_tags() ); ?>
 </div>

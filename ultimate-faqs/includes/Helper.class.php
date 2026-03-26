@@ -43,6 +43,171 @@ class ewdufaqHelper {
     return self::$instance;
   }
 
+  
+  /**
+   * Check whether AI Admin Assistance (AIAA) is active/loaded.
+   *
+   * We prefer a constant check (most reliable), with fallbacks.
+   *
+   * @since 2.4.8
+   */
+  private static function aiaa_is_active() {
+  
+    if ( defined( 'AIT_AIAA_VERSION' ) ) { return true; }
+  
+    if ( class_exists( 'AIT_AIAA_Plugin' ) ) { return true; }
+  
+    // As a fallback, if the filter exists, we treat it as active integration point.
+    if ( has_filter( 'ait_aiaa_third_party_information' ) ) { return true; }
+  
+    return false;
+  }
+  
+  /**
+   * AIAA integration
+   *
+   * @since 2.4.8
+   */
+  public static function aiaa_add_filter() {
+  
+    if ( self::aiaa_is_active() ) { update_option( 'EWD_Debugging', "Step 2 " );
+  
+      add_filter( 'ait_aiaa_third_party_information', array( __CLASS__, 'add_help_to_aiaa' ), 20, 2 );
+    }
+  }
+  
+  /**
+   * Adds Ultimate FAQs help content to AIAA's Third-Party Help tab.
+   *
+   * @param array $items
+   * @param array $context { screen_id, post_type, taxonomy }
+   * @return array
+   *
+   * @since 2.4.8
+   */
+  public static function add_help_to_aiaa( $items, $context ) {
+    update_option( 'EWD_Debugging', "Being called" );
+    $items   = is_array( $items ) ? $items : array();
+    $context = is_array( $context ) ? $context : array();
+  
+    // We only contribute on screens where our own helper would show.
+    $screen_id = isset( $context['screen_id'] ) ? (string) $context['screen_id'] : '';
+    $post_type = isset( $context['post_type'] ) ? (string) $context['post_type'] : '';
+    $taxonomy  = isset( $context['taxonomy'] ) ? (string) $context['taxonomy'] : '';
+  
+    if ( ! self::aiaa_matches_context( $screen_id, $post_type, $taxonomy ) ) { return $items; }
+  update_option( 'EWD_Debugging', "Being called 2" );
+    $page_details = self::get_page_details_for_context( $context );
+
+    // Build AIAA help_links with grouping:
+    // - Tutorials: page-specific items
+    // - General: documentation/support resources
+    $tutorial_links = array();
+    if ( ! empty( $page_details['tutorials'] ) && is_array( $page_details['tutorials'] ) ) {
+
+      foreach ( $page_details['tutorials'] as $tutorial ) {
+
+        if ( empty( $tutorial['url'] ) || empty( $tutorial['title'] ) ) { continue; }
+
+        $tutorial_links[] = array(
+          'title' => (string) $tutorial['title'],
+          'url'   => (string) $tutorial['url'],
+        );
+      }
+    }
+
+    $general_links = array();
+    if ( ! empty( self::$documentation_link ) ) {
+      $general_links[] = array(
+        'title' => __( 'Documentation', 'ultimate-faqs' ),
+        'url'   => self::$documentation_link,
+      );
+    }
+    if ( ! empty( self::$tutorials_link ) ) {
+      $general_links[] = array(
+        'title' => __( 'YouTube Tutorials', 'ultimate-faqs' ),
+        'url'   => self::$tutorials_link,
+      );
+    }
+    if ( ! empty( self::$support_center_link ) ) {
+      $general_links[] = array(
+        'title' => __( 'Support Center', 'ultimate-faqs' ),
+        'url'   => self::$support_center_link,
+      );
+    }
+
+    $help_links = array();
+    if ( ! empty( $tutorial_links ) ) { $help_links[ __( 'Tutorials', 'ultimate-faqs' ) ] = $tutorial_links; }
+    if ( ! empty( $general_links ) ) { $help_links[ __( 'General', 'ultimate-faqs' ) ] = $general_links; }
+  
+    $items[] = array(
+      'id'          => 'ufaq_help',
+      'title'       => __( 'Ultimate FAQs Help', 'ultimate-faqs' ),
+      'description' => ! empty( $page_details['description'] ) ? '<p>' . esc_html( $page_details['description'] ) . '</p>' : '',
+      'help_links'  => $help_links,
+      'source'      => array(
+        'type' => 'plugin',
+        'name' => 'Ultimate FAQs',
+        'slug' => 'ultimate-faqs',
+      ),
+      'target_callback' => array( __CLASS__, 'aiaa_target_callback' ),
+      'priority'        => 20,
+      'capability'      => 'manage_options',
+      'icon'            => 'dashicons-editor-help',
+    );
+    update_option( 'EWD_Debugging', "Being called - " . print_r( $items, true ) );
+    return $items;
+  }
+  
+  /**
+   * AIAA advanced targeting callback.
+   *
+   * @param array $context
+   * @param array $item
+   * @return bool
+   *
+   * @since 2.4.8
+   */
+  public static function aiaa_target_callback( $context, $item ) {
+  
+    $context = is_array( $context ) ? $context : array();
+  
+    $screen_id = isset( $context['screen_id'] ) ? (string) $context['screen_id'] : '';
+    $post_type = isset( $context['post_type'] ) ? (string) $context['post_type'] : '';
+    $taxonomy  = isset( $context['taxonomy'] ) ? (string) $context['taxonomy'] : '';
+  
+    return self::aiaa_matches_context( $screen_id, $post_type, $taxonomy );
+  }
+  
+  /**
+   * Shared matcher: aligns with should_button_display(), plus supports screen_id substring matches.
+   *
+   * @param string $screen_id
+   * @param string $post_type
+   * @param string $taxonomy
+   * @return bool
+   *
+   * @since 2.4.8
+   */
+  private static function aiaa_matches_context( $screen_id, $post_type, $taxonomy ) {
+  
+    if ( ! empty( $post_type ) && in_array( $post_type, self::$post_types, true ) ) { return true; }
+  
+    if ( ! empty( $taxonomy ) && in_array( $taxonomy, self::$taxonomies, true ) ) { return true; }
+  
+    if ( ! empty( $screen_id ) && ! empty( self::$additional_pages ) ) {
+  
+      foreach ( self::$additional_pages as $slug ) {
+  
+        if ( empty( $slug ) ) { continue; }
+  
+        if ( strpos( $screen_id, $slug ) !== false ) { return true; }
+      }
+    }
+  
+    return false;
+  }
+  
   /**
    * Handle ajax requests in admin area for logged out users
    * @since 2.1.1
@@ -102,6 +267,13 @@ class ewdufaqHelper {
 
   public static function display_help_button() {
 
+    // If AI Admin Assistance (AIAA) is active, UFAQ help is provided via the
+    // AIAA third-party help tab instead of showing the native UFAQ bubble.
+    if ( defined( 'AIT_AIAA_VERSION' ) ) { return; }
+
+    // If AIAA is active, UFAQ help will be provided via AIAA instead of the UFAQ bubble.
+    if ( self::aiaa_is_active() ) { return; }
+
     if ( ! ewdufaqHelper::should_button_display() ) { return; }
 
     ewdufaqHelper::enqueue_scripts();
@@ -143,6 +315,8 @@ class ewdufaqHelper {
     <?php
   }
 
+  
+
   public static function should_button_display() {
     global $post;
     
@@ -175,8 +349,55 @@ class ewdufaqHelper {
     wp_enqueue_script( 'ewd-ufaq-admin-helper-button', EWD_UFAQ_PLUGIN_URL . '/assets/js/ewd-ufaq-helper-button.js', array( 'jquery' ), EWD_UFAQ_PLUGIN_URL, true );
   }
 
-  public static function get_page_details() {
-    global $post;
+  /**
+   * Get page details based on an AIAA context array (AJAX-safe).
+   *
+   * @param array $context { screen_id, post_type, taxonomy }
+   * @return array { description, tutorials }
+   *
+   * @since 2.4.8
+   */
+  public static function get_page_details_for_context( $context ) {
+
+    $context = is_array( $context ) ? $context : array();
+
+    $screen_id = isset( $context['screen_id'] ) ? (string) $context['screen_id'] : '';
+    $post_type = isset( $context['post_type'] ) ? (string) $context['post_type'] : '';
+    $taxonomy  = isset( $context['taxonomy'] ) ? (string) $context['taxonomy'] : '';
+
+    $req = ( isset( $context['request'] ) && is_array( $context['request'] ) ) ? $context['request'] : array();
+
+    // Prefer the AIAA request snapshot (most accurate for settings tabs).
+    $page = isset( $req['page'] ) ? sanitize_text_field( $req['page'] ) : '';
+
+    // Derive a "page" slug from screen_id if not provided.
+    if ( $screen_id && ! empty( self::$additional_pages ) ) {
+      foreach ( self::$additional_pages as $slug ) {
+        if ( $slug && strpos( $screen_id, $slug ) !== false ) {
+          $page = $slug;
+          break;
+        }
+      }
+    }
+
+    // AIAA request snapshot includes tab (e.g. ewd-ufaq-basic-tab).
+    $tab = isset( $req['tab'] ) ? sanitize_text_field( $req['tab'] ) : '';
+
+    return self::get_page_details_by_values( $page, $tab, $taxonomy, $post_type );
+  }
+
+  /**
+   * Shared resolver used by both get_page_details() (GET-based) and get_page_details_for_context() (context-based).
+   *
+   * @param string $page
+   * @param string $tab
+   * @param string $taxonomy
+   * @param string $post_type
+   * @return array { description, tutorials }
+   *
+   * @since 2.4.8
+   */
+  private static function get_page_details_by_values( $page, $tab, $taxonomy, $post_type ) {
 
     $page_details = array(
       'ufaq' => array(
@@ -191,128 +412,98 @@ class ewdufaqHelper {
             'title' => 'Add FAQs to a Page'
           ),
           array(
-            'url'   => 'https://doc.etoilewebdesign.com/plugins/ultimate-faq/user/faqs/ai',
-            'title' => 'Create FAQs using AI (Premium)'
+            'url'   => 'https://doc.etoilewebdesign.com/plugins/ultimate-faq/user/faqs/edit',
+            'title' => 'Edit/Delete FAQs'
           ),
           array(
-            'url'   => 'https://doc.etoilewebdesign.com/plugins/ultimate-faq/user/blocks-shortcodes/',
-            'title' => 'Block and Shortcodes to display your FAQs'
+            'url'   => 'https://doc.etoilewebdesign.com/plugins/ultimate-faq/user/faqs/sort',
+            'title' => 'Re-Order FAQs'
+          ),
+        )
+      ),
+      'edit-ufaq-question' => array(
+        'description' => __( 'The FAQ edit screen allows you to create or update an individual FAQ, including its question, answer, categories/tags, and display settings. Use this to keep your FAQs accurate and up to date.', 'ultimate-faqs' ),
+        'tutorials'   => array(
+          array(
+            'url'   => 'https://doc.etoilewebdesign.com/plugins/ultimate-faq/user/faqs/create',
+            'title' => 'Create an FAQ'
           ),
           array(
-            'url'   => 'https://doc.etoilewebdesign.com/plugins/ultimate-faq/user/search/add-to-page',
-            'title' => 'Add FAQ Search to a Page (Premium)'
+            'url'   => 'https://doc.etoilewebdesign.com/plugins/ultimate-faq/user/faqs/edit',
+            'title' => 'Edit/Delete FAQs'
           ),
         )
       ),
       'ufaq-category' => array(
-        'description' => __( 'The FAQ Categories page lets you create, edit, and manage categories to group related FAQs for better organization. While you can view, sort, and search categories here, FAQs can only be assigned to categories through the FAQ Add/Edit screen or the Quick Edit option on the main FAQs page.', 'ultimate-faqs' ),
+        'description' => __( 'FAQ Categories let you organize your FAQs into groups for easier navigation and display. You can create, edit, and assign categories to FAQs from here.', 'ultimate-faqs' ),
         'tutorials'   => array(
           array(
-            'url'   => 'https://doc.etoilewebdesign.com/plugins/ultimate-faq/user/faqs/categories',
-            'title' => 'Add or Edit a Category'
+            'url'   => 'https://doc.etoilewebdesign.com/plugins/ultimate-faq/user/categories',
+            'title' => 'FAQ Categories'
           ),
         )
       ),
       'ufaq-tag' => array(
-        'description' => __( 'The FAQ Tags page allows you to create, edit, and manage tags to label and organize FAQs. Like categories, tags can only be assigned to FAQs through the Add/Edit screen or the Quick Edit option on the main FAQs page.', 'ultimate-faqs' ),
+        'description' => __( 'FAQ Tags provide an additional way to label and filter FAQs. Use tags to help users find related questions or to power tag-based displays.', 'ultimate-faqs' ),
         'tutorials'   => array(
           array(
-            'url'   => 'https://doc.etoilewebdesign.com/plugins/ultimate-faq/user/faqs/tags',
-            'title' => 'Add or Edit a Tag'
+            'url'   => 'https://doc.etoilewebdesign.com/plugins/ultimate-faq/user/tags',
+            'title' => 'FAQ Tags'
+          ),
+        )
+      ),
+      'ewd-ufaq-dashboard' => array(
+        'description' => __( 'The Ultimate FAQs dashboard provides a quick overview of your plugin configuration, shortcuts to key areas, and useful resources to help you get started.', 'ultimate-faqs' ),
+        'tutorials'   => array(
+          array(
+            'url'   => 'https://doc.etoilewebdesign.com/plugins/ultimate-faq/user/overview',
+            'title' => 'Plugin Overview'
+          ),
+        )
+      ),
+      'ewd-ufaq-ordering-table' => array(
+        'description' => __( 'Use the Ordering Table to quickly rearrange FAQs in the order they will appear. This is useful when you want precise control over the display sequence.', 'ultimate-faqs' ),
+        'tutorials'   => array(
+          array(
+            'url'   => 'https://doc.etoilewebdesign.com/plugins/ultimate-faq/user/faqs/sort',
+            'title' => 'Re-Order FAQs'
           ),
         )
       ),
       'ewd-ufaq-import' => array(
-        'description' => __( 'Import your FAQs from a spreadsheet to create them more quickly.', 'ultimate-faqs' ),
+        'description' => __( 'The Import screen allows you to upload FAQs in bulk from a file, saving time when migrating or creating large FAQ sets.', 'ultimate-faqs' ),
         'tutorials'   => array(
           array(
-            'url'   => 'https://doc.etoilewebdesign.com/plugins/ultimate-faq/user/faqs/import',
+            'url'   => 'https://doc.etoilewebdesign.com/plugins/ultimate-faq/user/import',
             'title' => 'Import FAQs'
           ),
         )
       ),
       'ewd-ufaq-export' => array(
-        'description' => __( 'Export your FAQs to a spreadsheet so they can be easily shared.', 'ultimate-faqs' ),
+        'description' => __( 'The Export screen lets you download your FAQs and settings for backup or migration to another site.', 'ultimate-faqs' ),
         'tutorials'   => array(
           array(
-            'url'   => 'https://doc.etoilewebdesign.com/plugins/ultimate-faq/user/faqs/export',
+            'url'   => 'https://doc.etoilewebdesign.com/plugins/ultimate-faq/user/export',
             'title' => 'Export FAQs'
           ),
         )
       ),
       'ewd-ufaq-settings' => array(
-        'description' => __( 'The Basic Settings page lets you customize how FAQs behave and appear on your site, including layout toggles, comment support, permalink options, and display preferences. It also includes access control settings and a custom CSS field to fine-tune the style and functionality of your FAQ section.', 'ultimate-faqs' ),
+        'description' => __( 'The Settings page controls how your FAQs display and behave. Review options to match your theme and desired layout, and use the tabs to explore advanced configuration.', 'ultimate-faqs' ),
         'tutorials'   => array(
           array(
-            'url'   => 'https://doc.etoilewebdesign.com/plugins/ultimate-faq/user/styling/css',
-            'title' => 'Custom CSS'
+            'url'   => 'https://doc.etoilewebdesign.com/plugins/ultimate-faq/user/settings',
+            'title' => 'Settings Overview'
           ),
         )
       ),
-      'ewd-ufaq-dashboard' => array(
-        'description' => __( 'This is the dashboard screen. Here you can view a summary of your FAQs as well as get quick access to to help, support and documentation.', 'ultimate-faqs' ),
-        'tutorials'   => array()
-      ),
-      'ewd-ufaq-settings-ewd-ufaq-basic-tab' => array(
-        'description' => __( 'The Basic Settings page lets you customize how FAQs behave and appear on your site, including layout toggles, comment support, permalink options, and display preferences. It also includes access control settings and a custom CSS field to fine-tune the style and functionality of your FAQ section.', 'ultimate-faqs' ),
+      'ewd-ufaq-settings-styling' => array(
+        'description' => __( 'The Styling tab provides options to customize the look and feel of your FAQ display. You can adjust colors, typography, and layout-related settings.', 'ultimate-faqs' ),
         'tutorials'   => array(
           array(
-            'url'   => 'https://doc.etoilewebdesign.com/plugins/ultimate-faq/user/styling/css',
-            'title' => 'Custom CSS'
+            'url'   => 'https://doc.etoilewebdesign.com/plugins/ultimate-faq/user/styling',
+            'title' => 'Styling Settings'
           ),
-        )
-      ),
-      'ewd-ufaq-settings-ewd-ufaq-ordering-tab' => array(
-        'description' => __( 'The Ordering Settings page controls how FAQs and categories are sorted and displayed on the front end, with options to group by category, show FAQ counts, and nest sub-categories. You can define sort criteria such as title, date created or modified, and set ascending or descending order for both FAQs and categories.', 'ultimate-faqs' ),
-        'tutorials'   => array(
-          array(
-            'url'   => 'https://doc.etoilewebdesign.com/plugins/ultimate-faq/user/faqs/order',
-            'title' => 'Order of FAQs (Premium)'
-          ),
-        )
-      ),
-      'ewd-ufaq-settings-ewd-ufaq-premium-tab' => array(
-        'description' => __( 'The Premium Settings page provides advanced customization options for FAQ display styles, pagination behavior, voting, search autocomplete, and permalink structure. It also includes features for user-submitted FAQs, WooCommerce and WPForms integrations, and admin notifications for streamlined content management.', 'ultimate-faqs' ),
-        'tutorials'   => array(
-          array(
-            'url'   => 'https://doc.etoilewebdesign.com/plugins/ultimate-faq/user/woocommerce/',
-            'title' => 'WooCommerce Integration'
-          ),
-          array(
-            'url'   => 'https://doc.etoilewebdesign.com/plugins/ultimate-faq/user/woocommerce/add',
-            'title' => 'Add FAQs to WooCommerce Products'
-          ),
-          array(
-            'url'   => 'https://doc.etoilewebdesign.com/plugins/ultimate-faq/user/wpforms/',
-            'title' => 'WPForms Integration'
-          ),
-        )
-      ),
-      'ewd-ufaq-settings-ewd-ufaq-fields-tab' => array(
-        'description' => __( 'The Fields Settings page lets you create and manage custom fields to add extra information to your FAQs, such as links, dates, files, or dropdowns. These fields can appear on your main FAQ display, individual FAQ pages, and the search page, offering advanced customization beyond categories and tags.', 'ultimate-faqs' ),
-        'tutorials'   => array(
-          array(
-            'url'   => 'https://doc.etoilewebdesign.com/plugins/ultimate-faq/user/custom-fields/create',
-            'title' => 'Create and Edit Custom Fields'
-          ),
-          array(
-            'url'   => 'https://doc.etoilewebdesign.com/plugins/ultimate-faq/user/custom-fields/faqs',
-            'title' => 'Using Custom Fields with FAQs'
-          ),
-        )
-      ),
-      'ewd-ufaq-settings-ewd-ufaq-labelling-tab' => array(
-        'description' => __( 'The Labelling Settings page allows you to customize or translate the text labels used throughout the plugin, making it easy to adapt the interface to your preferred language or tone. It offers a quick alternative to translation plugins for single-language sites, while still supporting full localization for multilingual setups.', 'ultimate-faqs' ),
-        'tutorials'   => array(
-          array(
-            'url'   => 'https://doc.etoilewebdesign.com/plugins/ultimate-faq/user/labelling/translating',
-            'title' => 'Translating'
-          ),
-        )
-      ),
-      'ewd-ufaq-settings-ewd-ufaq-styling-tab' => array(
-        'description' => __( 'The Styling Settings page offers extensive options to customize the appearance of your FAQs, including toggle symbols, colors, fonts, padding, and margins for various FAQ elements and themes. You can also control heading tags and styles, enabling precise visual integration with your site’s design.', 'ultimate-faqs' ),
-        'tutorials'   => array(
           array(
             'url'   => 'https://doc.etoilewebdesign.com/plugins/ultimate-faq/user/styling/css',
             'title' => 'Custom CSS'
@@ -321,30 +512,46 @@ class ewdufaqHelper {
       ),
     );
 
-    $tab = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : '';
-    $page = isset( $_GET['page'] ) ? sanitize_text_field( $_GET['page'] ) : '';
-    $taxonomy = isset( $_GET['taxonomy'] ) ? sanitize_text_field( $_GET['taxonomy'] ) : '';
+    $page    = $page ? sanitize_text_field( $page ) : '';
+    $tab     = $tab ? sanitize_text_field( $tab ) : '';
+    $taxonomy= $taxonomy ? sanitize_text_field( $taxonomy ) : '';
+    $post_type = $post_type ? sanitize_text_field( $post_type ) : '';
 
-    if ( isset( $_GET['post'] ) ) {
-
-      $post = get_post( intval( $_GET['post'] ) );
-      $post_type = $post ? $post->post_type : '';
-    }
-    else {
-      
-      $post_type = isset( $_GET['post_type'] ) ? sanitize_text_field( $_GET['post_type'] ) : '';
+    if ( $page && $tab && isset( $page_details[ $page . '-' . $tab ] ) ) {
+      return $page_details[ $page . '-' . $tab ];
     }
 
-    if ( in_array( $page . '-' . $tab, array_keys( $page_details ) ) ) { return $page_details[ $page . '-' . $tab ]; }
+    if ( $page && isset( $page_details[ $page ] ) ) { return $page_details[ $page ]; }
 
-    if ( in_array( $page, array_keys( $page_details ) ) ) { return $page_details[ $page ]; }
+    if ( $taxonomy && isset( $page_details[ $taxonomy ] ) ) { return $page_details[ $taxonomy ]; }
 
-    if ( in_array( $taxonomy, array_keys( $page_details ) ) ) { return $page_details[ $taxonomy ]; }
-
-    if ( in_array( $post_type, array_keys( $page_details ) ) ) { return $page_details[ $post_type ]; }
+    if ( $post_type && isset( $page_details[ $post_type ] ) ) { return $page_details[ $post_type ]; }
 
     return array( 'description' => '', 'tutorials' => array() );
   }
+
+
+  public static function get_page_details() {
+    global $post;
+
+    $tab      = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : '';
+    $page     = isset( $_GET['page'] ) ? sanitize_text_field( $_GET['page'] ) : '';
+    $taxonomy = isset( $_GET['taxonomy'] ) ? sanitize_text_field( $_GET['taxonomy'] ) : '';
+
+    if ( isset( $_GET['post'] ) ) {
+      $post      = get_post( intval( $_GET['post'] ) );
+      $post_type = $post ? $post->post_type : '';
+    }
+    else {
+      $post_type = isset( $_GET['post_type'] ) ? sanitize_text_field( $_GET['post_type'] ) : '';
+    }
+
+    return self::get_page_details_by_values( $page, $tab, $taxonomy, $post_type );
+  }
+
 }
+
+// Register integrations after all plugins load.
+add_action( 'plugins_loaded', array( 'ewdufaqHelper', 'aiaa_add_filter' ), 20 );
 
 }
