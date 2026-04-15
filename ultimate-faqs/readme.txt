@@ -3,7 +3,7 @@ Contributors: rustaurius
 Tags: faq, faqs, woocommerce faq, faq block, faq shortcode, accordion, documentation, knowledge base, mobile faq, responsive faq
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 2.4.8
+Stable tag: 2.4.9
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -222,6 +222,9 @@ For more info on installing and activating the plugin, and on the walk-through, 
 - [Our Support Center](https://www.etoilewebdesign.com/support-center/)
 
 == Changelog ==
+
+= 2.4.9 (2026-04-15) =
+- Fix for conflict caused by helper button/feature.
 
 = 2.4.8 (2026-03-26) =
 - Updated escaping of FAQ answer content output.

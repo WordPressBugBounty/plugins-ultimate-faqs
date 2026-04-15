@@ -3,7 +3,7 @@
  * Plugin Name: Ultimate FAQ Accordion Plugin
  * Plugin URI: https://www.etoilewebdesign.com/plugins/ultimate-faq/
  * Description: Full-featured FAQ and accordion plugin with advanced search, simple UI and easy-to-use Gutenberg blocks and shortcodes.
- * Version: 2.4.8
+ * Version: 2.4.9
  * Author: Etoile Web Design
  * Author URI: https://www.etoilewebdesign.com/
  * Text Domain: ultimate-faqs
@@ -11,7 +11,7 @@
  * Requires at least: 6.0
  * Requires PHP: 7.4
  * WC requires at least: 7.1
- * WC tested up to: 10.6
+ * WC tested up to: 10.7
  */
 
 if ( ! defined( 'ABSPATH' ) )
@@ -63,7 +63,7 @@ class ewdufaqInit {
 		define( 'EWD_UFAQ_PLUGIN_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
 		define( 'EWD_UFAQ_PLUGIN_FNAME', plugin_basename( __FILE__ ) );
 		define( 'EWD_UFAQ_TEMPLATE_DIR', 'ewd-ufaq-templates' );
-		define( 'EWD_UFAQ_VERSION', '2.4.8' );
+		define( 'EWD_UFAQ_VERSION', '2.4.9' );
 
 		define( 'EWD_UFAQ_FAQ_POST_TYPE', 'ufaq' );
 		define( 'EWD_UFAQ_FAQ_CATEGORY_TAXONOMY', 'ufaq-category' );
@@ -683,25 +683,54 @@ class ewdufaqInit {
 
 	public function maybe_display_new_plugin_notice() {
 
+		if ( ! current_user_can( 'activate_plugins' ) ) { return; }
+
 		$screen = get_current_screen();
-        if (!isset($screen->id) || strpos($screen->id, 'ufaq_page_') === false) { return; }
+		
+        if ( ! isset( $screen->id ) ) { return; }
 
-		if ( get_transient( 'ewd-ufaq-ait-iat-plugin-notice-dismissed' ) ) { return; }
+        $allowed_screens = array( 
+        	'plugins', 
+        	'update-core', 
+        	'dashboard', 
+        	'options-general', 
+        	'options-writing', 
+        	'options-reading', 
+        	'options-discussion', 
+        	'options-media',
+        	'options-permalink',
+        	'options-privacy'
+        );
 
-		// October 17th, 2025
-		if ( time() > 1760759940 ) { return; }
+        if ( strpos( $screen->id, 'ufaq_page_' ) === false and 
+        	 ! in_array( $screen->id, $allowed_screens ) ) { 
+        	return; 
+    	}
+
+		if ( get_transient( 'ait-aiaa-plugin-notice-dismissed' ) ) { return; }
+
+		// May 22nd, 2026
+		if ( time() > 1779508748 ) { return; }
+
+		$hook_lines = array(
+			__( 'Tired of digging through settings? Let <strong>AI Admin Assistance</strong> guide you!', 'ultimate-faqs' ),
+			__( 'Stop wasting time searching for answers—use <strong>AI Admin Assistance</strong> to bring AI-powered help directly into your dashboard!', 'ultimate-faqs' ),
+			__( 'Overwhelmed in the WordPress admin? <strong>AI Admin Assistance</strong> has you covered with AI-powered help directly in your dashboard!', 'ultimate-faqs' ),
+		);
+
+		$selection = array_rand( $hook_lines );
 
 		?>
 
-		<div class='notice notice-error is-dismissible ait-iat-new-plugin-notice'>
+		<div class='notice notice-error is-dismissible ait-aiaa-new-plugin-notice'>
 			
 			<div class='ewd-ufaq-new-plugin-notice-img'>
-				<img src='<?php echo EWD_UFAQ_PLUGIN_URL . '/assets/img/ait-iat-plugin-icon.png' ; ?>' />
+				<img src='<?php echo EWD_UFAQ_PLUGIN_URL . '/assets/img/ait-aiaa-plugin-icon.png' ; ?>' />
 			</div>
 
 			<div class='ewd-ufaq-new-plugin-notice-txt'>
-				<p><?php _e( 'Want to improve your search rankings? Try our new <strong>AI Image Alt Text</strong> plugin!', 'ultimate-faqs' ); ?></p>
-				<p><?php echo sprintf( __( 'As a thank you to our customers, for a limited time you can get a <strong>free pro license</strong>! Try the <a target=\'_blank\' href=\'%s\'>free version</a> today or use code <code>early_adopter_pro</code> to <a target=\'_blank\' href=\'%s\'>get your pro version license</a>!', 'ultimate-faqs' ), admin_url( 'plugin-install.php?tab=plugin-information&plugin=ai-image-alt-text' ), 'https://www.wpaiplugins.dev/wordpress-image-alt-text-ai-plugin/' ); ?></p>
+				<p><?php echo $hook_lines[ $selection ]; ?></p>
+                <p><?php echo sprintf( __( 'As a thank you to our customers, for a limited time you can get a <strong>free pro license</strong>! Try the <a target=\'_blank\' href=\'%s\'>free version</a> today or use code <code>early_adopter_pro</code> to <a target=\'_blank\' href=\'%s\'>get your pro version license</a>!', 'ultimate-faqs' ), admin_url( 'plugin-install.php?tab=plugin-information&plugin=ait-ai-admin-assistance' ), 'https://www.wpaiplugins.dev/wordpress-ai-admin-assistance/?utm_source=' . dirname( EWD_UFAQ_PLUGIN_FNAME ) . '_aiaa_notice&utm_content=' . $selection ); ?></p>
 			</div>
 
 			<div class='ewd-ufaq-clear'></div>
@@ -716,7 +745,7 @@ class ewdufaqInit {
 
 		// Authenticate request
 		if (
-			! check_ajax_referer( 'ewd-ufaq-admin-js', 'nonce' )
+			! check_ajax_referer( 'ewd-ufaq-helper-notice', 'nonce' )
 			||
 			! current_user_can( $ewd_ufaq_controller->settings->get_setting( 'access-role' ) )
 		) {
@@ -724,7 +753,7 @@ class ewdufaqInit {
 
 		}
 
-		set_transient( 'ewd-ufaq-ait-iat-plugin-notice-dismissed', true, 3600*24*7 );
+		set_transient( 'ait-aiaa-plugin-notice-dismissed', true, 3600*24*7 );
 
 		die();
 	}

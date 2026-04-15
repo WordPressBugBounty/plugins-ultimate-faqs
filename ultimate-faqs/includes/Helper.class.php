@@ -86,7 +86,7 @@ class ewdufaqHelper {
    * @since 2.4.8
    */
   public static function add_help_to_aiaa( $items, $context ) {
-    update_option( 'EWD_Debugging', "Being called" );
+    
     $items   = is_array( $items ) ? $items : array();
     $context = is_array( $context ) ? $context : array();
   
@@ -96,7 +96,7 @@ class ewdufaqHelper {
     $taxonomy  = isset( $context['taxonomy'] ) ? (string) $context['taxonomy'] : '';
   
     if ( ! self::aiaa_matches_context( $screen_id, $post_type, $taxonomy ) ) { return $items; }
-  update_option( 'EWD_Debugging', "Being called 2" );
+    
     $page_details = self::get_page_details_for_context( $context );
 
     // Build AIAA help_links with grouping:
@@ -318,7 +318,6 @@ class ewdufaqHelper {
   
 
   public static function should_button_display() {
-    global $post;
     
     $page = isset( $_GET['page'] ) ? sanitize_text_field( $_GET['page'] ) : '';
     $taxonomy = isset( $_GET['taxonomy'] ) ? sanitize_text_field( $_GET['taxonomy'] ) : '';
@@ -532,8 +531,7 @@ class ewdufaqHelper {
 
 
   public static function get_page_details() {
-    global $post;
-
+    
     $tab      = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : '';
     $page     = isset( $_GET['page'] ) ? sanitize_text_field( $_GET['page'] ) : '';
     $taxonomy = isset( $_GET['taxonomy'] ) ? sanitize_text_field( $_GET['taxonomy'] ) : '';
