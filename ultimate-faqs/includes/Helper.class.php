@@ -55,10 +55,7 @@ class ewdufaqHelper {
   
     if ( defined( 'AIT_AIAA_VERSION' ) ) { return true; }
   
-    if ( class_exists( 'AIT_AIAA_Plugin' ) ) { return true; }
-  
-    // As a fallback, if the filter exists, we treat it as active integration point.
-    if ( has_filter( 'ait_aiaa_third_party_information' ) ) { return true; }
+    if ( class_exists( 'AIT_AIAA_Settings' ) ) { return true; }
   
     return false;
   }
@@ -70,7 +67,7 @@ class ewdufaqHelper {
    */
   public static function aiaa_add_filter() {
   
-    if ( self::aiaa_is_active() ) { update_option( 'EWD_Debugging', "Step 2 " );
+    if ( self::aiaa_is_active() ) {
   
       add_filter( 'ait_aiaa_third_party_information', array( __CLASS__, 'add_help_to_aiaa' ), 20, 2 );
     }
@@ -155,7 +152,7 @@ class ewdufaqHelper {
       'capability'      => 'manage_options',
       'icon'            => 'dashicons-editor-help',
     );
-    update_option( 'EWD_Debugging', "Being called - " . print_r( $items, true ) );
+    
     return $items;
   }
   
