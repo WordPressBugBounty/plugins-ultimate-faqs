@@ -137,7 +137,7 @@ class ewdufaqSettings {
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/lib/simple-admin-pages/simple-admin-pages.php' );
 		$sap = sap_initialize_library(
 			$args = array(
-				'version' => '2.7.1',
+				'version' => '2.7.4',
 				'lib_url' => EWD_UFAQ_PLUGIN_URL . '/lib/simple-admin-pages/',
 				'theme'   => 'purple',
 			)

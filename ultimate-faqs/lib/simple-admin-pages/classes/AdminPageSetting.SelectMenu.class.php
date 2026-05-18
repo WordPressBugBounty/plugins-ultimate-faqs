@@ -17,7 +17,7 @@
  * @package Simple Admin Pages
  */
 
-class sapAdminPageSettingSelectMenu_2_7_1 extends sapAdminPageSetting_2_7_1 {
+class sapAdminPageSettingSelectMenu_2_7_4 extends sapAdminPageSetting_2_7_4 {
 
 	public $sanitize_callback = 'intval';
 

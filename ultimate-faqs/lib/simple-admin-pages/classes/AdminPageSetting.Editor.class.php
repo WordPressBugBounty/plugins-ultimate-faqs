@@ -7,7 +7,7 @@
  * @package Simple Admin Pages
  */
 
-class sapAdminPageSettingEditor_2_7_1 extends sapAdminPageSetting_2_7_1 {
+class sapAdminPageSettingEditor_2_7_4 extends sapAdminPageSetting_2_7_4 {
 
 	public $sanitize_callback = 'wp_kses_post';
 
