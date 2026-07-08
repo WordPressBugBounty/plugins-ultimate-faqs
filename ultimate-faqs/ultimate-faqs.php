@@ -3,7 +3,7 @@
  * Plugin Name: Ultimate FAQ Accordion Plugin
  * Plugin URI: https://www.etoilewebdesign.com/plugins/ultimate-faq/
  * Description: Full-featured FAQ and accordion plugin with advanced search, simple UI and easy-to-use Gutenberg blocks and shortcodes.
- * Version: 2.4.11
+ * Version: 2.4.12
  * Author: Etoile Web Design
  * Author URI: https://www.etoilewebdesign.com/
  * Text Domain: ultimate-faqs
@@ -11,7 +11,7 @@
  * Requires at least: 6.0
  * Requires PHP: 7.4
  * WC requires at least: 7.1
- * WC tested up to: 10.7
+ * WC tested up to: 10.9
  */
 
 if ( ! defined( 'ABSPATH' ) )
@@ -63,7 +63,7 @@ class ewdufaqInit {
 		define( 'EWD_UFAQ_PLUGIN_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
 		define( 'EWD_UFAQ_PLUGIN_FNAME', plugin_basename( __FILE__ ) );
 		define( 'EWD_UFAQ_TEMPLATE_DIR', 'ewd-ufaq-templates' );
-		define( 'EWD_UFAQ_VERSION', '2.4.11' );
+		define( 'EWD_UFAQ_VERSION', '2.4.12' );
 
 		define( 'EWD_UFAQ_FAQ_POST_TYPE', 'ufaq' );
 		define( 'EWD_UFAQ_FAQ_CATEGORY_TAXONOMY', 'ufaq-category' );
@@ -174,12 +174,13 @@ class ewdufaqInit {
 		add_action( 'admin_notices', 			array( $this, 'maybe_display_shortcode_notice' ) );
 		add_action( 'admin_notices', 			array( $this, 'maybe_display_new_plugin_notice' ) );
 
-		add_action( 'admin_init',	 			array( $this, 'display_help_bubble' ) );
+		add_action( 'admin_footer',	 			array( $this, 'display_help_bubble' ) );
 
 		add_action( 'admin_enqueue_scripts', 	array( $this, 'enqueue_admin_assets' ), 10, 1 );
 		add_action( 'wp_enqueue_scripts', 		array( $this, 'register_assets' ) );
 		add_action( 'wp_head', 					'ewd_add_frontend_ajax_url' );
 		add_action( 'wp_footer', 				array( $this, 'assets_footer' ), 2 );
+		add_action( 'wp_footer', 				array( $this, 'ensure_assets_enqueued' ), 1 );
 
 		add_filter( 'plugin_action_links', 		array( $this, 'plugin_action_links' ), 10, 2);
 
@@ -413,6 +414,18 @@ class ewdufaqInit {
 	public function get_front_end_php_data( $handle, $variable ) {
 
 		return ! empty( $this->front_end_php_js_data[ $variable ] ) ? $this->front_end_php_js_data[ $variable ] : array();
+	}
+
+	/**
+	 * Make sure styles were enqueued
+	 * @since 2.4.12
+	 */
+	public function ensure_assets_enqueued() {
+
+		if ( wp_style_is( 'ewd-ufaq-rrssb', 'enqueued' ) && ! wp_style_is( 'ewd-ufaq-rrssb', 'done' ) ) { wp_print_styles( 'ewd-ufaq-rrssb' ); }
+		if ( wp_style_is( 'ewd-ufaq-jquery-ui', 'enqueued' ) && ! wp_style_is( 'ewd-ufaq-jquery-ui', 'done' ) ) { wp_print_styles( 'ewd-ufaq-jquery-ui' ); }
+		if ( wp_style_is( 'ewd-ufaq-css', 'enqueued' ) && ! wp_style_is( 'ewd-ufaq-css', 'done' ) ) { wp_print_styles( 'ewd-ufaq-css' ); }
+		if ( wp_style_is( 'ewd-ufaq-minimalist', 'enqueued' ) && ! wp_style_is( 'ewd-ufaq-minimalist', 'done' ) ) { wp_print_styles( 'ewd-ufaq-minimalist' ); }
 	}
 
 	/**

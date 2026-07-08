@@ -273,8 +273,6 @@ class ewdufaqHelper {
 
     if ( ! ewdufaqHelper::should_button_display() ) { return; }
 
-    ewdufaqHelper::enqueue_scripts();
-
     $page_details = self::get_page_details();
 
     ?>
@@ -339,6 +337,8 @@ class ewdufaqHelper {
   }
 
   public static function enqueue_scripts() {
+
+    if ( ! self::should_button_display() ) { return; }
 
     wp_enqueue_style( 'ewd-ufaq-admin-helper-button', EWD_UFAQ_PLUGIN_URL . '/assets/css/ewd-ufaq-helper-button.css', array(), EWD_UFAQ_PLUGIN_URL );
 
@@ -548,5 +548,5 @@ class ewdufaqHelper {
 
 // Register integrations after all plugins load.
 add_action( 'plugins_loaded', array( 'ewdufaqHelper', 'aiaa_add_filter' ), 20 );
-
+add_action( 'admin_enqueue_scripts', array( 'ewdufaqHelper', 'enqueue_scripts' ) );
 }
