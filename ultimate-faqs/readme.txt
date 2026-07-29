@@ -3,7 +3,7 @@ Contributors: rustaurius
 Tags: faq, faqs, woocommerce faq, accordion, faq block
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 2.4.12
+Stable tag: 2.4.13
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -222,6 +222,9 @@ For more info on installing and activating the plugin, and on the walk-through, 
 - [Our Support Center](https://www.etoilewebdesign.com/support-center/)
 
 == Changelog ==
+
+= 2.4.13 (2026-07-29) =
+- Added a direct support option to the deactivation survey, making it easier to get help right away if you're uninstalling due to an issue.
 
 = 2.4.12 (2026-07-08) =
 - Fix for front-end styles not being enqueued on some sites/themes.

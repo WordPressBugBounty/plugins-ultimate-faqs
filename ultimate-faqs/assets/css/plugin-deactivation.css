@@ -40,6 +40,11 @@
 	color: #999;
 	margin-right: 10px;
 }
+#ewd-ufaq-deactivation-cancel {
+	display: inline-block;
+    float: right;
+    cursor: pointer;
+}
 .ewd-ufaq-deactivate-survey-desc {
 	display: block;
 	font-weight: 600;

@@ -55,8 +55,8 @@ class ewdufaqDeactivationSurvey {
 		<div class="ewd-ufaq-deactivate-survey-modal" id="ewd-ufaq-deactivate-survey-ultimate-faqs">
 			<div class="ewd-ufaq-deactivate-survey-wrap">
 				<form class="ewd-ufaq-deactivate-survey" method="post" data-installtime="<?php echo esc_attr( $install_time ); ?>">
-					<span class="ewd-ufaq-deactivate-survey-title"><span class="dashicons dashicons-testimonial"></span><?php echo ' ' . __( 'Quick Feedback', 'ultimate-faqs' ); ?></span>
-					<span class="ewd-ufaq-deactivate-survey-desc"><?php echo __('If you have a moment, please share why you are deactivating Ultimate FAQs:', 'ultimate-faqs' ); ?></span>
+					<span class="ewd-ufaq-deactivate-survey-title"><span class="dashicons dashicons-testimonial"></span><?php echo ' ' . __( 'Quick Feedback', 'ultimate-faqs' ); ?><span id="ewd-ufaq-deactivation-cancel">X</span></span>
+					<span class="ewd-ufaq-deactivate-survey-desc"><?php echo __('Need help? Contact us at <a href="mailto:contact@etoilewebdesign.com">contact@etoilewebdesign.com</a> for a quick reply!<br/> Please share why you are deactivating Ultimate FAQs:', 'ultimate-faqs' ); ?></span>
 					<div class="ewd-ufaq-deactivate-survey-options">
 						<?php foreach ( $options as $id => $option ) : ?>
 							<div class="ewd-ufaq-deactivate-survey-option">
