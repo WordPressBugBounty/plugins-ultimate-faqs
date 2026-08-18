@@ -44,7 +44,13 @@ class ewdufaqFAQ {
 	 * Whether or not this request was successfully saved to the database.
 	 * @since 2.0.0
 	 */
-	public $FAQ_inserted = false;
+	public $faq_inserted = false;
+
+	/**
+	 * Errors encountered while validating a submitted FAQ.
+	 * @since 2.0.0
+	 */
+	public $validation_errors = array();
 
 	public function __construct() {}
 

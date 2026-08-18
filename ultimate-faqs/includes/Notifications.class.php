@@ -116,8 +116,8 @@ class ewdufaqNotifications {
 		$message_body .= sprintf( __( 'Your FAQ, %s, has received a new question answer: ', 'ultimate-faqs' ), $faq->question ) . '<br/><br/>' . $faq->answer . '<br/><br/>';
 		$message_body .= __( 'Thank You,', 'ultimate-faqs' ) . '<br/><br/>';
 
-		$message_body = apply_filters( 'ewd_ufaq_user_question_answered_message_body', $message_body );
-	
+		$message_body = apply_filters( 'ewd_ufaq_user_question_answered_message_body', $message_body, $faq );
+
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
 		foreach ( $author_emails as $author_email ) {

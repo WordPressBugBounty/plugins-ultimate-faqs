@@ -22,6 +22,9 @@ class ewdufaqViewSubmitFAQ extends ewdufaqView {
 	// pointers
 	public $current_field;
 
+	// whether an FAQ was just submitted
+	public $faq_submitted;
+
 	/**
 	 * Render the view and enqueue required stylesheets
 	 * @since 2.0.0

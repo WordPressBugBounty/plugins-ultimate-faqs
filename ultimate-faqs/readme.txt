@@ -3,7 +3,7 @@ Contributors: rustaurius
 Tags: faq, faqs, woocommerce faq, accordion, faq block
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 2.4.13
+Stable tag: 2.4.14
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -222,6 +222,10 @@ For more info on installing and activating the plugin, and on the walk-through, 
 - [Our Support Center](https://www.etoilewebdesign.com/support-center/)
 
 == Changelog ==
+
+= 2.4.14 (2026-08-18) =
+- Added the ability to include FAQ question and answer when using the ewd_ufaq_user_question_answered_message_body filter.
+- Fixes for a few deprecated notices.
 
 = 2.4.13 (2026-07-29) =
 - Added a direct support option to the deactivation survey, making it easier to get help right away if you're uninstalling due to an issue.
