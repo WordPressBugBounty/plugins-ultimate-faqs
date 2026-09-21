@@ -36,11 +36,15 @@ if ( !class_exists( 'ewdufaqAJAX' ) ) {
 		 */
 		public function return_search_results() {
 			global $ewd_ufaq_controller;
-
 			if ( !check_ajax_referer( 'ewd-ufaq-js', 'nonce' ) ) {
 				ewdufaqHelper::bad_nonce_ajax();
 			}
 
+			if ( $ewd_ufaq_controller->helper_compatibility->get_state() !== 'compatible'
+				|| ! $ewd_ufaq_controller->permissions->check_permission( 'search' ) ) {
+
+				wp_send_json_error( array( 'code' => 'advanced_search_unavailable' ), 403 );
+			}
 			$faq_atts = array(
 				'is_search'					=> 1,
 				'search_string' 			=> '',
@@ -65,8 +69,7 @@ if ( !class_exists( 'ewdufaqAJAX' ) ) {
 			$query->parse_request_args();
 			$query->prepare_args();
 
-			$faq_atts['search_string'] = isset( $_REQUEST['search_string'] ) ? sanitize_text_field( stripslashes( $_REQUEST['search_string'] ) ) : ''; 
-
+			$faq_atts['search_string'] = isset( $_REQUEST['search_string'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['search_string'] ) ) : '';
 			$faqs = new ewdufaqViewFAQs( $faq_atts );
 
 			$faqs->set_request_parameters();
@@ -98,13 +101,16 @@ if ( !class_exists( 'ewdufaqAJAX' ) ) {
 
 			$output = $output ? $output : '<div class="ewd-ufaq-no-results-found">' . sprintf( $ewd_ufaq_controller->settings->get_setting( 'label-no-results-found' ), $query->args['search_string'] ) . '</div>';
 
+			do_action( 'ewd_ufaq_advanced_search_completed', $query->args['search_string'], count( $faqs->displayed_faqs ), $faq_atts );
+			$analytics = apply_filters( 'ewd_ufaq_advanced_search_analytics', array(), $query->args['search_string'], count( $faqs->displayed_faqs ), $faq_atts );
 			wp_send_json_success(
 				array(
 					'output' 		=> $output,
 					'pagination' 	=> $pagination,
 					'faq_count' 	=> $faqs->faq_count,
 					'max_page'		=> $faqs->max_page,
-					'request_count'	=> intval( $_POST['request_count'] )
+					'request_count'	=> intval( $_POST['request_count'] ),
+					'analytics'		=> $analytics,
 				)
 			);
 
@@ -117,19 +123,19 @@ if ( !class_exists( 'ewdufaqAJAX' ) ) {
 		 */
 		public function record_view() {
 			global $wpdb;
-
 			if ( !check_ajax_referer( 'ewd-ufaq-js', 'nonce' ) ) {
 				ewdufaqHelper::bad_nonce_ajax();
 			}
 
-  			$post_id = intval( $_POST['post_id'] );
+			$post_id = isset( $_POST['post_id'] ) ? absint( $_POST['post_id'] ) : 0;
 
-  			$meta_id = $wpdb->get_var( $wpdb->prepare( "SELECT meta_id FROM $wpdb->postmeta WHERE post_id=%d AND meta_key='ufaq_view_count'", $post_id ) );
-  
-  			if ( $meta_id != '' and $meta_id != 0 ) { $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->postmeta SET meta_value=meta_value+1 WHERE post_id=%d AND meta_key='ufaq_view_count'", $post_id ) ); }
-  			else { $wpdb->query( $wpdb->prepare("INSERT INTO $wpdb->postmeta (post_id,meta_key,meta_value) VALUES (%d,'ufaq_view_count','1')", $post_id ) ); }
+			if ( ! $this->is_public_faq( $post_id ) ) { wp_send_json_error( array( 'code' => 'invalid_faq' ), 400 ); }
+			if ( ! $this->allow_public_event( 'open', $post_id, 5 * MINUTE_IN_SECONDS ) ) { wp_send_json_success( array( 'duplicate' => true ) ); }
 
-  			die();
+			$this->increment_post_meta( $post_id, 'ufaq_view_count', 1 );
+			do_action( 'ewd_ufaq_public_faq_opened', $post_id );
+
+			wp_send_json_success();
 		}
 
 		/**
@@ -142,28 +148,30 @@ if ( !class_exists( 'ewdufaqAJAX' ) ) {
 				ewdufaqHelper::bad_nonce_ajax();
 			}
 
-			$faq_id = is_numeric( $_POST['faq_id'] ) ? intval( $_POST['faq_id'] ) : 0;
-			$vote_type = sanitize_text_field( $_POST['vote_type'] );
+			$faq_id = isset( $_POST['faq_id'] ) ? absint( $_POST['faq_id'] ) : 0;
+			$vote_type = isset( $_POST['vote_type'] ) ? sanitize_key( wp_unslash( $_POST['vote_type'] ) ) : '';
 
-			if ( $vote_type == 'up' ) {
+			if ( ! $this->is_public_faq( $faq_id ) || ! in_array( $vote_type, array( 'up', 'down' ), true ) ) {
 
-				$up_votes = absint( get_post_meta( $faq_id, 'FAQ_Up_Votes', true ) );
-				update_post_meta( $faq_id, 'FAQ_Up_Votes', $up_votes + 1 );
-
-				$total_score = absint( get_post_meta( $faq_id, 'FAQ_Total_Score', true ) );
-				update_post_meta( $faq_id, 'FAQ_Total_Score', $total_score + 1 );
+				wp_send_json_error( array( 'code' => 'invalid_rating' ), 400 );
 			}
 
-			if ( $vote_type == 'down' ) {
+			if ( ! $this->allow_public_event( 'rating', $faq_id, DAY_IN_SECONDS ) ) { wp_send_json_success( array( 'duplicate' => true ) ); }
 
-				$down_votes = absint( get_post_meta( $faq_id, 'FAQ_Down_Votes', true ) );
-				update_post_meta( $faq_id, 'FAQ_Down_Votes', $down_votes + 1 );
+			if ( 'up' === $vote_type ) {
 
-				$total_score = absint( get_post_meta( $faq_id, 'FAQ_Total_Score', true ) );
-				update_post_meta( $faq_id, 'FAQ_Total_Score', $total_score - 1 );
+				$this->increment_post_meta( $faq_id, 'FAQ_Up_Votes', 1 );
+				$this->increment_post_meta( $faq_id, 'FAQ_Total_Score', 1 );
+			}
+			else {
+
+				$this->increment_post_meta( $faq_id, 'FAQ_Down_Votes', 1 );
+				$this->increment_post_meta( $faq_id, 'FAQ_Total_Score', -1 );
 			}
 
-			die();
+			do_action( 'ewd_ufaq_public_faq_helpfulness', $faq_id, $vote_type );
+
+			wp_send_json_success();
 		}
 
 		/**
@@ -228,14 +236,20 @@ if ( !class_exists( 'ewdufaqAJAX' ) ) {
 
 			if ( empty( $ewd_ufaq_controller->settings->get_setting( 'save-search-terms' ) ) ) { return; }
 
-  			$search_term = sanitize_text_field( $_POST['search_term'] );
-
+			$search_term = isset( $_POST['search_term'] ) ? sanitize_text_field( wp_unslash( $_POST['search_term'] ) ) : '';
+			$search_term = function_exists( 'mb_substr' ) ? mb_substr( $search_term, 0, 200 ) : substr( $search_term, 0, 200 );
   			if ( empty( $search_term ) or strlen( $search_term ) < 2 ) { die(); }
 
   			$search_terms = get_option( 'ewd-ufaq-search-data', array() );
 
-  			$search_terms[ $search_term ] = isset( $search_terms[ $search_term ] ) ? $search_terms[ $search_term ] + 1 : 1;
+			if ( isset( $search_terms[ $search_term ] ) ) {
 
+				$search_terms[ $search_term ]++;
+			}
+			elseif ( count( $search_terms ) < 1000 ) {
+
+				$search_terms[ $search_term ] = 1;
+			}
   			update_option( 'ewd-ufaq-search-data', $search_terms );
 
   			die();
@@ -252,11 +266,49 @@ if ( !class_exists( 'ewdufaqAJAX' ) ) {
 				ewdufaqHelper::bad_nonce_ajax();
 			}
 
+			if ( ! current_user_can( $ewd_ufaq_controller->settings->get_setting( 'access-role' ) ) ) {
+
+				ewdufaqHelper::admin_nopriv_ajax();
+			}
 			if ( empty( $ewd_ufaq_controller->settings->get_setting( 'save-search-terms' ) ) ) { return; }
 
   			update_option( 'ewd-ufaq-search-data', array() );
 
-  			die();
+			die();
+		}
+
+		private function is_public_faq( $post_id ) {
+
+			$post = get_post( $post_id );
+
+			return $post && EWD_UFAQ_FAQ_POST_TYPE === $post->post_type && 'publish' === $post->post_status;
+		}
+
+		private function allow_public_event( $event, $post_id, $ttl ) {
+
+			$address = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
+			$user_agent = isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : '';
+			$key = 'ewd_ufaq_evt_' . substr( hash_hmac( 'sha256', $event . '|' . $post_id . '|' . $address . '|' . $user_agent, wp_salt( 'nonce' ) ), 0, 32 );
+
+			if ( get_transient( $key ) ) { return false; }
+
+			return set_transient( $key, 1, max( MINUTE_IN_SECONDS, absint( $ttl ) ) );
+		}
+
+		private function increment_post_meta( $post_id, $meta_key, $amount ) {
+
+			global $wpdb;
+
+			add_post_meta( $post_id, $meta_key, 0, true );
+
+			return $wpdb->query(
+				$wpdb->prepare(
+					"UPDATE {$wpdb->postmeta} SET meta_value = CAST(meta_value AS SIGNED) + %d WHERE post_id = %d AND meta_key = %s",
+					intval( $amount ),
+					absint( $post_id ),
+					$meta_key
+				)
+			);
 		}
 	}
 }

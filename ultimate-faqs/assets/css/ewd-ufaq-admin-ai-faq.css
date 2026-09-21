@@ -2,6 +2,12 @@
 	position: relative;
 	margin: 0 0 0 10px;
 	top: -3px;
+	height: 32px;
+	display: inline-flex;
+	padding: 0 12px;
+	justify-content: center;
+	align-items: center;
+	min-height: 0;
 }
 
 #ewd-ufaq-ai-faqs-modal,

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<ruleset name="UFAQ new first-party code">
+	<description>WordPress Core standards for UFAQ-MF-001 new first-party PHP, with only established plugin naming conventions excluded for backward compatibility.</description>
+
+	<arg name="extensions" value="php" />
+	<arg name="colors" />
+
+	<file>includes/AnalyticsBridge.class.php</file>
+	<file>includes/BasicSearch.class.php</file>
+	<file>includes/EditorFAQWorkflow.class.php</file>
+	<file>includes/HelperCompatibility.class.php</file>
+	<file>includes/Upgrades.class.php</file>
+
+	<rule ref="WordPress-Core">
+		<exclude name="PEAR.NamingConventions.ValidClassName.StartWithCapital" />
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
+		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
+	</rule>
+</ruleset>

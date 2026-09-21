@@ -4,11 +4,44 @@ var el = wp.element.createElement,
 	TextControl = wp.components.TextControl,
 	SelectControl = wp.components.SelectControl,
 	BaseControl = wp.components.BaseControl,
+	PanelBody = wp.components.PanelBody,
 	CheckboxControl = wp.components.CheckboxControl,
 	InspectorControls = wp.blockEditor.InspectorControls,
+	useEffect = wp.element.useEffect,
+	useRef = wp.element.useRef,
+	useState = wp.element.useState,
 	Localize = wp.i18n.__,
 	ewdUfaqBlocks = ewd_ufaq_blocks,
 	faqCategories = ewdUfaqBlocks.faqCategoryOptions;
+
+function EwdUfaqEditorPreview( props ) {
+	var previewRef = useRef( null );
+
+	useEffect( function() {
+		var preview = previewRef.current;
+		if ( ! preview ) { return undefined; }
+
+		function bindPreviewInteractions() {
+			if ( typeof window.ufaqSetClickHandlers === 'function' ) {
+				window.ufaqSetClickHandlers( preview );
+			}
+		}
+
+		bindPreviewInteractions();
+		var PreviewMutationObserver = preview.ownerDocument.defaultView.MutationObserver;
+		var observer = new PreviewMutationObserver( bindPreviewInteractions );
+		observer.observe( preview, { childList: true, subtree: true } );
+
+		return function() { observer.disconnect(); };
+	}, [] );
+
+	return el( 'div', { className: 'ewd-ufaq-editor-preview', ref: previewRef },
+		el( ServerSideRender, {
+			block: 'ultimate-faqs/ewd-ufaq-display-faq-block',
+			attributes: props.attributes
+		} )
+	);
+}
 
 registerBlockType( 'ultimate-faqs/ewd-ufaq-display-faq-block', {
 	title: Localize( 'Display FAQs', 'ultimate-faqs' ),
@@ -31,6 +64,18 @@ registerBlockType( 'ultimate-faqs/ewd-ufaq-display-faq-block', {
 	edit: function( props ) {
 
 		var include_category_array = props.attributes.include_category_array;
+		var hasExplicitFaqIds = String( props.attributes.post__in_string || '' ).trim().length > 0;
+		var faqIds = String( props.attributes.post__in_string || '' ).split( ',' ).map( function( id ) { return id.trim(); } ).filter( Boolean );
+		var advancedSettingsState = useState( hasExplicitFaqIds );
+		var isAdvancedSettingsOpen = advancedSettingsState[0];
+		var setAdvancedSettingsOpen = advancedSettingsState[1];
+		var previousFaqIds = useRef( faqIds );
+
+		useEffect( function() {
+			var faqWasAdded = faqIds.some( function( id ) { return previousFaqIds.current.indexOf( id ) === -1; } );
+			if ( faqWasAdded ) { setAdvancedSettingsOpen( true ); }
+			previousFaqIds.current = faqIds;
+		}, [ props.attributes.post__in_string ] );
 
 		// convert from the old include_category attribute to the new include_category_array attribute
 		if ( props.attributes.hasOwnProperty( 'include_category' ) && props.attributes.include_category.length ) { 
@@ -92,30 +137,36 @@ registerBlockType( 'ultimate-faqs/ewd-ufaq-display-faq-block', {
 					options: [ {value: '', label: 'Default (from settings)'}, {value: 'yes', label: 'Yes'}, {value: 'no', label: 'No'} ],
 					onChange: ( value ) => { props.setAttributes( { category_accordion: value } ); },
 				} ),
-				el(
+				! hasExplicitFaqIds ? el(
 					BaseControl, {
 						label: Localize( 'Categories to Include', 'ultimate-faqs' ),
 					}, 
 					checkboxes
-				),
-				el( TextControl, {
+				) : null,
+				! hasExplicitFaqIds ? el( TextControl, {
 					label: Localize( 'Exclude Category', 'ultimate-faqs' ),
 					help: Localize( 'Comma-separated list of category IDs you\'d like to exclude.', 'ultimate-faqs' ),
 					value: props.attributes.exclude_category,
 					onChange: ( value ) => { props.setAttributes( { exclude_category: value } ); },
-				} ),
-				el( TextControl, {
-					label: Localize( 'FAQ IDs', 'ultimate-faqs' ),
-					help: Localize( 'Comma-separated list of IDs, if you\'d like to display specific FAQs.', 'ultimate-faqs' ),
-					value: props.attributes.post__in_string,
-					onChange: ( value ) => { props.setAttributes( { post__in_string: value } ); },
-				} )
+				} ) : null,
+				el( PanelBody, {
+					title: Localize( 'Advanced / legacy settings', 'ultimate-faqs' ),
+					opened: isAdvancedSettingsOpen,
+					onToggle: setAdvancedSettingsOpen,
+				},
+					el( TextControl, {
+						label: Localize( 'FAQ IDs', 'ultimate-faqs' ),
+						help: Localize( 'Comma-separated list of IDs. Use the managed list in the block for normal editing.', 'ultimate-faqs' ),
+						value: props.attributes.post__in_string,
+						onChange: ( value ) => { props.setAttributes( { post__in_string: value } ); },
+					} )
+				)
 			),
 		);
-		returnString.push( el( ServerSideRender, { 
-			block: 'ultimate-faqs/ewd-ufaq-display-faq-block',
-			attributes: props.attributes
-		} ) );
+		returnString.push( el( EwdUfaqEditorPreview, props ) );
+		if ( window.ewdUfaqManagedEditor ) {
+			returnString.push( el( window.ewdUfaqManagedEditor, props ) );
+		}
 		return returnString;
 	},
 
@@ -133,9 +184,13 @@ registerBlockType( 'ultimate-faqs/ewd-ufaq-search-block', {
 		include_category: { type: 'string' },
 		exclude_category: { type: 'string' },
 		show_on_load: { type: 'string' },
+		search_id: { type: 'string' },
 	},
 
 	edit: function( props ) {
+		if ( ! props.attributes.search_id ) {
+			props.setAttributes( { search_id: 'ufaq_search_' + props.clientId.replace( /-/g, '_' ) } );
+		}
 
 		var include_category_array = props.attributes.include_category_array;
 

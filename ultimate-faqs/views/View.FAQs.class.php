@@ -43,6 +43,9 @@ class ewdufaqViewFAQs extends ewdufaqView {
 	// An multi-dimensional array containing the different categories, with their FAQs in sub-arrays
 	public $category_faqs = array();
 
+	// Virtual category ID used for explicitly listed FAQs without a category.
+	const UNCATEGORIZED_TERM_ID = 0;
+
 	// Array containing IDs of categories to display, empty if all should be displayed
 	public $include_categories = array();
 
@@ -83,7 +86,7 @@ class ewdufaqViewFAQs extends ewdufaqView {
 		$this->group_by_category = ! empty( $this->group_by_category ) ? ( strtolower( $this->group_by_category ) == 'yes' ? true : false ) : $ewd_ufaq_controller->settings->get_setting( 'group-by-category' );
 		
 		// Override the group by category setting if there's only a single FAQ being displayed
-		$this->group_by_category = sizeOf( $faqs ) == 1 ? false : $this->group_by_category;
+		$this->group_by_category = sizeOf( $faqs ) == 1 && empty( $this->get_explicit_post_ids() ) ? false : $this->group_by_category;
 
 		foreach ( $faqs as $faq ) {
 			
@@ -228,18 +231,29 @@ class ewdufaqViewFAQs extends ewdufaqView {
 			$categories = $this->sort_terms_hierarchically( $categories );
 		}
 
+		if ( ! empty( $this->category_faqs[ self::UNCATEGORIZED_TERM_ID ] ) ) {
+
+			$uncategorized           = new stdClass();
+			$uncategorized->term_id  = self::UNCATEGORIZED_TERM_ID;
+			$uncategorized->name     = __( 'Uncategorized', 'ultimate-faqs' );
+			$uncategorized->slug     = 'uncategorized';
+			$uncategorized->parent   = 0;
+			$uncategorized->children = array();
+			$categories[]            = $uncategorized;
+		}
+
 		foreach ( $categories as $category ) {
 			
-			if ( ! empty( $this->include_categories ) and ! $this->has_eligible_faq_categories( $category ) ) { continue; }
+			if ( empty( $this->get_explicit_post_ids() ) && ! empty( $this->include_categories ) and ! $this->has_eligible_faq_categories( $category ) ) { continue; }
 		
-			if ( $faq_count < $this->faqs_per_page * ( $this->faq_page - 1 ) ) { 
+			if ( $this->faqs_per_page > 0 && $faq_count < $this->faqs_per_page * ( $this->faq_page - 1 ) ) {
 
 				$faq_count += $this->get_faq_count( $category );
 
 				continue;
 			}
 
-			if ( $faq_count >= $this->faqs_per_page * ( $this->faq_page ) ) { continue; }
+			if ( $this->faqs_per_page > 0 && $faq_count >= $this->faqs_per_page * ( $this->faq_page ) ) { continue; }
 
 			$this->faq_count = $faq_count;
 			
@@ -464,7 +478,7 @@ class ewdufaqViewFAQs extends ewdufaqView {
 
   		if ( empty( $category ) ) { return 0; }
 
-  		$count = ( ! empty( $category->term_id ) and ! empty( $this->category_faqs[ $category->term_id ] ) ) ? sizeof( $this->category_faqs[ $category->term_id ] ) : 0;
+		$count = isset( $category->term_id ) && ! empty( $this->category_faqs[ $category->term_id ] ) ? sizeof( $this->category_faqs[ $category->term_id ] ) : 0;
 
   		if ( ! empty( $category->children ) ) {
 
@@ -584,6 +598,51 @@ class ewdufaqViewFAQs extends ewdufaqView {
 				}
 			}
 		}
+
+		foreach ( $this->faqs as $faq_view ) {
+
+			if ( ( $this->is_search || in_array( $faq_view->faq->post->ID, $this->get_explicit_post_ids(), true ) ) && empty( $faq_view->faq->categories ) ) {
+				$this->category_faqs[ self::UNCATEGORIZED_TERM_ID ][] = $faq_view;
+			}
+		}
+	}
+
+	/**
+	 * Return the positive FAQ IDs explicitly requested by post__in_string.
+	 *
+	 * @since 2.5.0
+	 */
+	public function get_explicit_post_ids() {
+
+		if ( empty( $this->post__in_string ) ) { return array(); }
+
+		return array_values(
+			array_unique(
+				array_map(
+					'absint',
+					preg_grep( '/^[1-9][0-9]*$/', array_map( 'trim', explode( ',', $this->post__in_string ) ) )
+				)
+			)
+		);
+	}
+
+	/**
+	 * Return a real FAQ category or the virtual Uncategorized category.
+	 *
+	 * @since 2.5.0
+	 */
+	public function get_category_term( $term_id ) {
+
+		if ( self::UNCATEGORIZED_TERM_ID !== absint( $term_id ) ) {
+			return get_term( $term_id, EWD_UFAQ_FAQ_CATEGORY_TAXONOMY );
+		}
+
+		$uncategorized          = new stdClass();
+		$uncategorized->term_id = self::UNCATEGORIZED_TERM_ID;
+		$uncategorized->name    = __( 'Uncategorized', 'ultimate-faqs' );
+		$uncategorized->slug    = 'uncategorized';
+
+		return $uncategorized;
 	}
 
 	/**

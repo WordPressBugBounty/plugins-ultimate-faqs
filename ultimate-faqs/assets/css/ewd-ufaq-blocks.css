@@ -17,3 +17,93 @@ BLOCKS
 .wp-admin input[name="submit_question"] {
   display: none;
 }
+
+.ewd-ufaq-managed-editor-controls {
+  margin-top: 16px;
+}
+
+.ewd-ufaq-managed-editor-toggle {
+  margin-bottom: 12px;
+}
+
+.ewd-ufaq-managed-editor {
+  border: 1px solid #c3c4c7;
+  padding: 16px;
+  margin-bottom: 16px;
+  background: #fff;
+  color: #1e1e1e;
+}
+
+.ewd-ufaq-managed-editor h3,
+.ewd-ufaq-managed-editor h4,
+.ewd-ufaq-managed-editor strong {
+  margin-top: 0;
+  color: #1e1e1e !important;
+}
+
+.ewd-ufaq-managed-item {
+  border-top: 1px solid #dcdcde;
+  padding: 12px 0;
+}
+
+.ewd-ufaq-managed-item:first-of-type {
+  border-top: 0;
+}
+
+.ewd-ufaq-managed-edit-link {
+  margin-left: 0.35em;
+}
+
+.ewd-ufaq-managed-status {
+  display: inline-block;
+  margin: 0 10px;
+  color: #646970;
+  text-transform: capitalize;
+}
+
+.ewd-ufaq-managed-actions,
+.ewd-ufaq-managed-search,
+.ewd-ufaq-managed-create {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.ewd-ufaq-managed-search > .components-base-control,
+.ewd-ufaq-managed-create > .components-base-control,
+.ewd-ufaq-managed-create > h4 {
+  flex-basis: 100%;
+}
+
+.ewd-ufaq-managed-result {
+  display: flex;
+  flex-basis: 100%;
+  align-items: center;
+  gap: 8px;
+}
+
+/*
+ * The server-rendered block preview sits on a white editor surface. Keep its
+ * FAQ titles readable when site or plugin front-end styles use white headings.
+ * This wrapper exists only in the editor and does not alter front-end output.
+ */
+.ewd-ufaq-editor-preview {
+  background: #fff;
+  color: #1e1e1e;
+}
+
+.editor-styles-wrapper .ewd-ufaq-editor-preview .ewd-ufaq-faq-title h1,
+.editor-styles-wrapper .ewd-ufaq-editor-preview .ewd-ufaq-faq-title h2,
+.editor-styles-wrapper .ewd-ufaq-editor-preview .ewd-ufaq-faq-title h3,
+.editor-styles-wrapper .ewd-ufaq-editor-preview .ewd-ufaq-faq-title h4,
+.editor-styles-wrapper .ewd-ufaq-editor-preview .ewd-ufaq-faq-title h5,
+.editor-styles-wrapper .ewd-ufaq-editor-preview .ewd-ufaq-faq-title h6,
+.wp-admin .ewd-ufaq-editor-preview .ewd-ufaq-faq-title h1,
+.wp-admin .ewd-ufaq-editor-preview .ewd-ufaq-faq-title h2,
+.wp-admin .ewd-ufaq-editor-preview .ewd-ufaq-faq-title h3,
+.wp-admin .ewd-ufaq-editor-preview .ewd-ufaq-faq-title h4,
+.wp-admin .ewd-ufaq-editor-preview .ewd-ufaq-faq-title h5,
+.wp-admin .ewd-ufaq-editor-preview .ewd-ufaq-faq-title h6 {
+  color: #1e1e1e !important;
+}

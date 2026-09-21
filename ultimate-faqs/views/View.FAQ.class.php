@@ -62,6 +62,8 @@ class ewdufaqViewFAQ extends ewdufaqView {
 		}
 		$output = ob_get_clean();
 
+		do_action( 'ewd_ufaq_faq_rendered', $this->faq->post->ID, $this );
+
 		return apply_filters( 'ewd_ufaq_faq_output', $output, $this );
 	}
 

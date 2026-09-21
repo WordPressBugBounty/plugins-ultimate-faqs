@@ -3,15 +3,17 @@
  * Plugin Name: Ultimate FAQ Accordion Plugin
  * Plugin URI: https://www.etoilewebdesign.com/plugins/ultimate-faq/
  * Description: Full-featured FAQ and accordion plugin with advanced search, simple UI and easy-to-use Gutenberg blocks and shortcodes.
- * Version: 2.4.14
+ * Version: 2.5.0
  * Author: Etoile Web Design
  * Author URI: https://www.etoilewebdesign.com/
+ * License: GPLv3
+ * License URI: https://www.gnu.org/licenses/gpl-3.0.html
  * Text Domain: ultimate-faqs
  * Domain Path: /languages
  * Requires at least: 6.0
  * Requires PHP: 7.4
  * WC requires at least: 7.1
- * WC tested up to: 11.0
+ * WC tested up to: 11.1
  */
 
 if ( ! defined( 'ABSPATH' ) )
@@ -25,6 +27,7 @@ class ewdufaqInit {
 	public $notifications;
 	public $permissions;
 	public $settings;
+	public $helper_compatibility;
 	public $woocommerce;
 	public $wpforms;
 
@@ -63,8 +66,10 @@ class ewdufaqInit {
 		define( 'EWD_UFAQ_PLUGIN_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
 		define( 'EWD_UFAQ_PLUGIN_FNAME', plugin_basename( __FILE__ ) );
 		define( 'EWD_UFAQ_TEMPLATE_DIR', 'ewd-ufaq-templates' );
-		define( 'EWD_UFAQ_VERSION', '2.4.14' );
-
+		define( 'EWD_UFAQ_VERSION', '2.5.0' );
+		define( 'EWD_UFAQ_HELPER_API_VERSION', 1 );
+		define( 'EWD_UFAQ_MIN_HELPER_VERSION', '0.1.0' );
+		define( 'EWD_UFAQ_MAX_HELPER_API_VERSION', 1 );
 		define( 'EWD_UFAQ_FAQ_POST_TYPE', 'ufaq' );
 		define( 'EWD_UFAQ_FAQ_CATEGORY_TAXONOMY', 'ufaq-category' );
 		define( 'EWD_UFAQ_FAQ_TAG_TAXONOMY', 'ufaq-tag' );
@@ -82,6 +87,8 @@ class ewdufaqInit {
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/AboutUs.class.php' );
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/AIAssist.class.php' );
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/Ajax.class.php' );
+		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/AnalyticsBridge.class.php' );
+		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/BasicSearch.class.php' );
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/Blocks.class.php' );
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/Patterns.class.php' );
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/CustomPostTypes.class.php' );
@@ -89,6 +96,8 @@ class ewdufaqInit {
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/DeactivationSurvey.class.php' );
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/FAQ.class.php' );
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/Helper.class.php' );
+		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/HelperCompatibility.class.php' );
+		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/EditorFAQWorkflow.class.php' );
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/InstallationWalkthrough.class.php' );
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/Notifications.class.php' );
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/OrderingTable.class.php' );
@@ -98,6 +107,7 @@ class ewdufaqInit {
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/Settings.class.php' );
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/template-functions.php' );
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/UltimateWPMail.class.php' );
+		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/Upgrades.class.php' );
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/Widgets.class.php' );
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/WooCommerce.class.php' );
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/WPForms.class.php' );
@@ -121,7 +131,7 @@ class ewdufaqInit {
 		$this->notifications = new ewdufaqNotifications();
 		$this->permissions 	 = new ewdufaqPermissions();
 		$this->settings 	 = new ewdufaqSettings(); 
-
+		$this->helper_compatibility = new ewdufaqHelperCompatibility();
 		if ( $this->settings->get_setting( 'woocommerce-faqs' ) ) {
 			
 			$this->woocommerce = new ewdufaqWooCommerce();
@@ -133,13 +143,15 @@ class ewdufaqInit {
 		}
 
 		new ewdufaqAJAX();
+		new ewdufaqAnalyticsBridge();
 		new ewdufaqAIAssist();
 		new ewdufaqBlocks();
+		new ewdufaqEditorFAQWorkflow();
 		if ( function_exists( 'register_block_pattern' ) ) { new ewdufaqPatterns(); }
 		new ewdufaqOrderingTable();
 		new ewdufaqUltimateWPMail();
+		new ewdufaqUpgrades();
 		new ewdufaqWidgetManager();
-
 		new ewdufaqAboutUs();
 	}
 
@@ -334,7 +346,8 @@ class ewdufaqInit {
 			'edit-ufaq-tag',
 			'ufaq_page_ewd-ufaq-about-us',
 			'ufaq_page_ewd-ufaq-export',
-			'ufaq_page_ewd-ufaq-import'
+			'ufaq_page_ewd-ufaq-import',
+			'ufaq_page_ewd-ufaq-content-gaps'
 		);
 
 		if ( ! in_array( $hook, $hooks ) and ! in_array( $screen->id, $screen_ids ) ) { return; }
@@ -814,5 +827,7 @@ class ewdufaqInit {
 
 global $ewd_ufaq_controller;
 $ewd_ufaq_controller = new ewdufaqInit();
+
+$ewd_ufaq_controller->helper_compatibility->guard_incompatible_helper_callback();
 
 do_action( 'ewd_ufaq_initialized' );

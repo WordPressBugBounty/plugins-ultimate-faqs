@@ -27,15 +27,15 @@ jQuery( document ).ready( function( $ ) {
 
 	jQuery( '#ewd-ufaq-ai-faqs-create-button' ).on( 'click', function() {
 
-		selected_posts = jQuery( '#ewd-ufaq-ai-faqs-content' ).val();
-		faq_count = jQuery( '#ewd-ufaq-ai-faqs-count' ).val();
-		set_categories = jQuery( '#ewd-ufaq-ai-faqs-categories' ).val();
+		var selected_posts = jQuery( '#ewd-ufaq-ai-faqs-content' ).val();
+		var faq_count = jQuery( '#ewd-ufaq-ai-faqs-count' ).val();
+		var set_categories = jQuery( '#ewd-ufaq-ai-faqs-categories' ).val();
+		var consent = jQuery( '#ewd-ufaq-ai-faqs-consent' ).is( ':checked' );
 
-		if ( ! selected_posts.length || ! faq_count ) {
+		if ( ! selected_posts || ! selected_posts.length || ! faq_count || ! consent ) {
 
-			var error_message = '<span class=\'ewd-ufaq-ai-faqs-error\'>Please complete all fields before submitting.</span>';
-
-			jQuery( '.ewd-ufaq-ai-faqs-submit' ).append( error_message );
+			var error_message = consent ? 'Please complete all fields before submitting.' : 'Confirm the external content transfer before continuing.';
+			jQuery( '<span>', { 'class': 'ewd-ufaq-ai-faqs-error', text: error_message } ).appendTo( '.ewd-ufaq-ai-faqs-submit' );
 
 			jQuery( '.ewd-ufaq-ai-faqs-error' ).delay( 5000 ).fadeOut();
 
@@ -54,6 +54,7 @@ jQuery( document ).ready( function( $ ) {
     	params.selected_posts  	 	= JSON.stringify( selected_posts );
     	params.faq_count 			= faq_count;
     	params.set_categories		= set_categories;
+		params.consent				= 'yes';
 
     	var data = jQuery.param( params );
     	jQuery.post( ajaxurl, data, function( response ) {
@@ -64,47 +65,27 @@ jQuery( document ).ready( function( $ ) {
     		}
     		else {
 
-    			faq_content = '';
+				var $results = jQuery( '#ewd-ufaq-ai-faqs-created-faqs' ).empty();
 
-    			jQuery( response.data.faqs ).each( function( index, faq ) {
+				jQuery( response.data.faqs ).each( function( index, faq ) {
+					var $faq = jQuery( '<div>', { 'class': 'ewd-ufaq-ai-faq' } ).appendTo( $results );
+					var $selector = jQuery( '<div>', { 'class': 'ewd-ufaq-ai-faq-checkbox' } ).appendTo( $faq );
+					jQuery( '<input>', { type: 'checkbox', value: 'true', checked: true } ).appendTo( $selector );
+					var $fields = jQuery( '<div>', { 'class': 'ewd-ufaq-ai-faq-title-and-content' } ).appendTo( $faq );
+					jQuery( '<input>', { type: 'text' } ).val( faq.title || '' ).appendTo( jQuery( '<div>', { 'class': 'ewd-ufaq-ai-faq-title' } ).appendTo( $fields ) );
+					jQuery( '<textarea>' ).val( faq.content || '' ).appendTo( jQuery( '<div>', { 'class': 'ewd-ufaq-ai-faq-content' } ).appendTo( $fields ) );
 
-    				faq_content += '<div class=\'ewd-ufaq-ai-faq\'>';
-
-    				faq_content += '<div class=\'ewd-ufaq-ai-faq-checkbox\'>';
-    				faq_content += '<input type=\'checkbox\' value=\'true\' checked=\'checked\' />';
-    				faq_content += '</div>';
-
-    				faq_content += '<div class=\'ewd-ufaq-ai-faq-title-and-content\'>';
-
-					faq_content += '<div class=\'ewd-ufaq-ai-faq-title\'>';
-    				faq_content += '<input type=\'text\' value=\'' + faq.title + '\' />';
-    				faq_content += '</div>';
-
-    				faq_content += '<div class=\'ewd-ufaq-ai-faq-content\'>';
-    				faq_content += '<textarea>' + faq.content + '</textarea>';
-    				faq_content += '</div>';
-
-    				if ( set_categories == 'yes' ) {
-
-    					faq_content += '<div class=\'ewd-ufaq-ai-faq-categories\'>';
-    					
-    					jQuery( faq.categories ).each( function( index, category ) {
-
-    						faq_content += '<div class=\'ewd-ufaq-ai-faq-category\'>';
-    						faq_content += '<input type=\'checkbox\' value=\'' + Object.keys(category)[0] + '\' checked=\'checked\' />';
-    						faq_content += '<span>' + Object.values(category)[0] + '</span>';
-    						faq_content += '</div>';
-    					} );
-
-    					faq_content += '</div>';
-    				}
-
-					faq_content += '</div>';
-
-    				faq_content += '</div>';
-    			} );
-
-    			jQuery( '#ewd-ufaq-ai-faqs-created-faqs' ).html( faq_content );
+					if ( set_categories === 'yes' && Array.isArray( faq.categories ) ) {
+						var $categories = jQuery( '<div>', { 'class': 'ewd-ufaq-ai-faq-categories' } ).appendTo( $fields );
+						jQuery( faq.categories ).each( function( category_index, category ) {
+							var category_id = Object.keys( category )[0];
+							var category_name = category[ category_id ];
+							var $category = jQuery( '<div>', { 'class': 'ewd-ufaq-ai-faq-category' } ).appendTo( $categories );
+							jQuery( '<input>', { type: 'checkbox', value: category_id, checked: true } ).appendTo( $category );
+							jQuery( '<span>' ).text( category_name ).appendTo( $category );
+						} );
+					}
+				} );
     		}
 
     	} );
@@ -112,13 +93,13 @@ jQuery( document ).ready( function( $ ) {
 
 	jQuery( '#ewd-ufaq-ai-faqs-publish-button' ).on( 'click', function() {
 
-		faqs = [];
+		var faqs = [];
 
 		jQuery( '.ewd-ufaq-ai-faq' ).each( function() {
 
 			if ( ! jQuery( this ).find( '.ewd-ufaq-ai-faq-checkbox input' ).first().is( ':checked' ) ) { return; }
 
-			faq = {};
+			var faq = {};
 
 			faq.title = jQuery( this ).find( '.ewd-ufaq-ai-faq-title input' ).first().val();
 			faq.content = jQuery( this ).find( '.ewd-ufaq-ai-faq-content textarea' ).first().val();

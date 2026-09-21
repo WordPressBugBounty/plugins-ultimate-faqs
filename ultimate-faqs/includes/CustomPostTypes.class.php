@@ -446,7 +446,10 @@ class ewdufaqCustomPostTypes {
 		
 		if ( $column_name == 'ewd_ufaq_views' ) {
 
-			echo ( get_post_meta( $post_id, 'ufaq_view_count', true ) ? get_post_meta( $post_id, 'ufaq_view_count', true ) : 0 );
+			// Custom-field writers can store arbitrary values, including on pending FAQs.
+			$view_count = get_post_meta( $post_id, 'ufaq_view_count', true );
+			$view_count = is_numeric( $view_count ) ? max( 0, (int) $view_count ) : 0;
+			echo esc_html( (string) $view_count );
 		}
 
 		if ( $column_name == 'ewd_ufaq_categories' ) {
@@ -534,7 +537,7 @@ class ewdufaqCustomPostTypes {
 	    $faq_taxonomy = get_taxonomy( EWD_UFAQ_FAQ_CATEGORY_TAXONOMY );
 
 	    $args = array(
-	        'show_option_all' =>  __("Show All {$faq_taxonomy->label}"),
+	        'show_option_all' => sprintf( __( 'Show All %s', 'ultimate-faqs' ), $faq_taxonomy->label ),
 	        'taxonomy'        =>  EWD_UFAQ_FAQ_CATEGORY_TAXONOMY,
 	        'name'            =>  EWD_UFAQ_FAQ_CATEGORY_TAXONOMY,
 	        'orderby'         =>  'name',
@@ -557,11 +560,9 @@ class ewdufaqCustomPostTypes {
 		
 		if ( ! isset( $wp_query->query['orderby'] ) or $wp_query->query['orderby'] != EWD_UFAQ_FAQ_CATEGORY_TAXONOMY ) { return $clauses; }
 		
-		$clauses['join'] .= <<<SQL
-LEFT OUTER JOIN {$wpdb->term_relationships} ON {$wpdb->posts}.ID={$wpdb->term_relationships}.object_id
-LEFT OUTER JOIN {$wpdb->term_taxonomy} USING (term_taxonomy_id)
-LEFT OUTER JOIN {$wpdb->terms} USING (term_id)
-SQL;
+		$clauses['join'] .= " LEFT OUTER JOIN {$wpdb->term_relationships} ON {$wpdb->posts}.ID={$wpdb->term_relationships}.object_id";
+		$clauses['join'] .= " LEFT OUTER JOIN {$wpdb->term_taxonomy} USING (term_taxonomy_id)";
+		$clauses['join'] .= " LEFT OUTER JOIN {$wpdb->terms} USING (term_id)";
 		
 		$clauses['where'] .= "AND (taxonomy = 'ufaq-category' OR taxonomy IS NULL)";
 		$clauses['groupby'] = "object_id";

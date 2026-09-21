@@ -2,8 +2,9 @@
 Contributors: rustaurius
 Tags: faq, faqs, woocommerce faq, accordion, faq block
 Requires at least: 6.0
-Tested up to: 7.0
-Stable tag: 2.4.14
+Tested up to: 7.1
+Stable tag: 2.5.0
+Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -24,6 +25,8 @@ All this in an accordion layout that is automatically responsive and adapts your
 
 - Add an unlimited number of FAQ entries, categories, tags and pages.
 - Display your FAQs anywhere with the included Gutenberg blocks and shortcodes.
+- Create, select, reorder, and safely reuse FAQs directly in the Display FAQs block.
+- Search published FAQs with a page-load form in Free; premium adds live AJAX search, highlighting, and autocomplete.
 - FAQ accordion layout that automatically adapts to fit in any site and on any device.
 - Works with third-party editors like Elementor.
 - Easily translate FAQ entries using WPML, Loco Translate, Polylang, etc. With many translations already available [here](https://translate.wordpress.org/projects/wp-plugins/ultimate-faqs/)!
@@ -49,6 +52,28 @@ Your FAQs are created using a post type. This means it works out of the box with
 
 We've included (in the free version!) advanced customization features that let you choose what elements show for each FAQ (e.g. categories, tags, author, date, etc.), set the order of your FAQs and categories, fine tune accordion behavior, add your own custom CSS and more!
 
+### Use AI to Generate FAQs
+
+You no longer need to manually create all your FAQs. Let the plugin do the heavy lifting for you! We now offer Open AI integration, via which the plugin will automatically generate new FAQs for you. You just need to specify which page or post should be used and the plugin will automatically create the FAQ based on the content of it. You can also choose to automatically assign an FAQ to a category. You then get a chance to review the generated content before publishing it to your site. 
+
+#### Premium AI-generated FAQs
+
+In the premium version you will get access to create up to 20 AI-generated FAQs at a time as well as to specify multiple pages and/or posts from which the content should be pulled to generate the FAQs. 
+
+*Privacy note: Only when an administrator confirms and starts AI Assist, selected public post/page text is sent to Etoile Web Design and relayed to OpenAI. Private, draft, future, pending, and password-protected content is rejected server-side. No other data is sent to external sources.*
+
+### FAQ Search
+
+Have a lot of FAQs? Our powerful search engine eliminates the need for your customers to scroll through endless FAQ entries to find the info they need. Just add the search shortcode or block to any page on your site.
+
+#### FAQ Search Premium
+
+The premium version of the plugin adds the following power features to the FAQ search functionality.
+
+- It uses asynchronous requests to search your whole database of FAQs in real time, without having to reload the page. 
+- It comes with an option to display your FAQs on page load, so you can use one block for everything. No duplicates. No mess. Super easy for your users!
+- Enable **highlighting** and **auto-complete** options for an even better FAQ search experience. 
+
 ### FAQ Statistics
 
 Statistics and view counts are automatically enabled, so you can easily keep track of which FAQs are the most popular.
@@ -57,24 +82,15 @@ Statistics and view counts are automatically enabled, so you can easily keep tra
 
 We've included the ability for you to enable comments on FAQs, giving you a platform to communicate with your users/customers and help improve not only your knowledge base, but your overall product or service. The FAQ comments make use of WordPress's built-in comment engine, which means seamless integration and you can use WordPress's comment and moderation settings to fine tune the experience.
 
-### Use AI to Generate FAQs
+### Local Analytics and Automatic AI-Generated FAQs (Requires Premium)
 
-You no longer need to manually create all your FAQs. Let the plugin do the heavy lifting for you! We now offer Open AI integration, via which the plugin will automatically generate new FAQs for you. You just need to specify which page or post should be used and the plugin will automatically create the FAQ based on the content of it. You can also choose to automatically assign an FAQ to a category. You then get a chance to review the generated content before publishing it to your site. 
+The Ultimate FAQ premium version now comes with a whole new governed analytics functionality that can also automatically create new FAQ drafts based on identified content gaps. 
 
-#### Premium AI-generated FAQs
+When an administrator opts in, the site stores bounded daily local counts for normalized search text, no-result searches, FAQ opens, and helpfulness responses for 7, 30, 60, or 90 days. Raw IP addresses and user-agent strings are not retained. And administrators can clear analytics explicitly. 
 
-In the premium version you will get access to create up to 20 AI-generated FAQs at a time as well as to specify multiple pages and/or posts from which the content should be pulled to generate the FAQs.
+Based on this data, the plugin will use AI to automatically suggest FAQs to fill *content gaps* it has identified. From there, you can decide to let it automatically generate these FAQs using AI or you can set it so that you can manually generate and review the ones that make sense.
 
-*Privacy note: The plugin sends post or page content to our server, which is forwarded to Open AI when using the AI FAQ generation feature. No other data is sent to external sources.*
-
-### Powerful FAQ Search (Requires Premium)
-
-Have a lot of FAQs? Our powerful search engine eliminates the need for your customers to scroll through endless FAQ entries to find the info they need.
-
-- Add the FAQ search form anywhere on your site via block, pattern or shortcode.
-- It uses asynchronous requests to search your whole database of FAQs in real time, without having to reload the page. 
-- It comes with an option to display your FAQs on page load, so you can use one block for everything. No duplicates. No mess. Super easy for your users!
-- Enable the **highlighting** and **auto-complete** options for an even better FAQ search experience. 
+You need to configure an AI provider in WordPress's Settings > Connectors for this to work.
 
 ### WooCommerce FAQ Support (Requires Premium)
 
@@ -223,67 +239,12 @@ For more info on installing and activating the plugin, and on the walk-through, 
 
 == Changelog ==
 
-= 2.4.14 (2026-08-18) =
-- Added the ability to include FAQ question and answer when using the ewd_ufaq_user_question_answered_message_body filter.
-- Fixes for a few deprecated notices.
-
-= 2.4.13 (2026-07-29) =
-- Added a direct support option to the deactivation survey, making it easier to get help right away if you're uninstalling due to an issue.
-
-= 2.4.12 (2026-07-08) =
-- Fix for front-end styles not being enqueued on some sites/themes.
-- Fix for admin FAQ search not correctly returning results in some instances.
-- Fix for issue causing brief flash of unstyled content on some admin screens. 
-
-= 2.4.11 (2026-05-18) =
-- Upgrading FPDF library to 1.86.
-- Compatibility updates for WordPress 7.0.
-
-= 2.4.10 (2026-04-17) =
-- Update to fix issue with in-admin help features not displaying correctly in certain instances.
-
-= 2.4.9 (2026-04-15) =
-- Fix for conflict caused by helper button/feature.
-
-= 2.4.8 (2026-03-26) =
-- Updated escaping of FAQ answer content output.
-
-= 2.4.7 (2026-03-02) =
-- Fixes for PHP warnings related to the new admin help button.
-
-= 2.4.6 (2026-02-03) =
-- New: You can now add a featured image to an FAQ and it will display on the single post page if your theme supports it.
-- New: Helper button with info/support/tutorials for admin and settings pages.
-- Update: Added a class to the h2 output for the FAQs heading on the WooCommerce product page.
-- Fix: Linebreaks/spacing not being applied.
-- Fix: WP Forms FAQs not working.
-
-= 2.4.5 (2026-01-08) =
-- Fixed issue with pagination not working in certain cases. 
-- Updated the Permalink Destination option description to more clearly explain the fallback behaviour when pagination is being used.
-
-= 2.4.4 (2025-11-19) =
-- Added a new option to display a toggle icon for the category toggle feature.
-
-= 2.4.3 (2025-10-16) =
-- Fix to prevent all FAQs from being displayed if an FAQ is added to a WooCommerce product and then subsequently deleted.
-
-= 2.4.2 (2025-09-26) =
-- Fix: Tabs not displaying on WooCommerce product page when no FAQs assigned to that product.
-
-= 2.4.1 (2025-09-23) =
-- AI feature now uses GPT-5.
-- Updated WooCommerce compatibility.
-
-= 2.4.0 (2025-08-28) =
-- **IMPORTANT NOTE: Significant updates have been made to the styling of several layouts, especially the "Minimalist" FAQ display style. We highly recommend, especially if you are using this display style, that you install the update on a staging environment first and test with with the updated style, especially if you have customized the layout and/or CSS.**
-- Refresh of the "Minimalist" FAQ display style.
-- Redesign of the plugin admin.
-- Added: Option to have nested categories (i.e. sub-categories can now appear nested within categories).
-- Added: New Category Tabs option (displays categories as horizontal tabs).
-- Changed: It is now possible to include an FAQ search shortcode or block on the same page as a regular FAQ shortcode or block.
-- Changed: Updated conditional options on the settings page, to reduce the likelihood of using conflicting styles/options and to make it cleaner.
-- Fixed: Broken links in FAQs when there was highlighted search text within them.
-- Fixed: FAQ search querying also being applied to other FAQ shortcodes or blocks on the same page.
+= 2.5.0 (2026-09-20) =
+- <strong>This is a major update with many changes, including some big changes. We suggest testing this update in a staging environment before updating your live environment. Or wait a few days before updating in the event that an issue is identified that requires a fix/new update.</strong>
+- Added the ability to create and manage FAQs directly in the Display FAQs block.
+- Added new local analytics functionality that can identify content gaps and use AI to suggest or automatically generate new FAQs to fill the gaps. You need to specify an AI provider in WP Settings > Connectors for this to work.
+- Updated the search functionality available in the free version.
+- Hardened public counters and AI Assist privacy, validation, and error handling.
+- Updated the bundled PhpSpreadsheet runtime to the PHP 7.4-compatible 1.30.6 security release and hardened CSV/XLS/XLSX imports.
 
 [See changelog for all versions](https://www.etoilewebdesign.com/changelogs/ultimate-faqs.txt).

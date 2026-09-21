@@ -1,0 +1,18 @@
+{
+    "name": "etoilewebdesign/ultimate-faqs-spreadsheet-runtime",
+    "description": "Locked production-only spreadsheet runtime bundled with Ultimate FAQs.",
+    "type": "project",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "phpoffice/phpspreadsheet": "1.30.6"
+    },
+    "config": {
+        "autoloader-suffix": "EwdUfaqSpreadsheet1306",
+        "platform": {
+            "php": "7.4.33"
+        },
+        "allow-plugins": false,
+        "sort-packages": true
+    },
+    "prefer-stable": true
+}

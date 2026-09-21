@@ -43,9 +43,10 @@ class ewdufaqAIAssist {
 
 		$args = array(
 			'posts_per_page'	=> -1,
-			//'post_type'			=> array( 'post', 'page', 'attachment' ),
 			'post_type'			=> array( 'post', 'page' ),
-			'post_status'		=> array( 'publish', 'pending', 'draft', 'future', 'private' ),
+			'post_status'		=> 'publish',
+			'has_password'		=> false,
+			'suppress_filters'	=> false,
 			'order'				=> 'ASC',
 			'orderby'			=> 'title'
 		);
@@ -82,9 +83,8 @@ class ewdufaqAIAssist {
 				</h4>
 
 				<p class="ewd-ufaq-ai-faqs-modal-warning">
-					<span class="dashicons dashicons-info-outline"></span><?php _e( 'This feature sends a remote request to our server to generate FAQs using Open AI\'s API', 'ultimate-faqs' ); ?>
+					<span class="dashicons dashicons-info-outline"></span><?php _e( 'This legacy feature sends the text of the public posts or pages you select to Etoile Web Design, which relays it to OpenAI to generate FAQ suggestions. Review the generated content before publishing.', 'ultimate-faqs' ); ?>
 				</p>
-
 				<div id='ewd-ufaq-ai-faqs-params'>
 
 					<div class='ewd-ufaq-ai-faqs-field ewd-ufaq-ai-no-premium'>
@@ -158,6 +158,11 @@ class ewdufaqAIAssist {
 
 					<div class='ewd-ufaq-ai-faqs-submit'>
 
+						<label class='ewd-ufaq-ai-faqs-consent'>
+							<input id='ewd-ufaq-ai-faqs-consent' type='checkbox' value='yes' />
+							<?php _e( 'I understand that the selected public content will be transferred to these external services.', 'ultimate-faqs' ); ?>
+						</label>
+
 						<button id='ewd-ufaq-ai-faqs-create-button' class='ewd-ufaq-ai-faqs-button'>
 							<?php _e( 'Create', 'ultimate-faqs' ); ?>
 						</button>
@@ -211,8 +216,10 @@ class ewdufaqAIAssist {
 			ewdufaqHelper::admin_nopriv_ajax();
 		}
 
-		if ( ! is_array( json_decode( stripslashes_deep( $_POST['selected_posts'] ), true ) ) ) {
+		$selected_json = isset( $_POST['selected_posts'] ) ? wp_unslash( $_POST['selected_posts'] ) : '';
+		$selected_raw = json_decode( $selected_json, true );
 
+		if ( ! is_array( $selected_raw ) || empty( $selected_raw ) ) {
 			wp_send_json_error(
 				array(
 					'error'	=> 'No content has been selected',
@@ -220,15 +227,26 @@ class ewdufaqAIAssist {
 			);
 		}
 
-		$selected_posts = array_map( 'intval', json_decode( stripslashes_deep( $_POST['selected_posts'] ), true ) );
-		$faq_count = min( intval( $_POST['faq_count'] ), ( $ewd_ufaq_controller->permissions->check_permission( 'premium' ) ? 999 : 1 ) );
-		$set_categories = $_POST['set_categories'] == 'yes' ? true : false;
+		if ( ! isset( $_POST['consent'] ) || 'yes' !== sanitize_text_field( wp_unslash( $_POST['consent'] ) ) ) {
+			wp_send_json_error( array( 'error' => __( 'Confirm the external content transfer before generating FAQs.', 'ultimate-faqs' ) ), 400 );
+		}
 
-		$selected_posts = $ewd_ufaq_controller->permissions->check_permission( 'premium' ) ? $selected_posts : array( reset( $selected_posts ) );
+		$is_premium = $ewd_ufaq_controller->permissions->check_permission( 'premium' );
+		$selected_posts = array_values( array_unique( array_filter( array_map( 'absint', $selected_raw ) ) ) );
+		$selected_posts = array_slice( $selected_posts, 0, $is_premium ? 20 : 1 );
+		$faq_count = min( max( 1, isset( $_POST['faq_count'] ) ? absint( $_POST['faq_count'] ) : 1 ), $is_premium ? 20 : 1 );
+		$set_categories = isset( $_POST['set_categories'] ) && 'yes' === sanitize_text_field( wp_unslash( $_POST['set_categories'] ) );
 
+		if ( empty( $selected_posts ) ) {
+			wp_send_json_error( array( 'error' => __( 'No valid content was selected.', 'ultimate-faqs' ) ), 400 );
+		}
 		$args = array(
 			'posts_per_page'	=> -1,
 			'post__in'			=> $selected_posts,
+			'post_type'			=> array( 'post', 'page' ),
+			'post_status'		=> 'publish',
+			'has_password'		=> false,
+			'suppress_filters'	=> false,
 		);
 
 		$content = '';
@@ -237,9 +255,18 @@ class ewdufaqAIAssist {
 
 		foreach ( $posts as $post ) {
 
-			$content .= wp_strip_all_tags( $post->post_content ) . ' ';
+			$source = trim( preg_replace( '/\s+/u', ' ', wp_strip_all_tags( $post->post_content, true ) ) );
+			$content .= mb_substr( $source, 0, 2000 ) . "\n\n";
+
+			if ( mb_strlen( $content ) >= 20000 ) {
+				$content = mb_substr( $content, 0, 20000 );
+				break;
+			}
 		}
 
+		if ( '' === trim( $content ) ) {
+			wp_send_json_error( array( 'error' => __( 'The selected public content is empty or unavailable.', 'ultimate-faqs' ) ), 400 );
+		}
 		$categories = '';
 
 		if ( $set_categories ) { 
@@ -251,8 +278,7 @@ class ewdufaqAIAssist {
 
 			$category_terms = get_terms( $args );
 
-			foreach ( $category_terms as $category_term ) { $categories .= $category_term->name . ','; }
-
+			foreach ( array_slice( $category_terms, 0, 100 ) as $category_term ) { $categories .= sanitize_text_field( $category_term->name ) . ','; }
 			$categories = trim( $categories, ',' );
 		}
 
@@ -267,12 +293,12 @@ class ewdufaqAIAssist {
 		$args = array(
 			'body'		=> $content,
 			'timeout'	=> 30,
+			'redirection' => 2,
+			'headers' => array( 'Content-Type' => 'text/plain; charset=utf-8' ),
 		);
-
 		$response = wp_remote_post( $url, $args );
 
-		if ( ! is_array( $response ) or is_wp_error( $response ) ) {
-
+		if ( ! is_array( $response ) || is_wp_error( $response ) ) {
 			wp_send_json_error(
 				array(
 					'error'	=> 'Invalid response received',
@@ -280,13 +306,19 @@ class ewdufaqAIAssist {
 			);
 		}
 
-		$body = json_decode( $response['body'], true ); 
+		$status_code = wp_remote_retrieve_response_code( $response );
+		$response_body = wp_remote_retrieve_body( $response );
 
+		if ( $status_code < 200 || $status_code >= 300 || strlen( $response_body ) > 262144 ) {
+			wp_send_json_error( array( 'error' => __( 'The generation service returned an invalid response.', 'ultimate-faqs' ) ), 502 );
+		}
+
+		$body = json_decode( $response_body, true );
 		if ( empty( $body['choices'][0]['message']['content'] ) ) {
 
 			wp_send_json_error(
 				array(
-					'error'	=> 'JSON decode failed',
+					'error'	=> __( 'The generation service returned content that could not be read.', 'ultimate-faqs' ),
 				)
 			);
 		}
@@ -297,19 +329,20 @@ class ewdufaqAIAssist {
 
 		$increment = $set_categories ? 3 : 2;
 
-		foreach ( $message_content  as $created_faq ) {
+		foreach ( array_slice( $message_content, 0, $faq_count ) as $created_faq ) {
+
+			if ( empty( $created_faq['Question'] ) || empty( $created_faq['Answer'] ) ) { continue; }
 
 			$faq = array( 
-				'title' 		=> $created_faq['Question'], 
-				'content' 		=> $created_faq['Answer'],
+				'title' 		=> sanitize_text_field( $created_faq['Question'] ),
+				'content' 		=> sanitize_textarea_field( $created_faq['Answer'] ),
 			);
 
 			if ( $set_categories ) {
 
 				$faq_categories = array();
 
-				$category_names = explode( ',', $created_faq['Categories'] );
-
+				$category_names = isset( $created_faq['Categories'] ) ? explode( ',', $created_faq['Categories'] ) : array();
 				foreach ( $category_names as $category_name ) {
 
 					foreach ( $category_terms as $category_term ) {
@@ -350,8 +383,10 @@ class ewdufaqAIAssist {
 			ewdufaqHelper::admin_nopriv_ajax();
 		}
 
-		if ( ! is_array( json_decode( stripslashes_deep( $_POST['faqs'] ), true ) ) ) {
+		$faqs_json = isset( $_POST['faqs'] ) ? wp_unslash( $_POST['faqs'] ) : '';
+		$faqs_raw = json_decode( $faqs_json, true );
 
+		if ( ! is_array( $faqs_raw ) ) {
 			wp_send_json_error(
 				array(
 					'error'	=> 'No faqs to be created',
@@ -359,8 +394,12 @@ class ewdufaqAIAssist {
 			);
 		}
 
-		$faqs = $this->sanitize_faqs( json_decode( stripslashes_deep( $_POST['faqs'] ), true ) );
+		if ( ! current_user_can( 'publish_posts' ) ) {
+			wp_send_json_error( array( 'error' => __( 'You are not allowed to publish FAQs.', 'ultimate-faqs' ) ), 403 );
+		}
 
+		$limit = $ewd_ufaq_controller->permissions->check_permission( 'premium' ) ? 20 : 1;
+		$faqs = array_slice( $this->sanitize_faqs( $faqs_raw ), 0, $limit );
 		foreach ( $faqs as $faq ) {
 
 			$post = array(
@@ -389,10 +428,12 @@ class ewdufaqAIAssist {
 
 		foreach ( $faqs as $index => $faq ) {
 
-			$faqs[ $index ]['title'] = sanitize_text_field( $faq['title'] );
-			$faqs[ $index ]['content'] = sanitize_textarea_field( $faq['content'] );
-		}
+			if ( ! is_array( $faq ) ) { unset( $faqs[ $index ] ); continue; }
 
+			$faqs[ $index ]['title'] = isset( $faq['title'] ) ? sanitize_text_field( $faq['title'] ) : '';
+			$faqs[ $index ]['content'] = isset( $faq['content'] ) ? sanitize_textarea_field( $faq['content'] ) : '';
+			$faqs[ $index ]['categories'] = isset( $faq['categories'] ) && is_array( $faq['categories'] ) ? array_values( array_filter( array_map( 'absint', $faq['categories'] ) ) ) : array();
+		}
 		return $faqs;
 	}
 
@@ -405,17 +446,17 @@ class ewdufaqAIAssist {
 
 		$faqs = array();
 
-		$lines = explode( "\n", $string );
-
+		$lines = preg_split( '/\R/u', mb_substr( (string) $string, 0, 262144 ) );
 		$header = array();
 		
 		// Find the correct header line
-		while ( sizeof( $header ) < 2 ) {
-			$header = str_getcsv( array_shift( $lines ) );
+		while ( sizeof( $header ) < 2 && ! empty( $lines ) ) {
+			$header = array_map( 'trim', str_getcsv( array_shift( $lines ) ) );
 		}
 
-		foreach ( $lines as $line ) {
+		if ( ! in_array( 'Question', $header, true ) || ! in_array( 'Answer', $header, true ) ) { return array(); }
 
+		foreach ( array_slice( $lines, 0, 100 ) as $line ) {
 			if ( trim( $line ) === '' ) { continue; }
 
 			if ( sizeof( $header ) != sizeof( str_getcsv( $line ) ) ) { continue; }

@@ -6,7 +6,7 @@
 
 		<?php if ( $faq_count < $this->faqs_per_page * ( $this->faq_page - 1) or $faq_count >= $this->faqs_per_page * ( $this->faq_page ) ) { continue; } ?>
 
-		<?php $category = get_term( $term_id, EWD_UFAQ_FAQ_CATEGORY_TAXONOMY ); ?>
+		<?php $category = $this->get_category_term( $term_id ); ?>
 
 		<div class='ewd-ufaq-faq-header-category'>
 

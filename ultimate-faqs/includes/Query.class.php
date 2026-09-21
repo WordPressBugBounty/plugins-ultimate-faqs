@@ -112,11 +112,22 @@ class ewdufaqQuery {
 
 		if ( ! empty( $args['post__in'] ) ) { $args['post__in'] = is_array( $args['post__in'] ) ? $args['post__in'] : json_decode( str_replace( array( '&lsqb;', '&rsqb;' ), array( '[', ']' ) ) ); }
 
-		if ( ! empty( $args['post__in_string'] ) ) { $args['post__in'] = ! empty( $args['post__in'] ) ? array_merge( $args['post__in'], explode( ',', $args['post__in_string'] ) ) : explode( ',', $args['post__in_string'] ); }
+		$explicit_post_ids = ! empty( $args['post__in_string'] )
+			? array_values(
+				array_unique(
+					array_map(
+						'absint',
+						preg_grep( '/^[1-9][0-9]*$/', array_map( 'trim', explode( ',', $args['post__in_string'] ) ) )
+					)
+				)
+			)
+			: array();
+
+		if ( ! empty( $explicit_post_ids ) ) { $args['post__in'] = ! empty( $args['post__in'] ) ? array_merge( $args['post__in'], $explicit_post_ids ) : $explicit_post_ids; }
 
 		$tax_query = array();
 
-		if ( ! empty( $args['include_category'] ) ) {
+		if ( empty( $explicit_post_ids ) && ! empty( $args['include_category'] ) ) {
 
 			$include_category_array = explode( ',', $args['include_category'] );
 				
@@ -128,7 +139,7 @@ class ewdufaqQuery {
 			);
 		}
 
-		if ( ! empty( $args['exclude_category'] ) ) {
+		if ( empty( $explicit_post_ids ) && ! empty( $args['exclude_category'] ) ) {
 
 			$exclude_category_array = explode( ',', $args['exclude_category'] );
 				
@@ -141,7 +152,7 @@ class ewdufaqQuery {
 			);
 		}
 
-		if ( ! empty( $args['include_category_ids'] ) ) {
+		if ( empty( $explicit_post_ids ) && ! empty( $args['include_category_ids'] ) ) {
 
 			$include_category_ids_array = explode( ',', $args['include_category_ids'] );
 				
@@ -153,7 +164,7 @@ class ewdufaqQuery {
 			);
 		}
 
-		if ( ! empty( $args['exclude_category_ids'] ) ) {
+		if ( empty( $explicit_post_ids ) && ! empty( $args['exclude_category_ids'] ) ) {
 
 			$exclude_category_ids_array = explode( ',', $args['exclude_category_ids'] );
 				
@@ -194,12 +205,20 @@ class ewdufaqQuery {
 
 		$orderby = array();
 
-		if ( empty( $args['product_name'] ) and $ewd_ufaq_controller->settings->get_setting( 'group-by-product' ) ) {
+		if ( ! empty( $explicit_post_ids ) ) {
+
+			// An explicit FAQ list is authoritative. Preserve its order and avoid
+			// meta-key ordering, which excludes FAQs that do not have that metadata.
+			$args['orderby'] = 'post__in';
+			unset( $args['meta_key'] );
+		}
+
+		if ( empty( $explicit_post_ids ) && empty( $args['product_name'] ) and $ewd_ufaq_controller->settings->get_setting( 'group-by-product' ) ) {
 
 			$orderby['meta_value'] = $ewd_ufaq_controller->settings->get_setting( 'group-by-product-order' );
 		}
 
-		if ( ! empty( $args['orderby'] ) ) {
+		if ( empty( $explicit_post_ids ) && ! empty( $args['orderby'] ) ) {
 
 			if ( $args['orderby'] == 'rating' or $args['orderby'] == 'popular' ) { $orderby['meta_value_num'] = $args['order']; }
 			elseif ( $args['orderby'] == 'date' ) { $orderby['date'] = $args['order']; }
@@ -207,11 +226,11 @@ class ewdufaqQuery {
 			elseif ( $args['orderby'] == 'set_order' ) { $orderby['meta_value_num'] = $args['order']; }
 		}
 
-		if ( $args['orderby'] == 'rating' ) { $args['meta_key'] = 'FAQ_Total_Score'; }
-		elseif ( $args['orderby'] == 'popular' ) { $args['meta_key'] = 'ufaq_view_count'; }
-		elseif ( $args['orderby'] == 'set_order' ) { $args['meta_key'] = 'ufaq_order'; }
+		if ( empty( $explicit_post_ids ) && $args['orderby'] == 'rating' ) { $args['meta_key'] = 'FAQ_Total_Score'; }
+		elseif ( empty( $explicit_post_ids ) && $args['orderby'] == 'popular' ) { $args['meta_key'] = 'ufaq_view_count'; }
+		elseif ( empty( $explicit_post_ids ) && $args['orderby'] == 'set_order' ) { $args['meta_key'] = 'ufaq_order'; }
 		
-		if ( ! empty( $orderby ) ) { $args['orderby'] = $orderby; }
+		if ( empty( $explicit_post_ids ) && ! empty( $orderby ) ) { $args['orderby'] = $orderby; }
 
 		$this->args = $args;
 

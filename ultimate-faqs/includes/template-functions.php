@@ -75,14 +75,17 @@ add_shortcode( 'ultimate-faqs', 'ewd_ufaq_faqs_shortcode' );
  */
 function ewd_ufaq_search_faqs_shortcode( $atts ) {
 	global $ewd_ufaq_controller;
-
-	if ( ! $ewd_ufaq_controller->permissions->check_permission( 'search' ) ) { return; }
-
 	// Define shortcode attributes
 	$faq_search_atts = array(
 		'include_category_array' 	=> array(),
 		'include_category' 			=> '',
 		'exclude_category' 			=> '',
+		'include_category_ids'     => '',
+		'exclude_category_ids'     => '',
+		'include_category_children'=> '',
+		'include_tag'              => '',
+		'post__in'                 => '',
+		'post__in_string'          => '',
 		'show_on_load' 				=> '',
 		'no_comments'				=> '',
 		'orderby' 					=> '',
@@ -90,6 +93,7 @@ function ewd_ufaq_search_faqs_shortcode( $atts ) {
 		'display_all_answers'		=> '',
 		'faq_page'					=> 1,
         'post_count' 				=> -1,
+		'search_id'                 => '',
 	);
 
 	if ( empty( $faq_search_atts['orderby'] ) ) { $faq_search_atts['orderby'] = $ewd_ufaq_controller->settings->get_setting( 'faq-order-by' ); }
@@ -105,8 +109,19 @@ function ewd_ufaq_search_faqs_shortcode( $atts ) {
 	// Convert array keys to string, filter out false or 'false' first
 	if ( is_array( $args['include_category_array'] ) ) { $args['include_category'] .= implode( ',', array_keys( array_filter( filter_var_array( $args['include_category_array'], FILTER_VALIDATE_BOOLEAN, false ) ) ) ); }
 
-	$query = new ewdufaqQuery( $args );
+	$advanced_entitled = $ewd_ufaq_controller->helper_compatibility->get_state() === 'compatible'
+		&& $ewd_ufaq_controller->permissions->check_permission( 'search' );
+	$render_mode = apply_filters( 'ewd_ufaq_search_render_mode', $advanced_entitled ? 'advanced' : 'basic', $args, $advanced_entitled );
+	$render_mode = $advanced_entitled && 'advanced' === $render_mode ? 'advanced' : 'basic';
 
+	if ( 'basic' === $render_mode ) {
+
+		ewd_ufaq_load_view_files();
+
+		return ewdufaqBasicSearch::render( $args );
+	}
+
+	$query = new ewdufaqQuery( $args );
 	$query->parse_request_args();
 	$query->prepare_args();
 

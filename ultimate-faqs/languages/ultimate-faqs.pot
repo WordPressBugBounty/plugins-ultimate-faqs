@@ -1,24 +1,1480 @@
-#, fuzzy
+# Copyright (C) 2026 Etoile Web Design
+# This file is distributed under the same license as the Ultimate FAQ Accordion Plugin plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Ultimate FAQ\n"
-"POT-Creation-Date: 2023-08-23 10:24-0400\n"
-"PO-Revision-Date: 2021-04-08 11:29-0400\n"
-"Last-Translator: \n"
-"Language-Team: Etoile Web Design\n"
-"Language: en\n"
+"Project-Id-Version: Ultimate FAQ Accordion Plugin 2.5.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ufaq\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.2\n"
-"X-Poedit-Basepath: ..\n"
-"X-Poedit-KeywordsList: __;_e\n"
-"X-Poedit-SearchPath-0: .\n"
+"POT-Creation-Date: 2026-08-07T00:00:00+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: ultimate-faqs\n"
+
+#. Plugin Name of the plugin
+#: ewd-premium-helper.php
+msgid "EWD Premium Helper"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: ewd-premium-helper.php
+msgid "https://www.etoilewebdesign.com/premium-upgrade-instructions/"
+msgstr ""
+
+#. Description of the plugin
+#: ewd-premium-helper.php
+msgid "Allows a website to access the premium trial and unlocks premium features of Etoile Web Design plugins with an upgrade code"
+msgstr ""
+
+#. Author of the plugin
+#: ewd-premium-helper.php
+#: ultimate-faqs.php
+msgid "Etoile Web Design"
+msgstr ""
+
+#. Author URI of the plugin
+#: ewd-premium-helper.php
+msgid "https://profiles.wordpress.org/etoilewebdesign/"
+msgstr ""
+
+#: includes/ufaq/AIWorkflow.class.php:111
+msgid "A supported WordPress AI provider is not configured."
+msgstr ""
+
+#: includes/ufaq/AIWorkflow.class.php:117
+#: includes/ufaq/ContentGaps.class.php:236
+msgid "The content gap no longer exists."
+msgstr ""
+
+#: includes/ufaq/AIWorkflow.class.php:122
+msgid "The content gap is no longer eligible."
+msgstr ""
+
+#: includes/ufaq/AIWorkflow.class.php:123
+msgid "Manual override confirmation is invalid."
+msgstr ""
+
+#: includes/ufaq/AIWorkflow.class.php:124
+msgid "This content gap is suppressed."
+msgstr ""
+
+#: includes/ufaq/AIWorkflow.class.php:125
+msgid "This content gap already has a linked FAQ."
+msgstr ""
+
+#: includes/ufaq/AIWorkflow.class.php:163
+msgid "The AI provider could not generate an FAQ draft."
+msgstr ""
+
+#: includes/ufaq/AIWorkflow.class.php:169
+msgid "The AI provider returned an unreadable result."
+msgstr ""
+
+#: includes/ufaq/AIWorkflow.class.php:173
+msgid "The AI provider returned an incomplete structured result."
+msgstr ""
+
+#: includes/ufaq/AIWorkflow.class.php:179
+msgid "The generated FAQ exceeded safe content limits."
+msgstr ""
+
+#: includes/ufaq/AIWorkflow.class.php:312
+msgid "AI draft review"
+msgstr ""
+
+#: includes/ufaq/AIWorkflow.class.php:317
+msgid "This content was generated as a draft and requires human verification before publication."
+msgstr ""
+
+#: includes/ufaq/AIWorkflow.class.php:539
+msgid "Language warning:"
+msgstr ""
+
+#. translators: 1: language reported by the AI provider, 2: requested WordPress locale.
+#: includes/ufaq/AIWorkflow.class.php:543
+msgid "Confirm that the draft uses the intended language before publishing. AI-reported language: %1$s. Requested locale: %2$s."
+msgstr ""
+
+#: includes/ufaq/AIWorkflow.class.php:544
+#: includes/ufaq/AIWorkflow.class.php:545
+msgid "Not reported"
+msgstr ""
+
+#: includes/ufaq/AIWorkflow.class.php:562
+msgid "Rejecting permanently deletes this AI draft and suppresses automatic regeneration for its content gap. The suppression can be removed later from Content Gaps."
+msgstr ""
+
+#: includes/ufaq/AIWorkflow.class.php:567
+msgid "Reject and permanently delete this AI draft?"
+msgstr ""
+
+#: includes/ufaq/AIWorkflow.class.php:568
+msgid "Reject AI draft"
+msgstr ""
+
+#. translators: %s: bounded internal error code.
+#: includes/ufaq/ContentGaps.class.php:266
+msgid "The requested action could not be completed. The AI draft is preserved when suppression or deletion fails. Error code: %s."
+msgstr ""
+
+#: includes/ufaq/AIWorkflow.class.php:318
+msgid "Source manifest"
+msgstr ""
+
+#: includes/ufaq/AIWorkflow.class.php:318
+msgid "Provider/model metadata"
+msgstr ""
+
+#: includes/ufaq/AIWorkflow.class.php:318
+msgid "Limitations"
+msgstr ""
+
+#: includes/ufaq/AIWorkflow.class.php:323
+msgid "AI draft"
+msgstr ""
+
+#: includes/ufaq/AIWorkflow.class.php:324
+msgid "Requires verification"
+msgstr ""
+
+#: includes/ufaq/Analytics.class.php:121
+msgid "The analytics event FAQ is invalid."
+msgstr ""
+
+#: includes/ufaq/Analytics.class.php:134
+msgid "Invalid analytics event token."
+msgstr ""
+
+#: includes/ufaq/Analytics.class.php:142
+msgid "Invalid analytics event signature."
+msgstr ""
+
+#: includes/ufaq/Analytics.class.php:160
+msgid "The analytics event token is malformed or expired."
+msgstr ""
+
+#: includes/ufaq/Analytics.class.php:365
+msgid "You do not have permission to clear FAQ analytics."
+msgstr ""
+
+#: includes/ufaq/ContentGaps.class.php:24
+#: includes/ufaq/ContentGaps.class.php:25
+#: includes/ufaq/ContentGaps.class.php:36
+#: includes/ufaq/ContentGaps.class.php:149
+msgid "Content Gaps"
+msgstr ""
+
+#: includes/ufaq/ContentGaps.class.php:150
+msgid "Eligible gaps have at least three no-result searches and strictly more than one percent of retained no-result searches."
+msgstr ""
+
+#: includes/ufaq/ContentGaps.class.php:151
+#, php-format
+msgid "Retained no-result searches: %d"
+msgstr ""
+
+#: includes/ufaq/ContentGaps.class.php:152
+#, php-format
+msgid "AI draft generation needs WordPress 7.0 or later and a supported provider configured under <a href=\"%s\">Settings &gt; Connectors</a>. Manual content-gap review remains available."
+msgstr ""
+
+#: includes/ufaq/ContentGaps.class.php:153
+msgid "The suppression store is full. Existing records are preserved and automatic AI generation is stopped; manual confirmed generation remains available."
+msgstr ""
+
+#: includes/ufaq/ContentGaps.class.php:154
+msgid "Permanently clear all governed FAQ analytics?"
+msgstr ""
+
+#: includes/ufaq/ContentGaps.class.php:157
+msgid "Clear governed analytics"
+msgstr ""
+
+#: includes/ufaq/ContentGaps.class.php:160
+msgid "Retained FAQ content gaps and available review actions"
+msgstr ""
+
+#: includes/ufaq/ContentGaps.class.php:161
+msgid "Query"
+msgstr ""
+
+#: includes/ufaq/ContentGaps.class.php:161
+msgid "Locale"
+msgstr ""
+
+#: includes/ufaq/ContentGaps.class.php:161
+msgid "No results"
+msgstr ""
+
+#: includes/ufaq/ContentGaps.class.php:161
+#: includes/ufaq/Settings.class.php:1064
+#: views/View.class.php:129
+msgid "Share"
+msgstr ""
+
+#: includes/ufaq/ContentGaps.class.php:161
+msgid "First / last seen"
+msgstr ""
+
+#: includes/ufaq/ContentGaps.class.php:161
+msgid "Variants / displays"
+msgstr ""
+
+#: includes/ufaq/ContentGaps.class.php:161
+msgid "State"
+msgstr ""
+
+#: includes/ufaq/ContentGaps.class.php:161
+msgid "Actions"
+msgstr ""
+
+#: includes/ufaq/ContentGaps.class.php:175
+msgid "No retained content gaps are available."
+msgstr ""
+
+#: includes/ufaq/ContentGaps.class.php:187
+#: includes/CustomPostTypes.class.php:63
+msgid "View FAQ"
+msgstr ""
+
+#: includes/ufaq/ContentGaps.class.php:191
+msgid "Create manual draft"
+msgstr ""
+
+#: includes/ufaq/ContentGaps.class.php:194
+msgid "Generate AI draft"
+msgstr ""
+
+#: includes/ufaq/ContentGaps.class.php:195
+#: includes/ufaq/ContentGaps.class.php:205
+msgid "Generating…"
+msgstr ""
+
+#: includes/ufaq/ContentGaps.class.php:201
+msgid "Unsuppress"
+msgstr ""
+
+#: includes/ufaq/ContentGaps.class.php:204
+msgid "Generate once (keep suppressed)"
+msgstr ""
+
+#: includes/ufaq/ContentGaps.class.php:208
+msgid "Suppress"
+msgstr ""
+
+#: includes/ufaq/ContentGaps.class.php:229
+msgid "You do not have permission to create FAQ drafts."
+msgstr ""
+
+#: includes/ufaq/ContentGaps.class.php:231
+msgid "You do not have permission to edit FAQs."
+msgstr ""
+
+#: includes/ufaq/Export.class.php:66
+#: includes/ufaq/Export.class.php:166
+msgid "You are not allowed to export FAQs."
+msgstr ""
+
+#: includes/ufaq/Export.class.php:261
+msgid "Export"
+msgstr ""
+
+#: includes/ufaq/Import.class.php:27
+#: includes/ufaq/Import.class.php:35
+#: includes/ufaq/Import.class.php:43
+#: includes/AboutUs.class.php:198
+msgid "Import FAQs"
+msgstr ""
+
+#: includes/ufaq/Import.class.php:27
+#: includes/ufaq/Import.class.php:218
+msgid "Import"
+msgstr ""
+
+#: includes/ufaq/Import.class.php:37
+msgid "Upload CSV, XLS, or XLSX. Maximum 10 MiB, 10,000 data rows, and 100 columns. Imports are processed on this site and the temporary upload is deleted after processing."
+msgstr ""
+
+#: includes/ufaq/Import.class.php:41
+msgid "Spreadsheet containing FAQs"
+msgstr ""
+
+#: includes/ufaq/Import.class.php:46
+msgid "A premium entitlement and an account with import permission are required."
+msgstr ""
+
+#: includes/ufaq/Import.class.php:61
+msgid "You are not allowed to import FAQs."
+msgstr ""
+
+#: includes/ufaq/Import.class.php:78
+#, php-format
+msgid "Import complete: %1$d imported, %2$d skipped, %3$d failed."
+msgstr ""
+
+#: includes/ufaq/Import.class.php:81
+msgid "The spreadsheet could not be read safely. Confirm that it is a valid CSV, XLS, or XLSX file within the documented limits."
+msgstr ""
+
+#: includes/ufaq/Import.class.php:89
+msgid "No spreadsheet was uploaded."
+msgstr ""
+
+#: includes/ufaq/Import.class.php:92
+#, php-format
+msgid "The upload failed with error code %d."
+msgstr ""
+
+#: includes/ufaq/Import.class.php:98
+msgid "File must be CSV, XLS, or XLSX."
+msgstr ""
+
+#: includes/ufaq/Import.class.php:99
+msgid "The spreadsheet must be larger than zero bytes and no larger than 10 MiB."
+msgstr ""
+
+#: includes/ufaq/Import.class.php:100
+msgid "The uploaded file could not be verified."
+msgstr ""
+
+#: includes/ufaq/Import.class.php:101
+msgid "The uploaded file MIME type does not match an allowed spreadsheet format."
+msgstr ""
+
+#: includes/ufaq/Import.class.php:102
+msgid "The file contents do not match the selected spreadsheet format."
+msgstr ""
+
+#: includes/ufaq/Import.class.php:105
+msgid "The spreadsheet could not be moved to secure temporary storage."
+msgstr ""
+
+#: includes/ufaq/Import.class.php:138
+msgid "The spreadsheet contains no FAQ rows."
+msgstr ""
+
+#: includes/ufaq/Import.class.php:139
+msgid "The spreadsheet exceeds the limit of 10,000 data rows or 100 columns; nothing was imported."
+msgstr ""
+
+#: includes/ufaq/Import.class.php:147
+msgid "The spreadsheet must contain Question and Answer columns; nothing was imported."
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:59
+msgid "Selected Order (Premium option)"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:68
+msgid "Governed Analytics"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:81
+msgid "Enable FAQ Analytics"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:82
+msgid "Opt in to local, bounded recording of FAQ searches, no-result searches, answer opens, and helpfulness responses. Raw IP addresses and user agents are not stored."
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:92
+msgid "Analytics Retention"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:93
+msgid "Daily analytics buckets older than this period are deleted automatically."
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:96
+msgid "7 days"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:97
+msgid "30 days"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:98
+msgid "60 days"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:99
+msgid "90 days"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:112
+msgid "Content Gap AI Drafts"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:125
+msgid "Automatic AI Draft Generation"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:126
+msgid "Create at most five review-required drafts per day from eligible, unsuppressed content gaps. Requires WordPress 7.0+ and a configured AI provider. Drafts are never published automatically."
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:136
+msgid "Use Associated Display Context"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:137
+msgid "Prefer up to 20 published public FAQs associated with the qualifying search before applying title relevance."
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:147
+msgid "Use Published FAQs as Sources"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:148
+msgid "Include up to 20 relevant, published public FAQs in bounded source context."
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:158
+msgid "Selected Public Post/Page IDs"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:159
+msgid "Optional comma-separated IDs for up to 10 explicitly selected published public posts or pages."
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:169
+msgid "Administrator Source Notes"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:170
+msgid "Optional bounded notes sent to the configured AI provider with the visible source manifest."
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:186
+#: includes/Settings.class.php:378
+msgid "Display"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:200
+msgid "FAQ Display Style"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:201
+msgid "Which theme should be used to display the FAQ's?"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:203
+msgid "Default"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:204
+msgid "Block"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:205
+msgid "Border Block"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:206
+msgid "Contemporary"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:207
+msgid "List"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:208
+msgid "Minimalist"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:221
+msgid "Number of Columns"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:222
+msgid "In how many columns would you like your FAQs displayed?"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:224
+msgid "One"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:225
+msgid "Two"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:226
+msgid "Three"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:227
+msgid "Four"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:240
+msgid "Responsive Columns"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:241
+msgid "If you have more than one column, would you like them to be responsive? If this option is disabled, the number of columns will remain the same on all screen sizes."
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:252
+msgid "Category Tabs"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:253
+msgid "If you are grouping your FAQs by category, enabling this will make the categories display as tabs instead of a vertical list."
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:266
+msgid "Reveal Effect"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:267
+msgid "How should FAQ's be displayed when their titles are clicked?"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:270
+#: includes/ufaq/Settings.class.php:1476
+#: includes/Settings.class.php:250
+msgid "None"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:271
+msgid "Blind"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:272
+msgid "Bounce"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:273
+msgid "Clip"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:274
+msgid "Drop"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:275
+msgid "Explode"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:276
+msgid "Fade"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:277
+msgid "Fold"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:278
+msgid "Highlight"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:279
+msgid "Puff"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:280
+msgid "Pulsate"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:281
+msgid "Shake"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:282
+msgid "Size"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:283
+msgid "Slide"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:295
+msgid "FAQs Per Page"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:296
+msgid "Set the number of FAQs to display per page. If you have \"Group FAQs by Category\" enabled, this sets the number of FAQs per category per page. Leave blank to display all FAQs."
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:308
+msgid "FAQ Page Type"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:309
+msgid "If FAQs are in pages, how should pages load?"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:311
+msgid "Distinct Pages"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:312
+msgid "Load More Button"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:313
+msgid "Infinite Scroll"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:325
+#: includes/Helper.class.php:138
+#: includes/Settings.class.php:174
+msgid "General"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:339
+msgid "FAQ Ratings"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:340
+msgid "Should visitors be able to up or down vote FAQs to let others know if they found them helpful?"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:351
+msgid "FAQ Ratings 'Thumbs Up' Image"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:352
+msgid "You can use this to upload your own image to replace the default \"thumbs up\" image."
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:365
+msgid "FAQ Ratings 'Thumbs Down' Image"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:366
+msgid "You can use this to upload your own image to replace the default \"thumbs down\" image."
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:379
+msgid "Pretty Permalinks"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:380
+msgid "Should an SEO friendly permalink structure be used for the link to the FAQ?"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:391
+msgid "Disable Front-Page Canonical Redirects"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:392
+msgid "Should canonical redirects be disabled for the front page of your site? Only necessary if you're using the plugin on your homepage and have pretty permalinks enabled."
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:405
+msgid "FAQ Slug Base"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:406
+msgid "This option can be used to change the slug base for all FAQ posts. Be sure to go to \"Settings\" -> \"Permalinks\" in the WordPress sidebar and hit \"Save Changes\" to avoid 404 errors."
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:418
+msgid "Social Media Options"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:419
+msgid "Choose for which platforms you would like to enable sharing."
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:437
+msgid "Compact FAQ Meta"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:438
+msgid "With this enabled, the permalink link, social sharing and ratings will be displayed in one compact bar. The permalink will be displayed only as an icon, no text. Each enabled sharing platform will display as an alternate small icon. The ratings will be displayed as small default icons, regardless of any custom images set."
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:448
+msgid "WooCommerce"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:462
+#: includes/AboutUs.class.php:158
+#: includes/Settings.class.php:703
+msgid "WooCommerce FAQs"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:463
+msgid "Should FAQs for a given product be displayed on the WooCommerce product page? For this to work correctly, an FAQ category needs to be created with the same name as a given WooCommerce product."
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:474
+msgid "WooCommerce FAQs Location"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:475
+msgid "Where on the WooCommerce product page should the FAQs be displayed?"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:478
+msgid "Tabs"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:479
+msgid "Before \"Add to Cart\""
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:480
+msgid "After \"Add to Cart\""
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:481
+msgid "After Product Summary"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:482
+msgid "After Product"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:494
+msgid "Use WooCommerce Product Object"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:495
+msgid "Should the FAQ tab be set up using the WooCommerce product object, as in the WC documentation, or just using the ID of the page?"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:507
+msgid "WP Forms"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:521
+msgid "WP Forms Integration"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:522
+msgid "Should FAQs be displayed when a visitor starts typing a message into a paragraph text field in WP Forms? This can be turned off for specific forms via the form's settings panel."
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:533
+msgid "WP Forms Post Count"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:534
+msgid "How many posts should be displayed below paragraph text fields, if WP Forms Integration has been turned on?"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:548
+msgid "WP Forms FAQ Location"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:549
+msgid "If WP Forms Integration has been turned on, where should the FAQs be displayed?"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:551
+msgid "Above"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:552
+msgid "Below"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:567
+msgid "WP Forms Minimum Characters"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:568
+msgid "How many characters need to be entered before FAQs will be searched, when a form field is being filled out? Default is 12 if left blank"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:581
+#: includes/AboutUs.class.php:153
+#: includes/Settings.class.php:701
+msgid "FAQ Search"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:595
+msgid "FAQ Auto Complete Titles"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:596
+msgid "Should the FAQ Titles auto complete when using the FAQ search shortcode?"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:607
+msgid "Highlight Search Term"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:608
+msgid "Should the search term be highlighted in the results when using the FAQ search shortcode?"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:619
+msgid "Save Search Terms"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:620
+msgid "Should search terms entered by users be saved and displayed below?"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:634
+msgid "Search Terms"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:636
+msgid "The following are the top 25 most common search terms:"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:638
+msgid "Reset"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:649
+msgid "Submit FAQ"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:663
+msgid "Allow Proposed Answer"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:664
+msgid "When using the user-submitted question shortcode, should users be able to propose an answer to the question they're submitting?"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:675
+msgid "Submit FAQ Email"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:676
+msgid "Should the submitter be able to submit their email address when they submit an FAQ?"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:687
+msgid "Email Submitter on FAQ Answer"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:688
+msgid "When should the submitter receive an email after submitting an FAQ?"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:690
+msgid "Never"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:691
+msgid "First Answer"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:692
+msgid "Each Edit"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:706
+msgid "Submit Question Captcha"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:707
+msgid "When using the user-submitted question shortcode, should a captcha field be added to the form to reduce the volume of spam FAQs?"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:718
+msgid "Submit Custom Fields"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:719
+msgid "When using the user-submitted question shortcode, should users be able to fill in custom fields for the question they're submitting? File type custom fields cannot be submitted for security reasons."
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:724
+#: includes/InstallationWalkthrough.class.php:344
+#: includes/OrderingTable.class.php:77
+#: assets/js/ewd-ufaq-managed-editor.js:270
+#: assets/js/ewd-ufaq-managed-editor.js:303
+msgid "Question"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:725
+#: includes/Settings.class.php:298
+msgid "Author"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:728
+#: includes/InstallationWalkthrough.class.php:319
+#: includes/InstallationWalkthrough.class.php:345
+#: assets/js/ewd-ufaq-managed-editor.js:271
+#: assets/js/ewd-ufaq-managed-editor.js:304
+msgid "Answer"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:729
+#: includes/ufaq/Settings.class.php:1293
+#: views/View.class.php:142
+msgid "Author Email"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:747
+msgid "Required Submit Fields"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:748
+msgid "Which fields should be required when submitting an FAQ?"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:774
+msgid "Default Category"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:775
+msgid "Which category should submitted questions default to?"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:788
+msgid "Admin Question Notification"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:789
+msgid "Should an email be sent to the site administrator when a question is submitted?"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:800
+msgid "Admin Notification Email"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:801
+msgid "What email address should the notifications be sent to if \"Admin Question Notification\" is enabled above? If blank, the default WordPress admin email will be used."
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:830
+msgid "FAQ Submitted Thank You E-mail"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:831
+msgid "You can use the <a href=\"https://wordpress.org/plugins/ultimate-wp-mail/\">Ultimate WP Mail plugin</a> to create a custom email that is sent whenever an faq is submitted."
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:843
+#: includes/ufaq/Settings.class.php:857
+msgid "FAQ Elements Order"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:858
+msgid "You can use this table to drag-and-drop the elements of an FAQ into a different order."
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:874
+#: includes/Settings.class.php:150
+#: includes/Settings.class.php:151
+#: includes/Settings.class.php:465
+#: ultimate-faqs.php:458
+#: ultimate-faqs.php:599
+msgid "Settings"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:888
+msgid "Hide Blank Fields"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:889
+msgid "Should field labels be hidden if a field hasn't been filled out for a particular FAQ?"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:894
+msgid "Should any extra fields be added to the FAQs?"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:895
+msgid "The \"Field Values\" should be a comma-separated list of values for the select, radio or checkbox field types (no extra spaces after the comma)."
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:896
+msgid "For security reasons, file fields cannot be included in the submit FAQ form."
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:905
+msgid "FAQ Custom Fields"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:906
+msgid "+ ADD"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:907
+msgid "Delete"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:922
+msgid "Field Type"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:924
+#: includes/Settings.class.php:251
+msgid "Text"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:925
+msgid "Text Area"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:926
+msgid "Select Box"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:927
+msgid "Radio Buttons"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:928
+msgid "Checkbox"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:929
+msgid "File"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:930
+msgid "Link"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:931
+msgid "Date"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:932
+msgid "Date/Time"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:937
+msgid "Field Values"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:955
+msgid "FAQ Page and Search"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:969
+#: views/View.class.php:116
+msgid "Posted"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:980
+msgid "By"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:992
+msgid "On"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1004
+#: includes/CustomPostTypes.class.php:433
+#: includes/Dashboard.class.php:124
+#: includes/OrderingTable.class.php:79
+#: ultimate-faqs.php:587
+msgid "Categories"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1016
+#: includes/CustomPostTypes.class.php:434
+#: includes/OrderingTable.class.php:80
+#: ultimate-faqs.php:593
+msgid "Tags"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1028
+#: views/View.class.php:121
+msgid "Permalink"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1040
+msgid "Back To Top"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1052
+msgid "WooCommerce Tab"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1076
+#: views/View.class.php:130
+msgid "Did you find this FAQ helpful?"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1088
+#: includes/BasicSearch.class.php:42
+#: views/View.class.php:119
+msgid "Enter your question"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1100
+msgid "Search Placeholder"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1112
+msgid "Search Button"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1124
+#: includes/Settings.class.php:77
+msgid "Retrieving Results"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1136
+#: includes/Settings.class.php:78
+#, php-format
+msgid "No result FAQ's contained the term '%s'"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1147
+msgid "FAQ Submit Page"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1161
+msgid "Thank you for submitting an FAQ"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1173
+#: views/View.class.php:133
+msgid "Submit a Question"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1185
+#: views/View.class.php:134
+msgid "Please fill out the form below to submit a question."
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1197
+#: views/View.class.php:135
+msgid "Send Question"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1209
+#: views/View.class.php:136
+msgid "Question Title"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1221
+#: views/View.class.php:137
+msgid "What question is being answered?"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1233
+#: views/View.class.php:138
+msgid "Proposed Answer"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1245
+#: views/View.class.php:139
+msgid "What answer should be displayed for this question?"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1257
+msgid "Question Author"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1269
+#: views/View.class.php:144
+msgid "Image Number"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1281
+msgid "What name should be displayed with your question?"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1305
+#: views/View.class.php:143
+msgid "This is only used to verify the authenticity of the FAQ. It is not displayed anywhere."
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1317
+msgid "Please make sure that there is a question that you are submitting as an FAQ"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1329
+#: includes/Settings.class.php:81
+msgid "The number you entered for the image was incorrect."
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1341
+#: includes/Settings.class.php:80
+msgid "Please fill out the image number field."
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1357
+msgid "Toggle Symbols"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1401
+msgid "Toggle Background Color"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1412
+msgid "Toggle Color"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1423
+msgid "Toggle Border Color"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1434
+msgid "Toggle Font Size"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1447
+msgid "Border Size"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1460
+msgid "Border Radius"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1504
+msgid "Category Toggle Background Color"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1515
+msgid "Category Toggle Color"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1526
+msgid "Category Toggle Border Color"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1537
+msgid "Category Toggle Font Size"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1550
+msgid "Category Toggle Border Size"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1563
+msgid "Category Toggle Border Radius"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1575
+msgid "Themes"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1589
+msgid "Block and Border Block Background Color"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1600
+msgid "Block and Border Block Hover Font Color"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1611
+msgid "List Font Color"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1622
+msgid "Font Family"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1635
+msgid "Font Size"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1648
+msgid "Margin"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1661
+msgid "Padding"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1673
+msgid "FAQ Elements"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1687
+msgid "Question Font Color"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1699
+msgid "Question Font Family"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1712
+msgid "Question Font Size"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1725
+msgid "Question Margin"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1738
+msgid "Question Padding"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1751
+msgid "Toggle Symbol Top Margin"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1764
+msgid "Answer Font Color"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1776
+msgid "Answer Font Family"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1789
+msgid "Answer Font Size"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1802
+msgid "Answer Margin"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1815
+msgid "Answer Padding"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1828
+msgid "Categories, Tags Font Color"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1840
+msgid "Categories, Tags Font Family"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1853
+msgid "Categories, Tags Font Size"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1866
+msgid "Categories, Tags Margin"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1879
+msgid "Categories, Tags Padding"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1892
+msgid "Post Date Font Color"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1904
+msgid "Post Date Font Family"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1917
+msgid "Post Date Font Size"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1930
+msgid "Post Date Margin"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1943
+msgid "Post Date Padding"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1955
+msgid "Headings"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1969
+msgid "Category Heading Type"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1971
+#: includes/ufaq/Settings.class.php:1991
+msgid "H1"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1972
+#: includes/ufaq/Settings.class.php:1992
+msgid "H2"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1973
+#: includes/ufaq/Settings.class.php:1993
+msgid "H3"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1974
+#: includes/ufaq/Settings.class.php:1994
+msgid "H4"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1975
+#: includes/ufaq/Settings.class.php:1995
+msgid "H5"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1976
+#: includes/ufaq/Settings.class.php:1996
+msgid "H6"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:1989
+msgid "FAQ Heading Type"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:2009
+msgid "Category Heading Font Color"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:2020
+msgid "Category Heading Font Family"
+msgstr ""
+
+#: includes/ufaq/Settings.class.php:2033
+msgid "Category Heading Font Size"
+msgstr ""
+
+#: includes/ufaq/SpreadsheetRuntime.class.php:40
+msgid "Ultimate FAQs import/export is disabled because the pinned PhpSpreadsheet 1.30.6 runtime could not be loaded safely. Resolve the plugin class conflict before importing files."
+msgstr ""
+
+#: includes/ufaq/Suppressions.class.php:47
+msgid "The content-gap suppression is invalid."
+msgstr ""
+
+#: includes/ufaq/Suppressions.class.php:54
+msgid "The FAQ suppression store is full. Existing suppressions were preserved and automatic generation has been stopped."
+msgstr ""
+
+#: includes/ufaq/Suppressions.class.php:147
+msgid "The AI FAQ draft is invalid."
+msgstr ""
+
+#: includes/ufaq/Suppressions.class.php:149
+msgid "You are not allowed to reject this AI FAQ draft."
+msgstr ""
+
+#: includes/ufaq/Suppressions.class.php:152
+msgid "Suppression was saved, but the draft could not be deleted."
+msgstr ""
+
+#: includes/ufaq/Suppressions.class.php:161
+msgid "You do not have permission to manage content gaps."
+msgstr ""
+
+#. Plugin Name of the plugin
+#: ultimate-faqs.php
+msgid "Ultimate FAQ Accordion Plugin"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: ultimate-faqs.php
+msgid "https://www.etoilewebdesign.com/plugins/ultimate-faq/"
+msgstr ""
+
+#. Description of the plugin
+#: ultimate-faqs.php
+msgid "Full-featured FAQ and accordion plugin with advanced search, simple UI and easy-to-use Gutenberg blocks and shortcodes."
+msgstr ""
+
+#. Author URI of the plugin
+#: ultimate-faqs.php
+msgid "https://www.etoilewebdesign.com/"
+msgstr ""
 
 #: ewd-ufaq-templates/faqs-category-header.php:5
 #, php-format
 msgid "Click here to open %s"
+msgstr ""
+
+#: includes/AboutUs.class.php:28
+#: includes/AboutUs.class.php:29
+msgid "About Us"
 msgstr ""
 
 #: includes/AboutUs.class.php:51
@@ -65,7 +1521,8 @@ msgstr ""
 msgid "Premium Version"
 msgstr ""
 
-#: includes/AboutUs.class.php:103 includes/Settings.class.php:673
+#: includes/AboutUs.class.php:103
+#: includes/Settings.class.php:699
 msgid "Unlimited FAQs"
 msgstr ""
 
@@ -105,14 +1562,6 @@ msgstr ""
 msgid "Advanced FAQ layouts"
 msgstr ""
 
-#: includes/AboutUs.class.php:153 includes/Settings.class.php:674
-msgid "FAQ Search"
-msgstr ""
-
-#: includes/AboutUs.class.php:158 includes/Settings.class.php:676
-msgid "WooCommerce FAQs"
-msgstr ""
-
 #: includes/AboutUs.class.php:163
 msgid "FAQ submit form"
 msgstr ""
@@ -133,16 +1582,13 @@ msgstr ""
 msgid "Pretty permalinks for FAQs and categories"
 msgstr ""
 
-#: includes/AboutUs.class.php:188 includes/AboutUs.class.php:208
+#: includes/AboutUs.class.php:188
+#: includes/AboutUs.class.php:208
 msgid "Advanced styling options"
 msgstr ""
 
 #: includes/AboutUs.class.php:193
 msgid "Export FAQs to PDF or spreadsheet"
-msgstr ""
-
-#: includes/AboutUs.class.php:198
-msgid "Import FAQs"
 msgstr ""
 
 #: includes/AboutUs.class.php:203
@@ -184,224 +1630,386 @@ msgstr ""
 msgid "Please describe your feature idea..."
 msgstr ""
 
-#: includes/AboutUs.class.php:246 includes/ReviewAsk.class.php:57
+#: includes/AboutUs.class.php:246
+#: includes/ReviewAsk.class.php:57
 msgid "Email Address"
 msgstr ""
 
-#: includes/Blocks.class.php:163 includes/Patterns.class.php:54
+#: includes/AIAssist.class.php:70
+msgid "AI Assist"
+msgstr ""
+
+#: includes/AIAssist.class.php:82
+msgid "AI FAQ Creation"
+msgstr ""
+
+#: includes/AIAssist.class.php:86
+msgid "This legacy feature sends the text of the public posts or pages you select to Etoile Web Design, which relays it to OpenAI to generate FAQ suggestions. Review the generated content before publishing."
+msgstr ""
+
+#: includes/AIAssist.class.php:94
+#: includes/Widgets.class.php:168
+#: includes/Widgets.class.php:249
+msgid "Number of FAQs"
+msgstr ""
+
+#: includes/AIAssist.class.php:112
+msgid "Purchase here"
+msgstr ""
+
+#: includes/AIAssist.class.php:122
+msgid "Page Content to Condense"
+msgstr ""
+
+#: includes/AIAssist.class.php:150
+msgid "Sort into Categories"
+msgstr ""
+
+#: includes/AIAssist.class.php:154
+msgid "No"
+msgstr ""
+
+#: includes/AIAssist.class.php:155
+msgid "Yes"
+msgstr ""
+
+#: includes/AIAssist.class.php:164
+msgid "I understand that the selected public content will be transferred to these external services."
+msgstr ""
+
+#: includes/AIAssist.class.php:168
+msgid "Create"
+msgstr ""
+
+#: includes/AIAssist.class.php:178
+msgid "Back to create"
+msgstr ""
+
+#: includes/AIAssist.class.php:182
+msgid "FAQs are being generated. This may take up to a few minutes."
+msgstr ""
+
+#: includes/AIAssist.class.php:188
+msgid "Publish"
+msgstr ""
+
+#: includes/AIAssist.class.php:233
+msgid "Confirm the external content transfer before generating FAQs."
+msgstr ""
+
+#: includes/AIAssist.class.php:243
+msgid "No valid content was selected."
+msgstr ""
+
+#: includes/AIAssist.class.php:271
+msgid "The selected public content is empty or unavailable."
+msgstr ""
+
+#: includes/AIAssist.class.php:320
+msgid "The generation service returned an invalid response."
+msgstr ""
+
+#: includes/AIAssist.class.php:329
+msgid "The generation service returned content that could not be read."
+msgstr ""
+
+#: includes/AIAssist.class.php:408
+msgid "You are not allowed to publish FAQs."
+msgstr ""
+
+#: includes/BasicSearch.class.php:46
+#: views/View.class.php:120
+msgid "Search"
+msgstr ""
+
+#: includes/BasicSearch.class.php:51
+#, php-format
+msgid "No FAQs contained the term “%s”."
+msgstr ""
+
+#: includes/BasicSearch.class.php:59
+msgid "FAQ search result pages"
+msgstr ""
+
+#: includes/BasicSearch.class.php:60
+#: includes/InstallationWalkthrough.class.php:355
+#: includes/InstallationWalkthrough.class.php:381
+#: includes/InstallationWalkthrough.class.php:453
+#: views/View.class.php:125
+msgid "Previous"
+msgstr ""
+
+#: includes/BasicSearch.class.php:61
+#: includes/InstallationWalkthrough.class.php:302
+#: includes/InstallationWalkthrough.class.php:354
+#: includes/InstallationWalkthrough.class.php:380
+#: views/View.class.php:126
+msgid "Next"
+msgstr ""
+
+#: includes/Blocks.class.php:191
+#: includes/Patterns.class.php:54
+#: includes/WPForms.class.php:46
 msgid "Ultimate FAQs"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:47 includes/CustomPostTypes.class.php:49
-#: includes/CustomPostTypes.class.php:50 includes/Settings.class.php:76
-#: includes/WooCommerce.class.php:129 includes/patterns/faqs.php:6
-#: ultimate-faqs.php:528 views/View.class.php:119
+#: includes/CustomPostTypes.class.php:55
+#: includes/CustomPostTypes.class.php:57
+#: includes/CustomPostTypes.class.php:58
+#: includes/patterns/faqs.php:6
+#: includes/Settings.class.php:79
+#: includes/WooCommerce.class.php:144
+#: includes/WPForms.class.php:31
+#: ultimate-faqs.php:575
+#: views/View.class.php:128
 msgid "FAQs"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:48 includes/WooCommerce.class.php:173
-#: includes/WooCommerce.class.php:200 includes/WooCommerce.class.php:322
+#: includes/CustomPostTypes.class.php:56
+#: includes/WooCommerce.class.php:188
+#: includes/WooCommerce.class.php:215
+#: includes/WooCommerce.class.php:337
 msgid "FAQ"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:51 ultimate-faqs.php:534
+#: includes/CustomPostTypes.class.php:59
+#: ultimate-faqs.php:581
 msgid "Add New"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:52
+#: includes/CustomPostTypes.class.php:60
 msgid "Add New FAQ"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:53
+#: includes/CustomPostTypes.class.php:61
+#: assets/js/ewd-ufaq-managed-editor.js:182
 msgid "Edit FAQ"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:54
+#: includes/CustomPostTypes.class.php:62
 msgid "New FAQ"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:55
-msgid "View FAQ"
-msgstr ""
-
-#: includes/CustomPostTypes.class.php:56 includes/patterns/search.php:6
+#: includes/CustomPostTypes.class.php:64
+#: includes/patterns/search.php:6
 msgid "Search FAQs"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:57
+#: includes/CustomPostTypes.class.php:65
 msgid "No FAQs found"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:58
+#: includes/CustomPostTypes.class.php:66
 msgid "No FAQs found in trash"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:59
+#: includes/CustomPostTypes.class.php:67
 msgid "All FAQs"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:93 includes/CustomPostTypes.class.php:103
+#: includes/CustomPostTypes.class.php:102
+#: includes/CustomPostTypes.class.php:112
 msgid "FAQ Categories"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:94
-#: includes/InstallationWalkthrough.class.php:303
+#: includes/CustomPostTypes.class.php:103
+#: includes/InstallationWalkthrough.class.php:325
 msgid "FAQ Category"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:95
+#: includes/CustomPostTypes.class.php:104
 msgid "Search FAQ Categories"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:96
+#: includes/CustomPostTypes.class.php:105
 msgid "All FAQ Categories"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:97
+#: includes/CustomPostTypes.class.php:106
 msgid "Parent FAQ Category"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:98
+#: includes/CustomPostTypes.class.php:107
 msgid "Parent FAQ Category:"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:99
+#: includes/CustomPostTypes.class.php:108
 msgid "Edit FAQ Category"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:100
+#: includes/CustomPostTypes.class.php:109
 msgid "Update FAQ Category"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:101
+#: includes/CustomPostTypes.class.php:110
 msgid "Add New FAQ Category"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:102
+#: includes/CustomPostTypes.class.php:111
 msgid "New FAQ Category Name"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:119
-#: includes/CustomPostTypes.class.php:129
+#: includes/CustomPostTypes.class.php:128
+#: includes/CustomPostTypes.class.php:138
 msgid "FAQ Tags"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:120
+#: includes/CustomPostTypes.class.php:129
 msgid "FAQ Tag"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:121
+#: includes/CustomPostTypes.class.php:130
 msgid "Search FAQ Tags"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:122
+#: includes/CustomPostTypes.class.php:131
 msgid "All FAQ Tags"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:123
+#: includes/CustomPostTypes.class.php:132
 msgid "Parent FAQ Tag"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:124
+#: includes/CustomPostTypes.class.php:133
 msgid "Parent FAQ Tag:"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:125
+#: includes/CustomPostTypes.class.php:134
 msgid "Edit FAQ Tag"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:126
+#: includes/CustomPostTypes.class.php:135
 msgid "Update FAQ Tag"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:127
+#: includes/CustomPostTypes.class.php:136
 msgid "Add New FAQ Tag"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:128
+#: includes/CustomPostTypes.class.php:137
 msgid "New FAQ Tag Name"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:218
-msgid "Author Display Name:"
+#: includes/CustomPostTypes.class.php:171
+msgid "FAQ Details"
+msgstr ""
+
+#: includes/CustomPostTypes.class.php:181
+msgid "Need Help?"
 msgstr ""
 
 #: includes/CustomPostTypes.class.php:227
+msgid "Author Display Name:"
+msgstr ""
+
+#: includes/CustomPostTypes.class.php:236
 msgid "Up Votes:"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:231
+#: includes/CustomPostTypes.class.php:240
 msgid "Down Votes:"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:312
+#: includes/CustomPostTypes.class.php:321
 msgid "Current File:"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:423
+#: includes/CustomPostTypes.class.php:432
 msgid "# of Views"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:424 includes/Dashboard.class.php:130
-#: includes/OrderingTable.class.php:77 ultimate-faqs.php:540
-msgid "Categories"
-msgstr ""
-
-#: includes/CustomPostTypes.class.php:425 includes/OrderingTable.class.php:78
-#: ultimate-faqs.php:546
-msgid "Tags"
-msgstr ""
-
-#: includes/CustomPostTypes.class.php:426
+#: includes/CustomPostTypes.class.php:435
 msgid "Post ID"
 msgstr ""
 
-#: includes/CustomPostTypes.class.php:579
+#: includes/CustomPostTypes.class.php:588
 msgid "Reset View Count"
 msgstr ""
 
-#: includes/Dashboard.class.php:78
-#, php-format
-msgid "<a href=\"%s\" target=\"_blank\">Visit our website</a> to learn how to upgrade to premium."
-msgstr ""
-
-#: includes/Dashboard.class.php:91 includes/Dashboard.class.php:115
-msgid "Get Support"
-msgstr ""
-
-#: includes/Dashboard.class.php:97
+#: includes/Dashboard.class.php:88
+#: includes/Helper.class.php:125
+#: includes/Helper.class.php:300
 msgid "YouTube Tutorials"
 msgstr ""
 
-#: includes/Dashboard.class.php:103
+#: includes/Dashboard.class.php:91
+#: includes/Dashboard.class.php:98
+#: includes/Dashboard.class.php:105
+#: includes/Dashboard.class.php:112
+msgid "View"
+msgstr ""
+
+#: includes/Dashboard.class.php:95
+#: includes/Helper.class.php:119
+#: includes/Helper.class.php:295
+msgid "Documentation"
+msgstr ""
+
+#: includes/Dashboard.class.php:102
 msgid "Plugin FAQs"
 msgstr ""
 
 #: includes/Dashboard.class.php:109
-msgid "Documentation"
+msgid "Get Support"
 msgstr ""
 
-#: includes/Dashboard.class.php:123
+#: includes/Dashboard.class.php:118
 msgid "FAQ Summary"
 msgstr ""
 
-#: includes/Dashboard.class.php:128
-#: includes/InstallationWalkthrough.class.php:420
-#: includes/Settings.class.php:536
+#: includes/Dashboard.class.php:122
+#: includes/InstallationWalkthrough.class.php:442
+#: includes/Settings.class.php:554
 msgid "Title"
 msgstr ""
 
-#: includes/Dashboard.class.php:129 includes/OrderingTable.class.php:76
+#: includes/Dashboard.class.php:123
+#: includes/OrderingTable.class.php:78
 msgid "Views"
 msgstr ""
 
-#: includes/Dashboard.class.php:135
+#: includes/Dashboard.class.php:129
 msgid "No faqs to display yet. Create an faq and then view it for it to be displayed here."
 msgstr ""
 
-#: includes/Dashboard.class.php:217
-#, php-format
-msgid "<a href=\"%s\" target=\"_blank\">Visit our website</a> to learn how to get a free 7-day trial of the premium plugin."
+#: includes/Dashboard.class.php:182
+msgid "What People Are Saying"
+msgstr ""
+
+#: includes/Dashboard.class.php:213
+msgid "Other plugins by Etoile"
+msgstr ""
+
+#: includes/DeactivationSurvey.class.php:36
+msgid "I no longer need the plugin"
+msgstr ""
+
+#: includes/DeactivationSurvey.class.php:39
+msgid "I'm switching to a different plugin"
+msgstr ""
+
+#: includes/DeactivationSurvey.class.php:40
+msgid "Please share which plugin"
+msgstr ""
+
+#: includes/DeactivationSurvey.class.php:43
+msgid "I couldn't get the plugin to work"
+msgstr ""
+
+#: includes/DeactivationSurvey.class.php:44
+msgid "Please share what wasn't working"
+msgstr ""
+
+#: includes/DeactivationSurvey.class.php:47
+msgid "It's a temporary deactivation"
+msgstr ""
+
+#: includes/DeactivationSurvey.class.php:50
+msgid "Other"
+msgstr ""
+
+#: includes/DeactivationSurvey.class.php:51
+msgid "Please share the reason"
 msgstr ""
 
 #: includes/DeactivationSurvey.class.php:58
@@ -409,7 +2017,7 @@ msgid "Quick Feedback"
 msgstr ""
 
 #: includes/DeactivationSurvey.class.php:59
-msgid "If you have a moment, please share why you are deactivating Ultimate FAQs:"
+msgid "Need help? Contact us at <a href=\"mailto:contact@etoilewebdesign.com\">contact@etoilewebdesign.com</a> for a quick reply!<br/> Please share why you are deactivating Ultimate FAQs:"
 msgstr ""
 
 #: includes/DeactivationSurvey.class.php:74
@@ -420,185 +2028,315 @@ msgstr ""
 msgid "Skip and Deactivate"
 msgstr ""
 
-#: includes/Helper.class.php:45
+#: includes/EditorFAQWorkflow.class.php:29
+msgid "Enter between 2 and 200 characters to search FAQ titles."
+msgstr ""
+
+#: includes/EditorFAQWorkflow.class.php:150
+msgid "You do not have permission to publish FAQs."
+msgstr ""
+
+#: includes/EditorFAQWorkflow.class.php:173
+msgid "WordPress did not publish the new FAQ."
+msgstr ""
+
+#: includes/EditorFAQWorkflow.class.php:180
+msgid "The new FAQ could not be initialized for display."
+msgstr ""
+
+#: includes/EditorFAQWorkflow.class.php:183
+msgid "Your editor session expired. Refresh the page and try again."
+msgstr ""
+
+#: includes/EditorFAQWorkflow.class.php:192
+msgid "The current editor is not available for FAQ management."
+msgstr ""
+
+#: includes/EditorFAQWorkflow.class.php:199
+msgid "You do not have permission to manage FAQs from this editor."
+msgstr ""
+
+#: includes/EditorFAQWorkflow.class.php:212
+msgid "The FAQ question is required and must not exceed 500 characters."
+msgstr ""
+
+#: includes/FAQ.class.php:192
+msgid "Please refresh the page and try submitting again."
+msgstr ""
+
+#: includes/Helper.class.php:131
+#: includes/Helper.class.php:305
+msgid "Support Center"
+msgstr ""
+
+#: includes/Helper.class.php:137
+msgid "Tutorials"
+msgstr ""
+
+#: includes/Helper.class.php:142
+msgid "Ultimate FAQs Help"
+msgstr ""
+
+#: includes/Helper.class.php:217
 #, php-format
 msgid "You have been logged out. Please %slogin again%s."
 msgstr ""
 
-#: includes/Helper.class.php:59
+#: includes/Helper.class.php:231
 msgid "The request has been rejected because it does not appear to have come from this site."
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:239
+#: includes/Helper.class.php:400
+msgid "The FAQs page displays a list of all your frequently asked questions, with options to manage them via quick edit, bulk actions, import/export tools, and sorting or search filters. This serves as the central hub for maintaining your FAQ content at scale."
+msgstr ""
+
+#: includes/Helper.class.php:421
+msgid "The FAQ edit screen allows you to create or update an individual FAQ, including its question, answer, categories/tags, and display settings. Use this to keep your FAQs accurate and up to date."
+msgstr ""
+
+#: includes/Helper.class.php:434
+msgid "FAQ Categories let you organize your FAQs into groups for easier navigation and display. You can create, edit, and assign categories to FAQs from here."
+msgstr ""
+
+#: includes/Helper.class.php:443
+msgid "FAQ Tags provide an additional way to label and filter FAQs. Use tags to help users find related questions or to power tag-based displays."
+msgstr ""
+
+#: includes/Helper.class.php:452
+msgid "The Ultimate FAQs dashboard provides a quick overview of your plugin configuration, shortcuts to key areas, and useful resources to help you get started."
+msgstr ""
+
+#: includes/Helper.class.php:461
+msgid "Use the Ordering Table to quickly rearrange FAQs in the order they will appear. This is useful when you want precise control over the display sequence."
+msgstr ""
+
+#: includes/Helper.class.php:470
+msgid "The Import screen allows you to upload FAQs in bulk from a file, saving time when migrating or creating large FAQ sets."
+msgstr ""
+
+#: includes/Helper.class.php:479
+msgid "The Export screen lets you download your FAQs and settings for backup or migration to another site."
+msgstr ""
+
+#: includes/Helper.class.php:488
+msgid "The Settings page controls how your FAQs display and behave. Review options to match your theme and desired layout, and use the tabs to explore advanced configuration."
+msgstr ""
+
+#: includes/Helper.class.php:497
+msgid "The Styling tab provides options to customize the look and feel of your FAQ display. You can adjust colors, typography, and layout-related settings."
+msgstr ""
+
+#: includes/HelperCompatibility.class.php:152
+msgid "EWD Premium Helper uses a newer Ultimate FAQs compatibility API. Update Ultimate FAQs before premium FAQ features can load."
+msgstr ""
+
+#. translators: %s: minimum compatible Premium Helper version.
+#: includes/HelperCompatibility.class.php:158
+#, php-format
+msgid "EWD Premium Helper is not compatible with this version of Ultimate FAQs. Update Premium Helper to version %s or newer. Free FAQ features remain available."
+msgstr ""
+
+#: includes/InstallationWalkthrough.class.php:71
+#: includes/InstallationWalkthrough.class.php:72
+msgid "Ultimate FAQs - Welcome!"
+msgstr ""
+
+#: includes/InstallationWalkthrough.class.php:261
 msgid "Welcome to Ultimate FAQs"
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:240
+#: includes/InstallationWalkthrough.class.php:262
 msgid "Thanks for choosing Ultimate FAQs! The following will help you get started with the setup by creating your first FAQ and category, as well as adding your FAQs to a page and configuring a few key options."
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:244
+#: includes/InstallationWalkthrough.class.php:266
 msgid "1. Create Categories"
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:246
+#: includes/InstallationWalkthrough.class.php:268
 msgid "Categories let you organize your FAQs in a way that's easy for you - and your customers - to find."
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:249
+#: includes/InstallationWalkthrough.class.php:271
 msgid "Category Name"
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:255
+#: includes/InstallationWalkthrough.class.php:277
 msgid "Category Description"
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:263
+#: includes/InstallationWalkthrough.class.php:285
 msgid "Add Category"
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:269
+#: includes/InstallationWalkthrough.class.php:291
 msgid "Created Categories"
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:272
-#: includes/Settings.class.php:498
+#: includes/InstallationWalkthrough.class.php:294
+#: includes/Settings.class.php:504
 msgid "Name"
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:273
+#: includes/InstallationWalkthrough.class.php:295
 msgid "Description"
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:280
-#: includes/InstallationWalkthrough.class.php:332
-#: includes/InstallationWalkthrough.class.php:358 views/View.class.php:117
-msgid "Next"
-msgstr ""
-
-#: includes/InstallationWalkthrough.class.php:286
+#: includes/InstallationWalkthrough.class.php:308
 msgid "2. Questions & Answers"
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:288
+#: includes/InstallationWalkthrough.class.php:310
 msgid "Create your first set of questions and answers. Don't worry, you can always add more later."
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:291
+#: includes/InstallationWalkthrough.class.php:313
 msgid "Questions"
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:297
-#: includes/InstallationWalkthrough.class.php:323
-msgid "Answer"
-msgstr ""
-
-#: includes/InstallationWalkthrough.class.php:313
+#: includes/InstallationWalkthrough.class.php:335
 msgid "Add FAQ"
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:319
+#: includes/InstallationWalkthrough.class.php:341
 msgid "Created FAQs"
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:322
-#: includes/OrderingTable.class.php:75
-msgid "Question"
-msgstr ""
-
-#: includes/InstallationWalkthrough.class.php:324
+#: includes/InstallationWalkthrough.class.php:346
 msgid "Category"
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:333
-#: includes/InstallationWalkthrough.class.php:359
-#: includes/InstallationWalkthrough.class.php:431 views/View.class.php:116
-msgid "Previous"
-msgstr ""
-
-#: includes/InstallationWalkthrough.class.php:339
+#: includes/InstallationWalkthrough.class.php:361
 msgid "3. Add an FAQ Page"
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:341
+#: includes/InstallationWalkthrough.class.php:363
 msgid "You can create a dedicated FAQ page below, or skip this step and add your FAQs to a page you've already created manually."
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:344
+#: includes/InstallationWalkthrough.class.php:366
 msgid "Page Title"
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:352
+#: includes/InstallationWalkthrough.class.php:374
 msgid "Create Page"
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:365
+#: includes/InstallationWalkthrough.class.php:387
 msgid "4. Set Key Options"
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:367
+#: includes/InstallationWalkthrough.class.php:389
 msgid "Options can always be changed later, but here are a few tha a lot of users want to set for themselves."
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:370
-#: includes/Settings.class.php:326
+#: includes/InstallationWalkthrough.class.php:392
+#: includes/Settings.class.php:330
 msgid "FAQ Accordion"
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:380
-#: includes/Settings.class.php:327
+#: includes/InstallationWalkthrough.class.php:402
+#: includes/Settings.class.php:331
 msgid "Should the FAQs accordion? (Only one FAQ is open at a time, requires FAQ Toggle)"
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:385
+#: includes/InstallationWalkthrough.class.php:407
 msgid "FAQ Toggle"
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:395
-#: includes/Settings.class.php:316
+#: includes/InstallationWalkthrough.class.php:417
+#: includes/Settings.class.php:320
 msgid "Should the FAQs open on a separate page when clicked, instead of opening and closing?"
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:400
-#: includes/Settings.class.php:470
+#: includes/InstallationWalkthrough.class.php:422
+#: includes/Settings.class.php:476
 msgid "Group FAQs by Category"
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:410
-#: includes/Settings.class.php:471
+#: includes/InstallationWalkthrough.class.php:432
+#: includes/Settings.class.php:477
 msgid "Should FAQs be grouped by category, or should all categories be mixed together?"
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:415
-#: includes/Settings.class.php:531
+#: includes/InstallationWalkthrough.class.php:437
+#: includes/Settings.class.php:550
 msgid "FAQ Ordering"
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:419
-#: includes/Settings.class.php:535
+#: includes/InstallationWalkthrough.class.php:441
+#: includes/Settings.class.php:553
 msgid "Created Date"
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:421
-#: includes/Settings.class.php:537
+#: includes/InstallationWalkthrough.class.php:443
+#: includes/Settings.class.php:555
 msgid "Modified Date"
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:423
-#: includes/Settings.class.php:532
+#: includes/InstallationWalkthrough.class.php:445
+#: includes/Settings.class.php:551
 msgid "How should individual FAQs be ordered?"
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:429
+#: includes/InstallationWalkthrough.class.php:451
 msgid "Save Options"
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:432
+#: includes/InstallationWalkthrough.class.php:454
 msgid "Finish"
 msgstr ""
 
-#: includes/InstallationWalkthrough.class.php:439
+#: includes/InstallationWalkthrough.class.php:461
 msgid "Skip Setup"
+msgstr ""
+
+#: includes/InstallationWalkthrough.class.php:481
+msgid "Create your first FAQ page"
+msgstr ""
+
+#: includes/InstallationWalkthrough.class.php:482
+msgid "Build and reuse FAQs directly in the WordPress page editor with the Display FAQs block."
+msgstr ""
+
+#: includes/InstallationWalkthrough.class.php:487
+msgid "Open or create a page"
+msgstr ""
+
+#: includes/InstallationWalkthrough.class.php:488
+msgid "The button below opens your configured FAQ page, or starts a new page with the Display FAQs block already inserted."
+msgstr ""
+
+#: includes/InstallationWalkthrough.class.php:491
+msgid "Add FAQs in the block"
+msgstr ""
+
+#: includes/InstallationWalkthrough.class.php:492
+msgid "Select the Display FAQs block. Search by title to reuse an existing FAQ, or create a new question and answer without leaving the page."
+msgstr ""
+
+#: includes/InstallationWalkthrough.class.php:492
+msgid "Manage FAQs centrally"
+msgstr ""
+
+#: includes/InstallationWalkthrough.class.php:493
+msgid "Every FAQ can be reused and edited centrally. Removing an FAQ from a block does not delete the FAQ."
+msgstr ""
+
+#: includes/InstallationWalkthrough.class.php:496
+msgid "Create, then preview"
+msgstr ""
+
+#: includes/InstallationWalkthrough.class.php:497
+msgid "Click Create FAQ to publish the new FAQ immediately and add it to the block. Preview the page to confirm the result."
+msgstr ""
+
+#: includes/InstallationWalkthrough.class.php:505
+msgid "Open the page editor"
+msgstr ""
+
+#: includes/InstallationWalkthrough.class.php:506
+msgid "Skip to settings"
 msgstr ""
 
 #: includes/Notifications.class.php:33
@@ -633,360 +2371,391 @@ msgstr ""
 msgid "Ultimate FAQs Team"
 msgstr ""
 
-#: includes/OrderingTable.class.php:69
+#: includes/Notifications.class.php:83
+msgid "New Question"
+msgstr ""
+
+#: includes/Notifications.class.php:85
+#: includes/Notifications.class.php:115
+msgid "Hello,"
+msgstr ""
+
+#: includes/Notifications.class.php:86
+#, php-format
+msgid "Thank you for submitting your FAQ, %s. "
+msgstr ""
+
+#: includes/Notifications.class.php:113
+msgid "New Question Answer"
+msgstr ""
+
+#: includes/Notifications.class.php:116
+#, php-format
+msgid "Your FAQ, %s, has received a new question answer: "
+msgstr ""
+
+#: includes/Notifications.class.php:117
+msgid "Thank You,"
+msgstr ""
+
+#: includes/OrderingTable.class.php:28
+#: includes/OrderingTable.class.php:29
+msgid "Ordering Table"
+msgstr ""
+
+#: includes/OrderingTable.class.php:66
+msgid "FAQ Ordering Table"
+msgstr ""
+
+#: includes/OrderingTable.class.php:71
 msgid "Use the table below to set the order for your FAQs, either overall or within their categories depending on your selected settings."
 msgstr ""
 
-#: includes/Settings.class.php:74
-msgid "Retrieving Results"
+#: includes/patterns/faqs.php:7
+msgctxt "Block pattern description"
+msgid "Adds your FAQs."
 msgstr ""
 
-#: includes/Settings.class.php:75
-#, php-format
-msgid "No result FAQ's contained the term '%s'"
+#: includes/patterns/featured-faqs.php:6
+msgid "Featured FAQs"
 msgstr ""
 
-#: includes/Settings.class.php:77
-msgid "Please fill out the image number field."
+#: includes/patterns/featured-faqs.php:7
+msgctxt "Block pattern description"
+msgid "Adds a list of featured FAQs. Use the available block attributes to specify which FAQs you would like to show."
 msgstr ""
 
-#: includes/Settings.class.php:78
-msgid "The number you entered for the image was incorrect."
+#: includes/patterns/search.php:7
+msgctxt "Block pattern description"
+msgid "Adds the FAQ search form."
 msgstr ""
 
-#: includes/Settings.class.php:79
+#: includes/patterns/submit.php:6
+msgid "Submit Question"
+msgstr ""
+
+#: includes/patterns/submit.php:7
+msgctxt "Block pattern description"
+msgid "Adds the submit question form."
+msgstr ""
+
+#: includes/Settings.class.php:82
 msgid "Please make sure that there is a question that you are submitting as an FAQ."
 msgstr ""
 
-#: includes/Settings.class.php:80 views/View.class.php:123
+#: includes/Settings.class.php:83
+#: views/View.class.php:132
 msgid "Thank you for submitting an FAQ."
 msgstr ""
 
-#: includes/Settings.class.php:147 includes/Settings.class.php:148
-#: includes/Settings.class.php:459 ultimate-faqs.php:411 ultimate-faqs.php:552
-msgid "Settings"
-msgstr ""
-
-#: includes/Settings.class.php:160
+#: includes/Settings.class.php:163
 msgid "Basic"
 msgstr ""
 
-#: includes/Settings.class.php:170
-msgid "General"
-msgstr ""
-
-#: includes/Settings.class.php:181
+#: includes/Settings.class.php:185
 msgid "FAQs Page"
 msgstr ""
 
-#: includes/Settings.class.php:182
+#: includes/Settings.class.php:186
 msgid "Select a page on your site to automatically display all of the FAQs you have created. Alternatively, you can also use the blocks and shortcodes to display your FAQs on pages other than the one selected above."
 msgstr ""
 
-#: includes/Settings.class.php:200
+#: includes/Settings.class.php:204
 msgid "Custom CSS"
 msgstr ""
 
-#: includes/Settings.class.php:201
+#: includes/Settings.class.php:205
 msgid "You can add custom CSS styles to your FAQs in the box above."
 msgstr ""
 
-#: includes/Settings.class.php:210
+#: includes/Settings.class.php:214
 msgid "Scroll To Top"
 msgstr ""
 
-#: includes/Settings.class.php:211
+#: includes/Settings.class.php:215
 msgid "Should the browser scroll to the top of the FAQ when it's opened?"
 msgstr ""
 
-#: includes/Settings.class.php:221
+#: includes/Settings.class.php:225
 msgid "Turn On Comment Support"
 msgstr ""
 
-#: includes/Settings.class.php:222
+#: includes/Settings.class.php:226
 msgid "Should comment support be turned on, so that if the \"Allow Comments\" checkbox is selected for a given FAQ, comments are shown in the FAQ list?"
 msgstr ""
 
-#: includes/Settings.class.php:232
+#: includes/Settings.class.php:236
 msgid "Disable Microdata"
 msgstr ""
 
-#: includes/Settings.class.php:233
+#: includes/Settings.class.php:237
 msgid "By default, the plugin adds FAQ page scheme when the shortcode is used. Select this option to disable this behaviour."
 msgstr ""
 
-#: includes/Settings.class.php:243
+#: includes/Settings.class.php:247
 msgid "Include Permalink"
 msgstr ""
 
-#: includes/Settings.class.php:244
+#: includes/Settings.class.php:248
 msgid "Display permalink to each question? If so, text, icon or both?"
 msgstr ""
 
-#: includes/Settings.class.php:246
-msgid "None"
-msgstr ""
-
-#: includes/Settings.class.php:247
-msgid "Text"
-msgstr ""
-
-#: includes/Settings.class.php:248
+#: includes/Settings.class.php:252
 msgid "Icon"
 msgstr ""
 
-#: includes/Settings.class.php:249
+#: includes/Settings.class.php:253
 msgid "Both"
 msgstr ""
 
-#: includes/Settings.class.php:261
+#: includes/Settings.class.php:265
 msgid "Permalink Destination"
 msgstr ""
 
-#: includes/Settings.class.php:262
-msgid "Should the permalink link to the main FAQ page or the individual FAQ page?"
+#: includes/Settings.class.php:266
+msgid "Should the permalink link to the main FAQ page or the individual FAQ page? Any FAQs not visible on page load will default to \"Individual FAQ Page\" regardless of what you choose here. (For example, if you have \"FAQs Per Page\" set to 5, FAQs 6 and up, which are not visible on page load, will default to \"Individual FAQ Page.\")"
 msgstr ""
 
-#: includes/Settings.class.php:264
+#: includes/Settings.class.php:268
 msgid "Main FAQ Page"
 msgstr ""
 
-#: includes/Settings.class.php:265
+#: includes/Settings.class.php:269
 msgid "Individual FAQ Page"
 msgstr ""
 
-#: includes/Settings.class.php:277
+#: includes/Settings.class.php:281
 msgid "Disable Permalink Pages"
 msgstr ""
 
-#: includes/Settings.class.php:278
+#: includes/Settings.class.php:282
 msgid "This option can be used to disable the permalink/single post pages for the FAQ posts. If you change this option, you may need to flush your permalinks."
 msgstr ""
 
-#: includes/Settings.class.php:288
+#: includes/Settings.class.php:292
 msgid "Set Access Role"
 msgstr ""
 
-#: includes/Settings.class.php:289
+#: includes/Settings.class.php:293
 msgid "Which level of user should have access to FAQs, Settings, etc.?."
 msgstr ""
 
-#: includes/Settings.class.php:292
+#: includes/Settings.class.php:296
 msgid "Administrator"
 msgstr ""
 
-#: includes/Settings.class.php:293
+#: includes/Settings.class.php:297
 msgid "Editor"
 msgstr ""
 
-#: includes/Settings.class.php:294
-msgid "Author"
-msgstr ""
-
-#: includes/Settings.class.php:295
+#: includes/Settings.class.php:299
 msgid "Contributor"
 msgstr ""
 
-#: includes/Settings.class.php:304
+#: includes/Settings.class.php:308
 msgid "Functionality"
 msgstr ""
 
-#: includes/Settings.class.php:315
+#: includes/Settings.class.php:319
 msgid "Disable FAQ Toggle"
 msgstr ""
 
-#: includes/Settings.class.php:339
+#: includes/Settings.class.php:343
 msgid "FAQ Category Toggle"
 msgstr ""
 
-#: includes/Settings.class.php:340
+#: includes/Settings.class.php:344
 msgid "Should the FAQ categories hide/open when they are clicked, if FAQs are being grouped by category (\"Group FAQs by Category\" in the \"Ordering\" area)?"
 msgstr ""
 
-#: includes/Settings.class.php:350
+#: includes/Settings.class.php:354
 msgid "FAQ Category Accordion"
 msgstr ""
 
-#: includes/Settings.class.php:351
+#: includes/Settings.class.php:355
 msgid "Should it only be possible to open one FAQ category at a time, if FAQ categories are being toggled (\"FAQ Category Toggle\" must be enabled above)?"
 msgstr ""
 
-#: includes/Settings.class.php:363
+#: includes/Settings.class.php:367
 msgid "FAQ Expand/Collapse All"
 msgstr ""
 
-#: includes/Settings.class.php:364
+#: includes/Settings.class.php:368
 msgid "Should there be a control to open and close all FAQs simultaneously?"
 msgstr ""
 
-#: includes/Settings.class.php:374
-msgid "Display"
-msgstr ""
-
-#: includes/Settings.class.php:385
+#: includes/Settings.class.php:389
 msgid "Hide Categories"
 msgstr ""
 
-#: includes/Settings.class.php:386
+#: includes/Settings.class.php:390
 msgid "Should the categories for each FAQ be hidden?"
 msgstr ""
 
-#: includes/Settings.class.php:396
+#: includes/Settings.class.php:400
 msgid "Hide Tags"
 msgstr ""
 
-#: includes/Settings.class.php:397
+#: includes/Settings.class.php:401
 msgid "Should the tags for each FAQ be hidden?"
 msgstr ""
 
-#: includes/Settings.class.php:407
+#: includes/Settings.class.php:411
 msgid "Display All Answers"
 msgstr ""
 
-#: includes/Settings.class.php:408
+#: includes/Settings.class.php:412
 msgid "Should all answers be displayed when the page loads? (Careful if FAQ Accordion is on)"
 msgstr ""
 
-#: includes/Settings.class.php:418
+#: includes/Settings.class.php:422
 msgid "Display Post Author"
 msgstr ""
 
-#: includes/Settings.class.php:419
+#: includes/Settings.class.php:423
 msgid "Should the display name of the post's author be displayed beneath the FAQ title?"
 msgstr ""
 
-#: includes/Settings.class.php:429
+#: includes/Settings.class.php:433
 msgid "Display Post Date"
 msgstr ""
 
-#: includes/Settings.class.php:430
+#: includes/Settings.class.php:434
 msgid "Should the date the post was created be displayed beneath the FAQ title?"
 msgstr ""
 
-#: includes/Settings.class.php:440
+#: includes/Settings.class.php:444
 msgid "Display 'Back to Top'"
 msgstr ""
 
-#: includes/Settings.class.php:441
+#: includes/Settings.class.php:445
 msgid "Should a link to return to the top of the page be added to each FAQ post?"
 msgstr ""
 
-#: includes/Settings.class.php:449
+#: includes/Settings.class.php:453
 msgid "Ordering"
 msgstr ""
 
-#: includes/Settings.class.php:481
+#: includes/Settings.class.php:487
 msgid "Display FAQ Category Count"
 msgstr ""
 
-#: includes/Settings.class.php:482
+#: includes/Settings.class.php:488
 msgid "If FAQs are grouped by category, should the number of FAQs in a category be displayed beside the category name?"
 msgstr ""
 
-#: includes/Settings.class.php:494
+#: includes/Settings.class.php:500
 msgid "Sort Categories"
 msgstr ""
 
-#: includes/Settings.class.php:495 includes/Settings.class.php:514
+#: includes/Settings.class.php:501
+#: includes/Settings.class.php:533
 msgid "How should FAQ categories be ordered? (Only used if \"Group FAQs by Category\" above is enabled.)"
 msgstr ""
 
-#: includes/Settings.class.php:499
+#: includes/Settings.class.php:505
 msgid "FAQ Count"
 msgstr ""
 
-#: includes/Settings.class.php:500
+#: includes/Settings.class.php:506
 msgid "Slug"
 msgstr ""
 
-#: includes/Settings.class.php:513
+#: includes/Settings.class.php:519
+msgid "Nested FAQ Categories"
+msgstr ""
+
+#: includes/Settings.class.php:520
+msgid "If FAQs are grouped by category, should sub-categories appear under their parent categories?"
+msgstr ""
+
+#: includes/Settings.class.php:532
 msgid "Sort Categories Ordering"
 msgstr ""
 
-#: includes/Settings.class.php:516 includes/Settings.class.php:552
+#: includes/Settings.class.php:535
+#: includes/Settings.class.php:570
 msgid "Ascending"
 msgstr ""
 
-#: includes/Settings.class.php:517 includes/Settings.class.php:553
+#: includes/Settings.class.php:536
+#: includes/Settings.class.php:571
 msgid "Descending"
 msgstr ""
 
-#: includes/Settings.class.php:549
+#: includes/Settings.class.php:567
 msgid "Sort FAQs Ordering"
 msgstr ""
 
-#: includes/Settings.class.php:550
+#: includes/Settings.class.php:568
 msgid "Should FAQ be ascending or descending order, based on the ordering criteria above?"
 msgstr ""
 
-#: includes/Settings.class.php:567 includes/Settings.class.php:694
-#: includes/Settings.class.php:710 includes/Settings.class.php:725
-#: includes/Settings.class.php:741
+#: includes/Settings.class.php:585
+#: includes/Settings.class.php:724
+#: includes/Settings.class.php:740
+#: includes/Settings.class.php:755
+#: includes/Settings.class.php:771
 msgid "Premium"
 msgstr ""
 
-#: includes/Settings.class.php:587 includes/Settings.class.php:710
+#: includes/Settings.class.php:606
+#: includes/Settings.class.php:740
 msgid "Fields"
 msgstr ""
 
-#: includes/Settings.class.php:607 includes/Settings.class.php:725
+#: includes/Settings.class.php:627
+#: includes/Settings.class.php:755
 msgid "Labelling"
 msgstr ""
 
-#: includes/Settings.class.php:627 includes/Settings.class.php:741
+#: includes/Settings.class.php:648
+#: includes/Settings.class.php:771
 msgid "Styling"
 msgstr ""
 
-#: includes/Settings.class.php:671
-msgid "The premium version also gives you access to the following features:"
+#: includes/Settings.class.php:700
+msgid "AI-Generated FAQs"
 msgstr ""
 
-#: includes/Settings.class.php:675
+#: includes/Settings.class.php:702
 msgid "Custom Fields"
 msgstr ""
 
-#: includes/Settings.class.php:677
+#: includes/Settings.class.php:704
 msgid "15 Different Icon Sets"
 msgstr ""
 
-#: includes/Settings.class.php:678
+#: includes/Settings.class.php:705
 msgid "Import/Export FAQs"
 msgstr ""
 
-#: includes/Settings.class.php:679
+#: includes/Settings.class.php:706
 msgid "Advanced Styling Options"
 msgstr ""
 
-#: includes/Settings.class.php:680
-msgid "Social Sharing"
-msgstr ""
-
-#: includes/Settings.class.php:681
+#: includes/Settings.class.php:707
 msgid "Email Support"
 msgstr ""
 
-#: includes/Settings.class.php:684
+#: includes/Settings.class.php:711
 msgid "UPGRADE NOW"
 msgstr ""
 
-#: includes/Settings.class.php:695
+#: includes/Settings.class.php:725
 msgid "The premium options let you change the FAQ layout, configure WooCommerce and WPForms integration, add reveal effects, paginate your FAQs, add an FAQ rating/voting system, add social sharing, change the the slug base of the post type and much more."
 msgstr ""
 
-#: includes/Settings.class.php:711
+#: includes/Settings.class.php:741
 msgid "You can add custom fields to your FAQs, which let you display extra content, such as product manuals, location info, links and more. "
 msgstr ""
 
-#: includes/Settings.class.php:726
+#: includes/Settings.class.php:756
 msgid "The labelling options let you change the wording of the different labels that appear on the front end of the plugin. You can use this to translate them, customize the wording for your purpose, etc."
 msgstr ""
 
-#: includes/Settings.class.php:742
+#: includes/Settings.class.php:772
 msgid "The styling options let you change the toggle symbol and FAQ heading types, as well as modify the color, font size, font family, border, margin and padding of the various elements found in your FAQs."
-msgstr ""
-
-#: includes/WPForms.class.php:77
-msgid "-- Select Field --"
 msgstr ""
 
 #: includes/Widgets.class.php:50
@@ -1005,8 +2774,10 @@ msgstr ""
 msgid "FAQ ID List:"
 msgstr ""
 
-#: includes/Widgets.class.php:97 includes/Widgets.class.php:178
-#: includes/Widgets.class.php:259 includes/Widgets.class.php:340
+#: includes/Widgets.class.php:97
+#: includes/Widgets.class.php:178
+#: includes/Widgets.class.php:259
+#: includes/Widgets.class.php:340
 #: includes/Widgets.class.php:416
 msgid "Widget Title:"
 msgstr ""
@@ -1019,16 +2790,15 @@ msgstr ""
 msgid "Insert a number of the most recent FAQs"
 msgstr ""
 
-#: includes/Widgets.class.php:168 includes/Widgets.class.php:249
-msgid "Number of FAQs"
-msgstr ""
-
-#: includes/Widgets.class.php:169 includes/Widgets.class.php:250
-#: includes/Widgets.class.php:335 includes/Widgets.class.php:407
+#: includes/Widgets.class.php:169
+#: includes/Widgets.class.php:250
+#: includes/Widgets.class.php:335
+#: includes/Widgets.class.php:407
 msgid "Widget Title"
 msgstr ""
 
-#: includes/Widgets.class.php:174 includes/Widgets.class.php:255
+#: includes/Widgets.class.php:174
+#: includes/Widgets.class.php:255
 msgid "Number of FAQs:"
 msgstr ""
 
@@ -1064,201 +2834,250 @@ msgstr ""
 msgid "FAQ Category List:"
 msgstr ""
 
-#: includes/WooCommerce.class.php:155
+#: includes/WooCommerce.class.php:170
 msgid "You can use the form below to select which FAQs to display for this product, or leave it blank to use the default category naming system."
 msgstr ""
 
-#: includes/WooCommerce.class.php:165
+#: includes/WooCommerce.class.php:180
 msgid "All Categories"
 msgstr ""
 
-#: includes/WooCommerce.class.php:172 includes/WooCommerce.class.php:321
+#: includes/WooCommerce.class.php:187
+#: includes/WooCommerce.class.php:336
 msgid "Add?"
 msgstr ""
 
-#: includes/WooCommerce.class.php:187
+#: includes/WooCommerce.class.php:202
 msgid "Add FAQs"
 msgstr ""
 
-#: includes/WooCommerce.class.php:199
+#: includes/WooCommerce.class.php:214
 msgid "Delete?"
 msgstr ""
 
-#: includes/WooCommerce.class.php:215
+#: includes/WooCommerce.class.php:230
 msgid "Delete FAQs"
 msgstr ""
 
-#: includes/patterns/featured-faqs.php:6
-msgid "Featured FAQs"
+#: includes/WPForms.class.php:77
+msgid "-- Select Field --"
 msgstr ""
 
-#: includes/patterns/submit.php:6
-msgid "Submit Question"
+#: includes/WPForms.class.php:128
+msgid "Possible FAQs related to your message:"
 msgstr ""
 
-#: lib/simple-admin-pages/classes/AdminPage.class.php:173
-msgid "You do not have sufficient permissions to access this page."
-msgstr ""
-
-#: lib/simple-admin-pages/classes/AdminPageSetting.FileUpload.class.php:48
-msgid "Current image:"
-msgstr ""
-
-#: lib/simple-admin-pages/classes/AdminPageSetting.FileUpload.class.php:61
-msgid "Upload Image"
-msgstr ""
-
-#: ultimate-faqs.php:408
+#: ultimate-faqs.php:455
 msgid "Try Premium"
 msgstr ""
 
-#: ultimate-faqs.php:411
+#: ultimate-faqs.php:458
 msgid "Head to the settings page for Ultimate FAQs"
 msgstr ""
 
-#: ultimate-faqs.php:522
+#: ultimate-faqs.php:569
 msgid "Dashboard"
 msgstr ""
 
-#: ultimate-faqs.php:566
+#: ultimate-faqs.php:613
 msgid "MENU"
 msgstr ""
 
-#: ultimate-faqs.php:608
+#: ultimate-faqs.php:655
 msgid "You're using the Ultimate FAQs premium version, but the premium helper plugin is not active."
 msgstr ""
 
-#: ultimate-faqs.php:610
+#: ultimate-faqs.php:657
 #, php-format
 msgid "Please re-activate the helper plugin, or <a target='_blank' href='%s'>download and install it</a> if the plugin is no longer installed to ensure continued access to the premium features of the plugin."
 msgstr ""
 
-#: ultimate-faqs.php:649
+#: ultimate-faqs.php:700
+msgid "Thanks for installing! Add FAQs to your site using the [ultimate-faqs] shortcode or the Display FAQs block."
+msgstr ""
+
+#: ultimate-faqs.php:742
+msgid "Tired of digging through settings? Let <strong>AI Admin Assistance</strong> guide you!"
+msgstr ""
+
+#: ultimate-faqs.php:743
+msgid "Stop wasting time searching for answers—use <strong>AI Admin Assistance</strong> to bring AI-powered help directly into your dashboard!"
+msgstr ""
+
+#: ultimate-faqs.php:744
+msgid "Overwhelmed in the WordPress admin? <strong>AI Admin Assistance</strong> has you covered with AI-powered help directly in your dashboard!"
+msgstr ""
+
+#: ultimate-faqs.php:759
+#, php-format
+msgid "As a thank you to our customers, for a limited time you can get a <strong>free pro license</strong>! Try the <a target='_blank' href='%s'>free version</a> today or use code <code>early_adopter_pro</code> to <a target='_blank' href='%s'>get your pro version license</a>!"
+msgstr ""
+
+#: ultimate-faqs.php:803
 msgid "FAQ Order"
 msgstr ""
 
-#: views/View.FAQ.class.php:514
-msgid "Category:"
-msgstr ""
-
-#: views/View.FAQ.class.php:514
-msgid "Categories:"
-msgstr ""
-
-#: views/View.FAQ.class.php:538
-msgid "Tag:"
-msgstr ""
-
-#: views/View.FAQ.class.php:538
-msgid "Tags:"
-msgstr ""
-
-#: views/View.FAQ.class.php:607 views/View.FAQ.class.php:619
-#: views/View.FAQ.class.php:631 views/View.FAQ.class.php:643
-msgid "Check out this helpful FAQ"
-msgstr ""
-
-#: views/View.class.php:107
-msgid "Posted"
-msgstr ""
-
-#: views/View.class.php:108
+#: views/View.class.php:117
 msgid "by"
 msgstr ""
 
-#: views/View.class.php:109
+#: views/View.class.php:118
 msgid "on"
 msgstr ""
 
-#: views/View.class.php:110
-msgid "Enter your question"
-msgstr ""
-
-#: views/View.class.php:111
-msgid "Search"
-msgstr ""
-
-#: views/View.class.php:112
-msgid "Permalink"
-msgstr ""
-
-#: views/View.class.php:113
+#: views/View.class.php:122
 msgid "Back to Top"
 msgstr ""
 
-#: views/View.class.php:114
+#: views/View.class.php:123
 msgid "Expand All"
 msgstr ""
 
-#: views/View.class.php:115
+#: views/View.class.php:124
 msgid "Collapse All"
 msgstr ""
 
-#: views/View.class.php:118
+#: views/View.class.php:127
 msgid "Load More"
 msgstr ""
 
-#: views/View.class.php:120
-msgid "Share"
-msgstr ""
-
-#: views/View.class.php:121
-msgid "Did you find this FAQ helpful?"
-msgstr ""
-
-#: views/View.class.php:122
+#: views/View.class.php:131
 msgid "Enter your question..."
 msgstr ""
 
-#: views/View.class.php:124
-msgid "Submit a Question"
-msgstr ""
-
-#: views/View.class.php:125
-msgid "Please fill out the form below to submit a question."
-msgstr ""
-
-#: views/View.class.php:126
-msgid "Send Question"
-msgstr ""
-
-#: views/View.class.php:127
-msgid "Question Title"
-msgstr ""
-
-#: views/View.class.php:128
-msgid "What question is being answered?"
-msgstr ""
-
-#: views/View.class.php:129
-msgid "Proposed Answer"
-msgstr ""
-
-#: views/View.class.php:130
-msgid "What answer should be displayed for this question?"
-msgstr ""
-
-#: views/View.class.php:131
+#: views/View.class.php:140
 msgid "FAQ Author"
 msgstr ""
 
-#: views/View.class.php:132
+#: views/View.class.php:141
 msgid "What name should be displayed with your FAQ?"
 msgstr ""
 
-#: views/View.class.php:133
-msgid "Author Email"
-msgstr ""
-
-#: views/View.class.php:134
-msgid "This is only used to verify the authenticity of the FAQ. It is not displayed anywhere."
-msgstr ""
-
-#: views/View.class.php:135
-msgid "Image Number"
-msgstr ""
-
-#: views/View.class.php:136
+#: views/View.class.php:145
 #, php-format
 msgid "No result FAQs contained the term '%s'"
+msgstr ""
+
+#: views/View.FAQ.class.php:536
+msgid "Category:"
+msgstr ""
+
+#: views/View.FAQ.class.php:536
+msgid "Categories:"
+msgstr ""
+
+#: views/View.FAQ.class.php:560
+msgid "Tag:"
+msgstr ""
+
+#: views/View.FAQ.class.php:560
+msgid "Tags:"
+msgstr ""
+
+#: views/View.FAQ.class.php:586
+msgid "Thumbs Up Icon"
+msgstr ""
+
+#: views/View.FAQ.class.php:609
+msgid "Thumbs Down Icon"
+msgstr ""
+
+#: views/View.FAQ.class.php:629
+#: views/View.FAQ.class.php:641
+#: views/View.FAQ.class.php:653
+#: views/View.FAQ.class.php:665
+msgid "Check out this helpful FAQ"
+msgstr ""
+
+#: assets/js/ewd-ufaq-managed-editor.js:60
+msgid "The FAQ request returned an invalid response."
+msgstr ""
+
+#: assets/js/ewd-ufaq-managed-editor.js:63
+msgid "The FAQ request failed."
+msgstr ""
+
+#: assets/js/ewd-ufaq-managed-editor.js:213
+msgid "Open centrally"
+msgstr ""
+
+#: assets/js/ewd-ufaq-managed-editor.js:185
+msgid "Up"
+msgstr ""
+
+#: assets/js/ewd-ufaq-managed-editor.js:186
+msgid "Down"
+msgstr ""
+
+#: assets/js/ewd-ufaq-managed-editor.js:187
+msgid "Remove"
+msgstr ""
+
+#: assets/js/ewd-ufaq-managed-editor.js:201
+msgid "Hide FAQ Management"
+msgstr ""
+
+#: assets/js/ewd-ufaq-managed-editor.js:201
+#: assets/js/ewd-ufaq-managed-editor.js:218
+msgid "Create a new FAQ"
+msgstr ""
+
+#: assets/js/ewd-ufaq-managed-editor.js:203
+msgid "FAQs managed by this block"
+msgstr ""
+
+#: assets/js/ewd-ufaq-managed-editor.js:205
+msgid "Save this page once before creating FAQs in the block."
+msgstr ""
+
+#: assets/js/ewd-ufaq-managed-editor.js:208
+msgid "Find an existing FAQ by title"
+msgstr ""
+
+#: assets/js/ewd-ufaq-managed-editor.js:212
+msgid "Use existing FAQ"
+msgstr ""
+
+#: assets/js/ewd-ufaq-managed-editor.js:221
+msgid "Working…"
+msgstr ""
+
+#: assets/js/ewd-ufaq-managed-editor.js:221
+msgid "Create FAQ"
+msgstr ""
+
+#: includes/EditorFAQWorkflow.class.php:206
+msgid "The new FAQ could not be initialized for editing."
+msgstr ""
+
+#: includes/EditorFAQWorkflow.class.php:221
+msgid "This FAQ cannot be removed automatically. Reload the page and try again."
+msgstr ""
+
+#: includes/EditorFAQWorkflow.class.php:240
+msgid "This request cannot delete that FAQ."
+msgstr ""
+
+#: includes/EditorFAQWorkflow.class.php:257
+msgid "You do not have permission to delete this FAQ."
+msgstr ""
+
+#: includes/EditorFAQWorkflow.class.php:273
+msgid "The FAQ could not be moved to Trash. Please try again."
+msgstr ""
+
+#: assets/js/ewd-ufaq-managed-editor.js:144
+msgid "Some FAQs could not be refreshed. Please reload this page and try again."
+msgstr ""
+
+#: assets/js/ewd-ufaq-managed-editor.js:220
+msgid "The FAQ was removed from this block but kept in the FAQ library for safety. You can delete it from the FAQs screen if it is no longer needed."
+msgstr ""
+
+#: assets/js/ewd-ufaq-managed-editor.js:265
+msgid "Save and reload this page after editing the FAQ to see your changes."
+msgstr ""
+
+#: assets/js/ewd-ufaq-managed-editor.js
+msgid "(Untitled FAQ)"
 msgstr ""

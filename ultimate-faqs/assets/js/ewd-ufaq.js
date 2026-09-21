@@ -122,9 +122,11 @@ function ewd_ufaq_toggle_hidden_class( faq_element ) {
 	setTimeout( function() { faq_element.find( '.ewd-ufaq-faq-body' ).toggleClass( 'ewd-ufaq-hidden' ); }, 500 );
 };
 
-function ufaqSetClickHandlers() {
+function ufaqSetClickHandlers( context ) {
 
-	jQuery( '.ewd-ufaq-faq-toggle' ).off( 'click' ).on( 'click', function( event ) {
+	var interaction_scope = context ? jQuery( context ) : jQuery( document );
+
+	interaction_scope.find( '.ewd-ufaq-faq-toggle' ).off( 'click' ).on( 'click', function( event ) {
 		
 		jQuery( this ).attr( 'aria-expanded', function ( i, attr ) {
 			return attr == 'true' ? 'false' : 'true'
@@ -146,7 +148,7 @@ function ufaqSetClickHandlers() {
 		}
 	});
 
-	jQuery( '.ewd-ufaq-faq-category-title-toggle' ).off( 'click' ).on( 'click', function() {
+	interaction_scope.find( '.ewd-ufaq-faq-category-title-toggle' ).off( 'click' ).on( 'click', function() {
 		
 		var category_title = jQuery( this );
 		var category = category_title.parent();
@@ -187,13 +189,13 @@ function ufaqSetClickHandlers() {
 		} );
 	});
 
-	jQuery( '.ewd-ufaq-back-to-top-link' ).off( 'click' ).on( 'click', function( event ) {
+	interaction_scope.find( '.ewd-ufaq-back-to-top-link' ).off( 'click' ).on( 'click', function( event ) {
 		event.preventDefault();
 
 		jQuery( 'html, body' ).animate( { scrollTop: jQuery( '#ewd-ufaq-faq-list' ).offset().top -80 }, 100 );
 	});
 
-	jQuery( '.ewd-ufaq-faq-header-link' ).off( 'click' ).on( 'click', function( event ) {
+	interaction_scope.find( '.ewd-ufaq-faq-header-link' ).off( 'click' ).on( 'click', function( event ) {
 		event.preventDefault();
 
 		var faq_id = jQuery( this ).data( 'postid' );
@@ -377,6 +379,17 @@ function ewd_ufaq_ajax_reload( pagination, append_results, search_string ) {
 	var data = jQuery.param( params );
 
 	jQuery.post( ajaxurl, data, function( response ) {
+
+		if ( ! response || ! response.success || ! response.data ) { return; }
+		if ( response.data.analytics && response.data.analytics.endpoint && response.data.analytics.token ) {
+			try {
+				var analyticsKey = 'ewdUfaqAnalytics:' + response.data.analytics.storage_key;
+				if ( ! window.sessionStorage.getItem( analyticsKey ) ) {
+					window.sessionStorage.setItem( analyticsKey, '1' );
+					window.fetch( response.data.analytics.endpoint, { method: 'POST', credentials: 'omit', keepalive: true, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify( { event: response.data.analytics.event, token: response.data.analytics.token } ) } ).catch( function() {} );
+				}
+			} catch ( analyticsError ) {}
+		}
 		
 		if ( response.data.request_count == request_count ) {
 

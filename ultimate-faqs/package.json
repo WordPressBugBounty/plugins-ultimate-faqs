@@ -1,0 +1,39 @@
+{
+  "name": "ultimate-faqs-development",
+  "private": true,
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "test:php": "php tests/helper-compatibility.php && php tests/upgrades.php && php tests/editor-workflow-validation.php && php tests/basic-search.php",
+    "env:start": "wp-env start --update",
+    "env:start:xdebug": "wp-env start --update --xdebug",
+    "env:start:tests": "wp-env start --config=.wp-env.tests.json --update",
+    "env:start:free": "wp-env start --config=.wp-env.free.json --update",
+    "env:start:next": "wp-env start --config=.wp-env.next.json --update",
+    "env:stop": "wp-env stop",
+    "env:stop:tests": "wp-env stop --config=.wp-env.tests.json",
+    "env:stop:free": "wp-env stop --config=.wp-env.free.json",
+    "env:stop:next": "wp-env stop --config=.wp-env.next.json",
+    "env:status": "wp-env status",
+    "env:status:tests": "wp-env status --config=.wp-env.tests.json",
+    "env:status:free": "wp-env status --config=.wp-env.free.json",
+    "env:status:next": "wp-env status --config=.wp-env.next.json",
+    "env:logs": "wp-env logs",
+    "env:wp": "wp-env run cli wp",
+    "test:php:docker": "wp-env run cli --env-cwd=wp-content/plugins/ufaq php tests/helper-compatibility.php && wp-env run cli --env-cwd=wp-content/plugins/ufaq php tests/upgrades.php && wp-env run cli --env-cwd=wp-content/plugins/ufaq php tests/editor-workflow-validation.php && wp-env run cli --env-cwd=wp-content/plugins/ufaq php tests/basic-search.php",
+    "test:php:helper:docker": "wp-env run cli --env-cwd=wp-content/plugins/ewd-premium-helper php tests/helper-compatibility.php && wp-env run cli --env-cwd=wp-content/plugins/ewd-premium-helper php tests/normalizer.php && wp-env run cli --env-cwd=wp-content/plugins/ewd-premium-helper php tests/content-gap-eligibility.php && wp-env run cli --env-cwd=wp-content/plugins/ewd-premium-helper php tests/spreadsheet-runtime.php && wp-env run cli --env-cwd=wp-content/plugins/ewd-premium-helper php tests/spreadsheet-runtime-collision.php && wp-env run cli --env-cwd=wp-content/plugins/ewd-premium-helper php tests/import-boundaries.php",
+    "test:integration": "wp-env run cli --config=.wp-env.tests.json --env-cwd=wp-content/plugins/ufaq vendor/bin/phpunit -c phpunit.xml.dist",
+    "test:integration:helper": "wp-env run cli --config=.wp-env.tests.json --env-cwd=wp-content/plugins/ewd-premium-helper ../ufaq/vendor/bin/phpunit -c phpunit.xml.dist",
+    "test:benchmark:import": "wp-env run cli --env-cwd=wp-content/plugins/ewd-premium-helper wp eval-file tests/benchmarks/import-10000.php",
+    "test:concurrency:helper": "wp-env run cli --env-cwd=wp-content/plugins/ewd-premium-helper wp eval-file tests/concurrency/reservation-races.php",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
+    "package:build": "node scripts/build-release-packages.js",
+    "package:build:history": "node scripts/build-release-packages.js --history",
+    "package:gate:linux": "node scripts/linux-package-gate.js",
+    "package:gate:linux:install": "node scripts/linux-package-gate.js --install-update-only"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.62.0",
+    "@wordpress/env": "^11.12.0"
+  }
+}

@@ -15,13 +15,29 @@ class ewdufaqInstallationWalkthrough {
 		add_action( 'admin_init', array( $this, 'redirect' ), 9999 );
 
 		add_action( 'admin_head', array( $this, 'admin_enqueue' ) );
-
+		add_filter( 'default_content', array( $this, 'get_walkthrough_page_content' ), 10, 2 );
 		add_action( 'wp_ajax_ewd_ufaq_welcome_add_category', array( $this, 'create_category' ) );
 		add_action( 'wp_ajax_ewd_ufaq_welcome_add_faq', array( $this, 'create_faq' ) );
 		add_action( 'wp_ajax_ewd_ufaq_welcome_add_faq_page', array( $this, 'add_faqs_page' ) );
 		add_action( 'wp_ajax_ewd_ufaq_welcome_set_options', array( $this, 'set_options' ) );
 	}
 
+	/**
+	 * Start a walkthrough-created page with the existing Display FAQs block.
+	 */
+	public function get_walkthrough_page_content( $content, $post ) {
+
+		if ( ! is_admin()
+			|| ! isset( $_GET['ewd_ufaq_walkthrough'] )
+			|| '1' !== sanitize_text_field( wp_unslash( $_GET['ewd_ufaq_walkthrough'] ) )
+			|| ! $post instanceof WP_Post
+			|| 'page' !== $post->post_type ) {
+
+			return $content;
+		}
+
+		return '<!-- wp:ultimate-faqs/ewd-ufaq-display-faq-block /-->';
+	}
 	/**
 	 * On activation, redirect the user if they haven't used the plugin before
 	 * @since 2.0.0
@@ -226,6 +242,9 @@ class ewdufaqInstallationWalkthrough {
 	public function display_install_screen() { 
 		global $ewd_ufaq_controller;
 
+		$this->display_block_first_walkthrough();
+
+		return;
 		$faq_accordion = $ewd_ufaq_controller->settings->get_setting( 'faq-accordion' );
 		$disable_faq_toggle = $ewd_ufaq_controller->settings->get_setting( 'disable-faq-toggle' );
 		$group_by_category = $ewd_ufaq_controller->settings->get_setting( 'group-by-category' );
@@ -441,7 +460,51 @@ class ewdufaqInstallationWalkthrough {
 		</div>
 
 	<?php }
-}
 
+	/**
+	 * Revised block-first onboarding using the existing walkthrough screen.
+	 */
+	private function display_block_first_walkthrough() {
+
+		global $ewd_ufaq_controller;
+
+		$page_id = absint( $ewd_ufaq_controller->settings->get_setting( 'faq-page' ) );
+		$editor_url = $page_id && current_user_can( 'edit_post', $page_id )
+			? get_edit_post_link( $page_id, 'raw' )
+			: add_query_arg( array( 'post_type' => 'page', 'ewd_ufaq_walkthrough' => '1' ), admin_url( 'post-new.php' ) );
+		?>
+		<div class="wrap ewd-ufaq-welcome-screen ewd-ufaq-block-first-walkthrough">
+			<div class="ewd-ufaq-welcome-screen-header">
+				<h1><?php echo esc_html__( 'Create your first FAQ page', 'ultimate-faqs' ); ?></h1>
+				<p><?php echo esc_html__( 'Build and reuse FAQs directly in the WordPress page editor with the Display FAQs block.', 'ultimate-faqs' ); ?></p>
+			</div>
+
+			<ol class="ewd-ufaq-welcome-screen-box ewd-ufaq-welcome-screen-open">
+				<li>
+					<h2><?php echo esc_html__( 'Open or create a page', 'ultimate-faqs' ); ?></h2>
+					<p><?php echo esc_html__( 'The button below opens your configured FAQ page, or starts a new page with the Display FAQs block already inserted.', 'ultimate-faqs' ); ?></p>
+				</li>
+				<li>
+					<h2><?php echo esc_html__( 'Add FAQs in the block', 'ultimate-faqs' ); ?></h2>
+					<p><?php echo esc_html__( 'Select the Display FAQs block. Search by title to reuse an existing FAQ, or create a new question and answer without leaving the page.', 'ultimate-faqs' ); ?></p>
+				</li>
+				<li>
+					<h2><?php echo esc_html__( 'Manage FAQs centrally', 'ultimate-faqs' ); ?></h2>
+					<p><?php echo esc_html__( 'Every FAQ can be reused and edited centrally. Removing an FAQ from a block does not delete the FAQ.', 'ultimate-faqs' ); ?></p>
+				</li>
+				<li>
+					<h2><?php echo esc_html__( 'Create, then preview', 'ultimate-faqs' ); ?></h2>
+					<p><?php echo esc_html__( 'Click Create FAQ to publish the new FAQ immediately and add it to the block. Preview the page to confirm the result.', 'ultimate-faqs' ); ?></p>
+				</li>
+			</ol>
+
+			<p>
+				<a class="button button-primary button-hero" href="<?php echo esc_url( $editor_url ); ?>"><?php echo esc_html__( 'Open the page editor', 'ultimate-faqs' ); ?></a>
+				<a class="button button-secondary" href="<?php echo esc_url( admin_url( 'admin.php?page=ewd-ufaq-settings' ) ); ?>"><?php echo esc_html__( 'Skip to settings', 'ultimate-faqs' ); ?></a>
+			</p>
+		</div>
+		<?php
+	}
+}
 
 ?>

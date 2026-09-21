@@ -83,7 +83,7 @@ class ewdufaqFAQPostListWidget extends WP_Widget {
 	public function form( $instance ) {
 
 		$faq_id = ! empty( $instance['faq_id'] ) ? $instance['faq_id'] : __( 'FAQ ID List', 'ultimate-faqs' );
-		$faq_title = ! empty( $instance['faq_title'] ) ? $instance['faq_title'] : __( '', 'ultimate-faqs' );
+		$faq_title = ! empty( $instance['faq_title'] ) ? $instance['faq_title'] : '';
 
 		?>
 

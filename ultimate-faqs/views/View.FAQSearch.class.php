@@ -18,6 +18,7 @@ class ewdufaqViewFAQSearch extends ewdufaqViewFAQs {
 	public $display_all_answers;
 	public $faq_page;
 	public $post_count;
+	public $search_id;
 
 	/**
 	 * Render the view and enqueue required stylesheets

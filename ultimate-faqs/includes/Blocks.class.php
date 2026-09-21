@@ -97,6 +97,9 @@ class ewdufaqBlocks {
 				'exclude_category' => array(
 					'type' => 'string',
 				),
+				'search_id' => array(
+					'type' => 'string',
+				),
 			),
 			'render_callback' 	=> 'ewd_ufaq_search_faqs_shortcode',
 		);
@@ -118,12 +121,16 @@ class ewdufaqBlocks {
 	 */
 	public function localize_data() {
 
+		global $post, $ewd_ufaq_controller;
+		$post_id = $post instanceof WP_Post ? $post->ID : ( isset( $_GET['post'] ) ? absint( wp_unslash( $_GET['post'] ) ) : 0 );
+		$editor_post = $post_id ? get_post( $post_id ) : null;
 		$screen = get_current_screen();
 
 		if ( ! $screen->is_block_editor and $screen->id != 'widgets' ) { return; }
 
 		wp_enqueue_style( 'ewd-ufaq-css' );
 		wp_enqueue_style( 'ewd-ufaq-blocks-css' );
+		wp_enqueue_script( 'ewd-ufaq-js' );
 		wp_enqueue_script( 'ewd-ufaq-blocks-js' );
 
 		$faq_categories = get_terms( array(
@@ -132,6 +139,16 @@ class ewdufaqBlocks {
 		) );
 
 		$faq_category_options = array();
+		$existing_faq_ids = get_posts( array(
+			'post_type'      => EWD_UFAQ_FAQ_POST_TYPE,
+			'post_status'    => array( 'publish', 'private', 'draft', 'pending', 'future' ),
+			'posts_per_page' => 1,
+			'fields'         => 'ids',
+			'no_found_rows'  => true,
+		) );
+		$can_order_faqs = is_object( $ewd_ufaq_controller )
+			&& is_object( $ewd_ufaq_controller->permissions )
+			&& $ewd_ufaq_controller->permissions->check_permission( 'ordering' );
 
 		foreach ( $faq_categories as $faq_category ) {
 
@@ -142,11 +159,18 @@ class ewdufaqBlocks {
 		}
 
 		wp_add_inline_script(
-			'ewd-ufaq-blocks-js',
+			'ewd-ufaq-managed-editor-js',
 			sprintf(
-				'var ewd_ufaq_blocks = %s;',
-				json_encode( array(
+				'var ewd_ufaq_blocks = window.ewd_ufaq_blocks = %s;',
+				wp_json_encode( array(
 					'faqCategoryOptions' => $faq_category_options,
+					'hasExistingFaqs'    => ! empty( $existing_faq_ids ),
+					'ajaxUrl'            => admin_url( 'admin-ajax.php' ),
+					'nonce'              => wp_create_nonce( 'ewd-ufaq-editor' ),
+					'pagePostId'         => $editor_post instanceof WP_Post ? $editor_post->ID : 0,
+					'faqRestBase'        => rest_url( 'wp/v2/' . EWD_UFAQ_FAQ_POST_TYPE ),
+					'adminEditUrl'       => admin_url( 'post.php?action=edit&post=' ),
+					'canOrderFaqs'       => $can_order_faqs,
 				) )
 			),
 			'before'
@@ -176,7 +200,9 @@ class ewdufaqBlocks {
 
 		wp_register_style( 'ewd-ufaq-css', EWD_UFAQ_PLUGIN_URL . '/assets/css/ewd-ufaq.css', array(), EWD_UFAQ_VERSION );
 		wp_register_style( 'ewd-ufaq-blocks-css', EWD_UFAQ_PLUGIN_URL . '/assets/css/ewd-ufaq-blocks.css', array( 'wp-edit-blocks' ), EWD_UFAQ_VERSION );
-		wp_register_script( 'ewd-ufaq-blocks-js', EWD_UFAQ_PLUGIN_URL . '/assets/js/ewd-ufaq-blocks.js', array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor', 'wp-server-side-render' ), EWD_UFAQ_VERSION );
+		wp_register_script( 'ewd-ufaq-js', EWD_UFAQ_PLUGIN_URL . '/assets/js/ewd-ufaq.js', array( 'jquery', 'jquery-ui-core' ), EWD_UFAQ_VERSION, true );
+		wp_register_script( 'ewd-ufaq-managed-editor-js', EWD_UFAQ_PLUGIN_URL . '/assets/js/ewd-ufaq-managed-editor.js', array( 'wp-api-fetch', 'wp-components', 'wp-data', 'wp-element', 'wp-i18n' ), EWD_UFAQ_VERSION, true );
+		wp_register_script( 'ewd-ufaq-blocks-js', EWD_UFAQ_PLUGIN_URL . '/assets/js/ewd-ufaq-blocks.js', array( 'ewd-ufaq-js', 'ewd-ufaq-managed-editor-js', 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor', 'wp-server-side-render' ), EWD_UFAQ_VERSION, true );
 	}
 }
 
