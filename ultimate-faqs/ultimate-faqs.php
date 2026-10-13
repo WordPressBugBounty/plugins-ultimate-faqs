@@ -3,7 +3,7 @@
  * Plugin Name: Ultimate FAQ Accordion Plugin
  * Plugin URI: https://www.etoilewebdesign.com/plugins/ultimate-faq/
  * Description: Full-featured FAQ and accordion plugin with advanced search, simple UI and easy-to-use Gutenberg blocks and shortcodes.
- * Version: 2.5.0
+ * Version: 2.6.0
  * Author: Etoile Web Design
  * Author URI: https://www.etoilewebdesign.com/
  * License: GPLv3
@@ -13,7 +13,7 @@
  * Requires at least: 6.0
  * Requires PHP: 7.4
  * WC requires at least: 7.1
- * WC tested up to: 11.1
+ * WC tested up to: 11.2
  */
 
 if ( ! defined( 'ABSPATH' ) )
@@ -66,10 +66,11 @@ class ewdufaqInit {
 		define( 'EWD_UFAQ_PLUGIN_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
 		define( 'EWD_UFAQ_PLUGIN_FNAME', plugin_basename( __FILE__ ) );
 		define( 'EWD_UFAQ_TEMPLATE_DIR', 'ewd-ufaq-templates' );
-		define( 'EWD_UFAQ_VERSION', '2.5.0' );
-		define( 'EWD_UFAQ_HELPER_API_VERSION', 1 );
-		define( 'EWD_UFAQ_MIN_HELPER_VERSION', '0.1.0' );
-		define( 'EWD_UFAQ_MAX_HELPER_API_VERSION', 1 );
+			define( 'EWD_UFAQ_VERSION', '2.6.0' );
+			define( 'EWD_UFAQ_HELPER_API_VERSION', 2 );
+			define( 'EWD_UFAQ_MIN_HELPER_VERSION', '0.2.0' );
+			define( 'EWD_UFAQ_MAX_HELPER_API_VERSION', 2 );
+			define( 'EWD_UFAQ_ENTITLEMENT_CONTRACT_VERSION', 1 );
 		define( 'EWD_UFAQ_FAQ_POST_TYPE', 'ufaq' );
 		define( 'EWD_UFAQ_FAQ_CATEGORY_TAXONOMY', 'ufaq-category' );
 		define( 'EWD_UFAQ_FAQ_TAG_TAXONOMY', 'ufaq-tag' );
@@ -132,15 +133,9 @@ class ewdufaqInit {
 		$this->permissions 	 = new ewdufaqPermissions();
 		$this->settings 	 = new ewdufaqSettings(); 
 		$this->helper_compatibility = new ewdufaqHelperCompatibility();
-		if ( $this->settings->get_setting( 'woocommerce-faqs' ) ) {
-			
+			// Register adapters regardless of initial entitlement; check at execution time.
 			$this->woocommerce = new ewdufaqWooCommerce();
-		}
-
-		if ( $this->settings->get_setting( 'wpforms-integration' ) ) {
-			
-			$this->wpforms = new ewdufaqWPForms();
-		}
+			$this->wpforms     = new ewdufaqWPForms();
 
 		new ewdufaqAJAX();
 		new ewdufaqAnalyticsBridge();

@@ -1,14 +1,12 @@
 <?php
 
-namespace PhpOffice\PhpSpreadsheet\Calculation\MathTrig;
+namespace EwdUfaqVendor\PhpOffice\PhpSpreadsheet\Calculation\MathTrig;
 
-use PhpOffice\PhpSpreadsheet\Calculation\ArrayEnabled;
-use PhpOffice\PhpSpreadsheet\Calculation\Exception;
-
+use EwdUfaqVendor\PhpOffice\PhpSpreadsheet\Calculation\ArrayEnabled;
+use EwdUfaqVendor\PhpOffice\PhpSpreadsheet\Calculation\Exception;
 class Absolute
 {
     use ArrayEnabled;
-
     /**
      * ABS.
      *
@@ -22,16 +20,14 @@ class Absolute
      */
     public static function evaluate($number)
     {
-        if (is_array($number)) {
+        if (\is_array($number)) {
             return self::evaluateSingleArgumentArray([self::class, __FUNCTION__], $number);
         }
-
         try {
             $number = Helpers::validateNumericNullBool($number);
         } catch (Exception $e) {
             return $e->getMessage();
         }
-
-        return abs($number);
+        return \abs($number);
     }
 }

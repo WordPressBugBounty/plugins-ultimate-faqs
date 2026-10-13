@@ -20,7 +20,7 @@ if ( !class_exists( 'ewdufaqWooCommerce' ) ) {
 			add_action( 'wp_ajax_ewd_ufaq_delete_wc_faqs', array( $this, 'delete_wc_faqs' ) );
 			add_action( 'wp_ajax_ewd_ufaq_wc_faq_category', array( $this, 'wc_faq_category' ) );
 
-			add_action( 'plugins_loaded', array( $this, 'set_faq_display_hook' ) );
+			add_action( 'plugins_loaded', array( $this, 'set_faq_display_hook' ), 30 );
 		}
 
 		/**
@@ -104,6 +104,10 @@ if ( !class_exists( 'ewdufaqWooCommerce' ) ) {
 		public function faq_content() {
 			global $product;
 			global $ewd_ufaq_controller;
+			if ( ! $ewd_ufaq_controller->permissions->check_permission( 'woocommerce' )
+			|| ! $ewd_ufaq_controller->settings->get_setting( 'woocommerce-faqs' ) ) {
+				return;
+			}
 		
 			$product_post = ( $ewd_ufaq_controller->settings->get_setting( 'woocommerce-use-product' ) and is_object( $product ) ) ? get_post( $product->get_id() ) : get_post( get_the_id() );
 			
@@ -155,9 +159,10 @@ if ( !class_exists( 'ewdufaqWooCommerce' ) ) {
 			global $thepostid;
 			global $ewd_ufaq_controller;
 
-			if ( ! $ewd_ufaq_controller->settings->get_setting( 'woocommerce-faqs' ) ) { return $tabs; }
+			if ( ! $ewd_ufaq_controller->settings->get_setting( 'woocommerce-faqs' ) ) {
+				return; }
 		
-			$current_faqs = (array) get_post_meta( $thepostid, 'EWD_UFAQ_WC_Selected_FAQs', true );
+			$current_faqs = array_filter( array_map( 'absint', (array) get_post_meta( $thepostid, 'EWD_UFAQ_WC_Selected_FAQs', true ) ) );
 		
 			$all_faqs = get_posts( array( 'numberposts' => -1, 'post_type' => EWD_UFAQ_FAQ_POST_TYPE ) );
 			$categories = get_terms( array( 'taxonomy' => EWD_UFAQ_FAQ_CATEGORY_TAXONOMY ) );
@@ -217,7 +222,11 @@ if ( !class_exists( 'ewdufaqWooCommerce' ) ) {
 
 								<?php foreach ( $current_faqs as $faq_id ) { ?>
 
-									<?php $faq = get_post( $faq_id ); ?>
+									<?php
+									$faq = get_post( $faq_id );
+									if ( ! $faq || EWD_UFAQ_FAQ_POST_TYPE !== $faq->post_type ) {
+										continue; }
+									?>
 									<tr class='ewd-ufaq-faq-row ewd-ufaq-delete-faq-row' data-faqid='<?php echo esc_attr( $faq_id ); ?>'>
 										<td><input type='checkbox' class='ewd-ufaq-delete-faq' name='Delete_FAQs[]' value='<?php echo esc_attr( $faq_id ); ?>'/></td>
 										<td><?php echo esc_html( $faq->post_title ); ?></td>
@@ -238,6 +247,9 @@ if ( !class_exists( 'ewdufaqWooCommerce' ) ) {
 
 		public function add_wc_faqs() {
 				global $ewd_ufaq_controller;
+			if ( ! $ewd_ufaq_controller->permissions->check_permission( 'woocommerce' ) ) {
+					wp_send_json_error( array( 'code' => 'premium_unavailable' ), 403 );
+			}
 
 				if (
 						! check_ajax_referer( 'ewd-ufaq-wc-admin-js', 'nonce' ) 
@@ -274,6 +286,9 @@ if ( !class_exists( 'ewdufaqWooCommerce' ) ) {
 
 		public function delete_wc_faqs() {
 			global $ewd_ufaq_controller;
+			if ( ! $ewd_ufaq_controller->permissions->check_permission( 'woocommerce' ) ) {
+				wp_send_json_error( array( 'code' => 'premium_unavailable' ), 403 );
+			}
 			
 			if (
 					! check_ajax_referer( 'ewd-ufaq-wc-admin-js', 'nonce' ) 
@@ -299,6 +314,9 @@ if ( !class_exists( 'ewdufaqWooCommerce' ) ) {
 
 		public function wc_faq_category() {
 			global $ewd_ufaq_controller;
+			if ( ! $ewd_ufaq_controller->permissions->check_permission( 'woocommerce' ) ) {
+				wp_send_json_error( array( 'code' => 'premium_unavailable' ), 403 );
+			}
 
 			if (
 					! check_ajax_referer( 'ewd-ufaq-wc-admin-js', 'nonce' ) 

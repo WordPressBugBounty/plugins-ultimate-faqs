@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'etoilewebdesign/ultimate-faqs-spreadsheet-runtime',
-        'pretty_version' => 'dev-master',
-        'version' => 'dev-master',
-        'reference' => '5af1e5a0f7b60fc6f98b891b63c2e243d6a47983',
+        'pretty_version' => '1.0.0+no-version-set',
+        'version' => '1.0.0.0',
+        'reference' => null,
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -20,9 +20,9 @@
             'dev_requirement' => false,
         ),
         'etoilewebdesign/ultimate-faqs-spreadsheet-runtime' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
-            'reference' => '5af1e5a0f7b60fc6f98b891b63c2e243d6a47983',
+            'pretty_version' => '1.0.0+no-version-set',
+            'version' => '1.0.0.0',
+            'reference' => null,
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

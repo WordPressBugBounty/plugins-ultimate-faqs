@@ -11,32 +11,84 @@ var el = wp.element.createElement,
 	useRef = wp.element.useRef,
 	useState = wp.element.useState,
 	Localize = wp.i18n.__,
-	ewdUfaqBlocks = ewd_ufaq_blocks,
-	faqCategories = ewdUfaqBlocks.faqCategoryOptions;
+	ewdUfaqBlocks = ewd_ufaq_blocks;
+
+function EwdUfaqIncludedCategories( props ) {
+	var selected = props.attributes.include_category_array || {};
+	function selectCategory( category ) {
+		var next = Object.assign( {}, selected ); next[ category.slug ] = true;
+		props.setAttributes( { include_category_array: next } );
+	}
+	return el( 'div', {},
+		el( window.ewdUfaqCategorySelector, { purpose: 'display', label: Localize( 'Find a category', 'ultimate-faqs' ), onSelect: selectCategory } ),
+		Object.keys( selected ).filter( function( slug ) { return selected[ slug ]; } ).map( function( slug ) {
+			return el( CheckboxControl, { key: slug, label: slug, checked: true, onChange: function() {
+				var next = Object.assign( {}, selected ); delete next[ slug ]; props.setAttributes( { include_category_array: next } );
+			} } );
+		} )
+	);
+}
 
 function EwdUfaqEditorPreview( props ) {
 	var previewRef = useRef( null );
+	var revisionState = useState( 0 ), revision = revisionState[0], setRevision = revisionState[1];
+	useEffect( function() {
+		function refreshPreview() { setRevision( function( current ) { return current + 1; } ); }
+		window.addEventListener( 'ewd-ufaq-preview-refresh', refreshPreview );
+		return function() { window.removeEventListener( 'ewd-ufaq-preview-refresh', refreshPreview ); };
+	}, [] );
 
 	useEffect( function() {
 		var preview = previewRef.current;
 		if ( ! preview ) { return undefined; }
+		var previewWindow = preview.ownerDocument.defaultView;
+		var contrastFrame = null;
+		function keepWhiteTitlesReadable() {
+			contrastFrame = null;
+			preview.querySelectorAll( '.ewd-ufaq-faq-title h1, .ewd-ufaq-faq-title h2, .ewd-ufaq-faq-title h3, .ewd-ufaq-faq-title h4, .ewd-ufaq-faq-title h5, .ewd-ufaq-faq-title h6' ).forEach( function( heading ) {
+				heading.classList.remove( 'ewd-ufaq-preview-low-contrast' );
+				var foreground = previewWindow.getComputedStyle( heading ).color.match( /[\d.]+/g ) || [];
+				if ( foreground.length < 3 || ! foreground.slice( 0, 3 ).every( function( value ) { return Number( value ) >= 245; } ) ) { return; }
+				var ancestor = heading;
+				while ( ancestor && preview.contains( ancestor ) ) {
+					var background = previewWindow.getComputedStyle( ancestor ).backgroundColor.match( /[\d.]+/g ) || [];
+					if ( background.length >= 3 && ( background.length === 3 || Number( background[3] ) >= 0.95 ) ) {
+						if ( background.slice( 0, 3 ).every( function( value ) { return Number( value ) >= 245; } ) ) { heading.classList.add( 'ewd-ufaq-preview-low-contrast' ); }
+						break;
+					}
+					ancestor = ancestor.parentElement;
+				}
+			} );
+		}
+		function scheduleContrastCheck() {
+			if ( contrastFrame === null ) { contrastFrame = previewWindow.requestAnimationFrame( keepWhiteTitlesReadable ); }
+		}
 
 		function bindPreviewInteractions() {
 			if ( typeof window.ufaqSetClickHandlers === 'function' ) {
 				window.ufaqSetClickHandlers( preview );
 			}
+			scheduleContrastCheck();
 		}
 
 		bindPreviewInteractions();
 		var PreviewMutationObserver = preview.ownerDocument.defaultView.MutationObserver;
 		var observer = new PreviewMutationObserver( bindPreviewInteractions );
-		observer.observe( preview, { childList: true, subtree: true } );
+		observer.observe( preview, { childList: true, subtree: true, attributes: true, attributeFilter: [ 'style' ] } );
+		var styleObserver = new PreviewMutationObserver( scheduleContrastCheck );
+		styleObserver.observe( preview.ownerDocument.head, { childList: true, subtree: true, characterData: true } );
+		preview.ownerDocument.addEventListener( 'load', scheduleContrastCheck, true );
 
-		return function() { observer.disconnect(); };
+		return function() {
+			observer.disconnect(); styleObserver.disconnect();
+			preview.ownerDocument.removeEventListener( 'load', scheduleContrastCheck, true );
+			if ( contrastFrame !== null ) { previewWindow.cancelAnimationFrame( contrastFrame ); }
+		};
 	}, [] );
 
 	return el( 'div', { className: 'ewd-ufaq-editor-preview', ref: previewRef },
 		el( ServerSideRender, {
+			key: revision,
 			block: 'ultimate-faqs/ewd-ufaq-display-faq-block',
 			attributes: props.attributes
 		} )
@@ -92,23 +144,6 @@ registerBlockType( 'ultimate-faqs/ewd-ufaq-display-faq-block', {
 			props.setAttributes( { include_category: '' } );
 		}
 
-		var checkboxes = faqCategories.map( function( term ) {
-			var termLabel = term.label;
-			var termSlug = term.slug;
-			
-			return el( CheckboxControl, {
-				label: termLabel,
-				checked: include_category_array[termSlug],
-				onChange: updateFAQCategories.bind( termSlug ),
-			} );
-		} );
-
-		function updateFAQCategories( checked ) {
-			var copy = Object.assign( {}, include_category_array );
-			copy[this] = checked;
-			props.setAttributes( { include_category_array: copy } );
-		}
-
 		var returnString = [];
 		returnString.push(
 			el( InspectorControls, {},
@@ -141,7 +176,7 @@ registerBlockType( 'ultimate-faqs/ewd-ufaq-display-faq-block', {
 					BaseControl, {
 						label: Localize( 'Categories to Include', 'ultimate-faqs' ),
 					}, 
-					checkboxes
+					el( EwdUfaqIncludedCategories, props )
 				) : null,
 				! hasExplicitFaqIds ? el( TextControl, {
 					label: Localize( 'Exclude Category', 'ultimate-faqs' ),
@@ -209,23 +244,6 @@ registerBlockType( 'ultimate-faqs/ewd-ufaq-search-block', {
 			props.setAttributes( { include_category: '' } );
 		}
 
-		var checkboxes = faqCategories.map( function( term ) {
-			var termLabel = term.label;
-			var termSlug = term.slug;
-			
-			return el( CheckboxControl, {
-				label: termLabel,
-				checked: include_category_array[termSlug],
-				onChange: updateFAQCategories.bind( termSlug ),
-			} );
-		} );
-
-		function updateFAQCategories( checked ) {
-			var copy = Object.assign( {}, include_category_array );
-			copy[this] = checked;
-			props.setAttributes( { include_category_array: copy } );
-		}
-
 		var returnString = [];
 		returnString.push(
 			el( InspectorControls, {},
@@ -233,7 +251,7 @@ registerBlockType( 'ultimate-faqs/ewd-ufaq-search-block', {
 					BaseControl, {
 						label: Localize( 'Categories to Include', 'ultimate-faqs' ),
 					}, 
-					checkboxes
+					el( EwdUfaqIncludedCategories, props )
 				),
 				el( TextControl, {
 					label: Localize( 'Exclude Category', 'ultimate-faqs' ),

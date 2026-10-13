@@ -12,6 +12,7 @@ class ewdufaqBlocks {
 	public function __construct() {
 
 		add_action( 'init', array( $this, 'add_faq_blocks' ) );
+			add_action( 'enqueue_block_assets', array( $this, 'enqueue_editor_content_assets' ) );
 		
 		add_filter( 'block_categories_all', array( $this, 'add_block_category' ) );
 	}
@@ -119,6 +120,23 @@ class ewdufaqBlocks {
 	 * Conditionally enqueue assets and perform any necessary data localization for use in block parameters
 	 * @since 2.1.13
 	 */
+		public function enqueue_editor_content_assets() {
+			global $ewd_ufaq_controller;
+			if ( ! is_admin() ) {
+				return;
+			}
+			// This hook is replayed inside Gutenberg's canvas iframe. current_screen
+			// alone enqueues only in the parent window, leaving previews unstyled.
+			$ewd_ufaq_controller->register_assets();
+			wp_enqueue_style( 'ewd-ufaq-css' );
+			wp_enqueue_style( 'ewd-ufaq-blocks-css' );
+			wp_enqueue_style( 'ewd-ufaq-rrssb' );
+			wp_enqueue_style( 'ewd-ufaq-jquery-ui' );
+			if ( 'minimalist' === $ewd_ufaq_controller->settings->get_setting( 'display-style' ) ) {
+				wp_enqueue_style( 'ewd-ufaq-minimalist' );
+			}
+		}
+
 	public function localize_data() {
 
 		global $post, $ewd_ufaq_controller;
@@ -133,12 +151,7 @@ class ewdufaqBlocks {
 		wp_enqueue_script( 'ewd-ufaq-js' );
 		wp_enqueue_script( 'ewd-ufaq-blocks-js' );
 
-		$faq_categories = get_terms( array(
-			'taxonomy' => EWD_UFAQ_FAQ_CATEGORY_TAXONOMY,
-			'hide_empty' => false,
-		) );
-
-		$faq_category_options = array();
+			$category_taxonomy = get_taxonomy( EWD_UFAQ_FAQ_CATEGORY_TAXONOMY );
 		$existing_faq_ids = get_posts( array(
 			'post_type'      => EWD_UFAQ_FAQ_POST_TYPE,
 			'post_status'    => array( 'publish', 'private', 'draft', 'pending', 'future' ),
@@ -150,20 +163,13 @@ class ewdufaqBlocks {
 			&& is_object( $ewd_ufaq_controller->permissions )
 			&& $ewd_ufaq_controller->permissions->check_permission( 'ordering' );
 
-		foreach ( $faq_categories as $faq_category ) {
-
-			$faq_category_options[] = array(
-				'label' => $faq_category->name,
-				'slug'	=> $faq_category->slug,
-			);
-		}
-
 		wp_add_inline_script(
 			'ewd-ufaq-managed-editor-js',
 			sprintf(
 				'var ewd_ufaq_blocks = window.ewd_ufaq_blocks = %s;',
 				wp_json_encode( array(
-					'faqCategoryOptions' => $faq_category_options,
+					'canAssignCategories' => $category_taxonomy && current_user_can( $category_taxonomy->cap->assign_terms ),
+					'categoryRestPath'    => '/wp/v2/' . ( $category_taxonomy && $category_taxonomy->rest_base ? $category_taxonomy->rest_base : EWD_UFAQ_FAQ_CATEGORY_TAXONOMY ),
 					'hasExistingFaqs'    => ! empty( $existing_faq_ids ),
 					'ajaxUrl'            => admin_url( 'admin-ajax.php' ),
 					'nonce'              => wp_create_nonce( 'ewd-ufaq-editor' ),

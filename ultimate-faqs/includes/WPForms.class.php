@@ -27,6 +27,10 @@ if ( !class_exists( 'ewdufaqWPForms' ) ) {
 		 * @since 2.0.0
 		 */
 		public function add_settings_panel( $panels ) {
+			global $ewd_ufaq_controller;
+			if ( ! $ewd_ufaq_controller->settings->get_setting( 'wpforms-integration' ) ) {
+				return $panels;
+			}
 
 			$panels['ufaq'] = esc_html__( 'FAQs', 'ultimate-faqs' );
 
@@ -38,7 +42,12 @@ if ( !class_exists( 'ewdufaqWPForms' ) ) {
 		 * Adds an the settings to enable WP Forms integration
 		 * @since 2.0.0
 		 */
-		public function add_settings( $instance ) { ?>
+		public function add_settings( $instance ) {
+			global $ewd_ufaq_controller;
+			if ( ! $ewd_ufaq_controller->settings->get_setting( 'wpforms-integration' ) ) {
+				return;
+			}
+			?>
 
 			<div class="wpforms-panel-content-section wpforms-panel-content-section-ufaq">
 
@@ -90,6 +99,9 @@ if ( !class_exists( 'ewdufaqWPForms' ) ) {
 		 */
 		public function js_localization( $form_data, $form ) {
 			global $ewd_ufaq_controller;
+			if ( ! $ewd_ufaq_controller->settings->get_setting( 'wpforms-integration' ) ) {
+				return;
+			}
 
 			$target_field = $this->get_target_field( $form_data );
 
@@ -104,12 +116,19 @@ if ( !class_exists( 'ewdufaqWPForms' ) ) {
 		}
 
 		public function enqueue_scripts() {
+			global $ewd_ufaq_controller;
+			if ( ! $ewd_ufaq_controller->settings->get_setting( 'wpforms-integration' ) ) {
+				return;
+			}
 
 			wp_enqueue_style( 'ewd-ufaq-wpforms-css', EWD_UFAQ_PLUGIN_URL . '/assets/css/ewd-ufaq-wpforms.css', array(), EWD_UFAQ_VERSION );
 		}
 	
 		public function display_faqs( $field, $form_data ) {
 			global $ewd_ufaq_controller;
+			if ( ! $ewd_ufaq_controller->settings->get_setting( 'wpforms-integration' ) ) {
+				return;
+			}
 
 			$target_field = $this->get_target_field( $form_data );
 

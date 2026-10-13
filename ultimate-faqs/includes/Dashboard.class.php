@@ -69,6 +69,7 @@ class ewdufaqDashboard {
 		?>
 
 		<div id="ewd-ufaq-dashboard-content-area">
+			<?php echo wp_kses( apply_filters( 'ewd_ufaq_dashboard_entitlement_card', '' ), apply_filters( 'ewd_dashboard_top_kses_allowed_tags', wp_kses_allowed_html( 'post' ) ) ); ?>
 		
 			<?php if ( ! $permission or get_option("EWD_UFAQ_Trial_Happening") == "Yes" ) {
 				$premium_info = '<div class="ewd-ufaq-dashboard-visit-our-site">';

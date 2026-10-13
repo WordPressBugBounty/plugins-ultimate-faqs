@@ -6,6 +6,6 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => $vendorDir . '/symfony/polyfill-mbstring/bootstrap.php',
-    '2cffec82183ee1cea088009cef9a6fc3' => $vendorDir . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
+    '08144a52449e7c42cbe427b59157fca0' => $vendorDir . '/symfony/polyfill-mbstring/bootstrap.php',
+    '155e7881b9776889700aba7939c2a67e' => $vendorDir . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
 );

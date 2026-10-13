@@ -91,6 +91,16 @@ class ewdufaqSettings {
 	 * @since 2.0.0
 	 */
 	public function get_setting( $setting ) { 
+			global $ewd_ufaq_controller;
+			$required = ewdufaqPermissions::setting_permission( $setting );
+			$raw      = ! empty( $this->settings ) ? $this->settings : get_option( 'ewd-ufaq-settings', array() );
+			if ( 'faq-order-by' === $setting && isset( $raw[ $setting ] ) && 'set_order' === $raw[ $setting ] ) {
+				$required = 'ordering';
+			}
+			if ( '' !== $required && is_object( $ewd_ufaq_controller ) && isset( $ewd_ufaq_controller->permissions )
+			&& ! $ewd_ufaq_controller->permissions->check_permission( $required ) ) {
+				return isset( $this->defaults[ $setting ] ) ? $this->defaults[ $setting ] : null;
+			}
 
 		if ( empty( $this->settings ) ) {
 			$this->settings = get_option( 'ewd-ufaq-settings' );

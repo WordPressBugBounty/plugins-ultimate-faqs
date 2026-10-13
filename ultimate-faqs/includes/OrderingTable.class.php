@@ -20,6 +20,9 @@ class ewdufaqOrderingTable {
 	 */
 	public function register_menu_screen() {
 		global $ewd_ufaq_controller;
+			if ( ! $ewd_ufaq_controller->permissions->check_permission( 'ordering' ) ) {
+				return;
+			}
 
 		if ( $ewd_ufaq_controller->settings->get_setting( 'faq-order-by' ) != 'set_order' ) { return; }
 		
@@ -38,6 +41,11 @@ class ewdufaqOrderingTable {
 	 * @since 3.0.0
 	 */
 	public function display_admin_screen() { 
+			global $ewd_ufaq_controller;
+			if ( ! $ewd_ufaq_controller->permissions->check_permission( 'ordering' )
+			|| ! current_user_can( $ewd_ufaq_controller->settings->get_setting( 'access-role' ) ) ) {
+				wp_die( esc_html__( 'Current Premium access and administrator permission are required for FAQ ordering.', 'ultimate-faqs' ) );
+			}
 		
 		$args = array(
 			'post_type' => EWD_UFAQ_FAQ_POST_TYPE,

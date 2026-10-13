@@ -3,7 +3,7 @@ Contributors: rustaurius
 Tags: faq, faqs, woocommerce faq, accordion, faq block
 Requires at least: 6.0
 Tested up to: 7.1
-Stable tag: 2.5.0
+Stable tag: 2.6.0
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -239,6 +239,14 @@ For more info on installing and activating the plugin, and on the walk-through, 
 
 == Changelog ==
 
+= 2.6.0 (2026-10-12) =
+- Added the ability to assign FAQ categories when creating FAQs directly in the Display FAQs block.
+- Added a separate "Move FAQ to Trash" action in the block editor, distinct from removing an FAQ from a page.
+- Improved FAQ library management and selection for sites with larger numbers of FAQs.
+- Improved validation, reliability, and error handling for FAQ import/export operations.
+- Updated Premium license validation and entitlement handling, including improved license status, recovery, and compatibility checks.
+- Improved preservation of existing FAQ content and settings when Premium access is unavailable.
+
 = 2.5.0 (2026-09-20) =
 - <strong>This is a major update with many changes, including some big changes. We suggest testing this update in a staging environment before updating your live environment. Or wait a few days before updating in the event that an issue is identified that requires a fix/new update.</strong>
 - Added the ability to create and manage FAQs directly in the Display FAQs block.
@@ -248,3 +256,8 @@ For more info on installing and activating the plugin, and on the walk-through, 
 - Updated the bundled PhpSpreadsheet runtime to the PHP 7.4-compatible 1.30.6 security release and hardened CSV/XLS/XLSX imports.
 
 [See changelog for all versions](https://www.etoilewebdesign.com/changelogs/ultimate-faqs.txt).
+
+== Upgrade Notice ==
+
+= 2.6.0 =
+This update includes changes to the functionality that lets you create FAQs directly in the block, as well as to the interaction between this plugin and the Premium Helper. If you make use of this functionality in the block or your site uses the Premium Helper, we recommend testing the update on a staging site before updating your production site.

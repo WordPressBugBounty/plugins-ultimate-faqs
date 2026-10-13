@@ -101,6 +101,10 @@ class ewdufaqQuery {
 		global $ewd_ufaq_controller;
 
 		$args = $this->args;
+			if ( isset( $args['orderby'] ) && 'set_order' === $args['orderby']
+			&& ! $ewd_ufaq_controller->permissions->check_permission( 'ordering' ) ) {
+				$args['orderby'] = 'title';
+			}
 
 		$args['include_children'] = ( ! empty( $args['include_children'] ) and strtolower( $args['include_children'] ) != 'yes' ) ? false : true;
 
@@ -228,7 +232,31 @@ class ewdufaqQuery {
 
 		if ( empty( $explicit_post_ids ) && $args['orderby'] == 'rating' ) { $args['meta_key'] = 'FAQ_Total_Score'; }
 		elseif ( empty( $explicit_post_ids ) && $args['orderby'] == 'popular' ) { $args['meta_key'] = 'ufaq_view_count'; }
-		elseif ( empty( $explicit_post_ids ) && $args['orderby'] == 'set_order' ) { $args['meta_key'] = 'ufaq_order'; }
+			elseif ( empty( $explicit_post_ids ) && 'set_order' === $args['orderby'] ) {
+				// Manual ordering must not filter out reusable FAQs which have no rank.
+				$manual_order_query = array(
+					'relation'          => 'OR',
+					'ufaq_manual_order' => array(
+						'key'     => 'ufaq_order',
+						'compare' => 'EXISTS',
+						'type'    => 'NUMERIC',
+					),
+					'ufaq_unordered'    => array(
+						'key'     => 'ufaq_order',
+						'compare' => 'NOT EXISTS',
+					),
+				);
+				$args['meta_query'] = empty( $args['meta_query'] )
+					? $manual_order_query
+					: array(
+						'relation' => 'AND',
+						$args['meta_query'],
+						$manual_order_query,
+					);
+				unset( $args['meta_key'], $orderby['meta_value_num'] );
+				$orderby['ufaq_manual_order'] = $args['order'];
+				$orderby['ID']                = $args['order'];
+			}
 		
 		if ( empty( $explicit_post_ids ) && ! empty( $orderby ) ) { $args['orderby'] = $orderby; }
 

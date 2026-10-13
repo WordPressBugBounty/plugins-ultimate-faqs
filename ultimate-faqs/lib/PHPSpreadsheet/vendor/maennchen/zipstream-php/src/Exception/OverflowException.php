@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace EwdUfaqVendor\ZipStream\Exception;
 
-namespace ZipStream\Exception;
-
-use ZipStream\Exception;
-
+use EwdUfaqVendor\ZipStream\Exception;
 /**
  * This Exception gets invoked if a counter value exceeds storage size
  */

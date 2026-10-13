@@ -143,6 +143,10 @@ if ( !class_exists( 'ewdufaqAJAX' ) ) {
 		 * @since 2.0.0
 		 */
 		public function update_rating() {
+			global $ewd_ufaq_controller;
+			if ( ! $ewd_ufaq_controller->permissions->check_permission( 'premium' ) ) {
+				wp_send_json_error( array( 'code' => 'premium_unavailable' ), 403 );
+			}
 
 			if ( !check_ajax_referer( 'ewd-ufaq-js', 'nonce' ) ) {
 				ewdufaqHelper::bad_nonce_ajax();
@@ -205,6 +209,9 @@ if ( !class_exists( 'ewdufaqAJAX' ) ) {
 		 */
 		public function update_category_order() {
 			global $ewd_ufaq_controller;
+			if ( ! $ewd_ufaq_controller->permissions->check_permission( 'ordering' ) ) {
+				wp_send_json_error( array( 'code' => 'premium_unavailable' ), 403 );
+			}
 
 			// Authenticate request
 			if (
@@ -229,6 +236,9 @@ if ( !class_exists( 'ewdufaqAJAX' ) ) {
 		 */
 		public function save_search_term() {
 			global $ewd_ufaq_controller;
+			if ( ! $ewd_ufaq_controller->permissions->check_permission( 'search' ) ) {
+				wp_send_json_error( array( 'code' => 'premium_unavailable' ), 403 );
+			}
 
 			if ( !check_ajax_referer( 'ewd-ufaq-js', 'nonce' ) ) {
 				ewdufaqHelper::bad_nonce_ajax();
@@ -270,7 +280,7 @@ if ( !class_exists( 'ewdufaqAJAX' ) ) {
 
 				ewdufaqHelper::admin_nopriv_ajax();
 			}
-			if ( empty( $ewd_ufaq_controller->settings->get_setting( 'save-search-terms' ) ) ) { return; }
+			// Administrator deletion remains available even when paid recording is suspended.
 
   			update_option( 'ewd-ufaq-search-data', array() );
 

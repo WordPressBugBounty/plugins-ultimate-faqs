@@ -48,6 +48,7 @@ class ewdufaqNotifications {
 	
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
+			$success = false;
 		foreach ( $admin_emails as $admin_email ) {
 
 			$success = wp_mail( $admin_email, $subject_line, $message_body, $headers );
@@ -90,6 +91,7 @@ class ewdufaqNotifications {
 
 			$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
+				$success = false;
 			foreach ( $author_emails as $author_email ) {
 
 				if ( ! filter_var( $author_email, FILTER_VALIDATE_EMAIL ) ) { continue;}
@@ -120,6 +122,7 @@ class ewdufaqNotifications {
 
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
+			$success = false;
 		foreach ( $author_emails as $author_email ) {
 
 			if ( ! filter_var( $author_email, FILTER_VALIDATE_EMAIL ) ) { continue;}

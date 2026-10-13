@@ -29,10 +29,11 @@ if ( ! class_exists( 'ewdufaqHelperCompatibility' ) ) {
 		public static function get_descriptor() {
 
 			return array(
-				'plugin_version'         => EWD_UFAQ_VERSION,
-				'api_version'            => EWD_UFAQ_HELPER_API_VERSION,
-				'min_helper_version'     => EWD_UFAQ_MIN_HELPER_VERSION,
-				'max_helper_api_version' => EWD_UFAQ_MAX_HELPER_API_VERSION,
+				'plugin_version'               => EWD_UFAQ_VERSION,
+				'api_version'                  => EWD_UFAQ_HELPER_API_VERSION,
+				'min_helper_version'           => EWD_UFAQ_MIN_HELPER_VERSION,
+				'max_helper_api_version'       => EWD_UFAQ_MAX_HELPER_API_VERSION,
+				'entitlement_contract_version' => EWD_UFAQ_ENTITLEMENT_CONTRACT_VERSION,
 			);
 		}
 
@@ -110,6 +111,10 @@ if ( ! class_exists( 'ewdufaqHelperCompatibility' ) ) {
 					'helper_api'     => $helper_api,
 				);
 			}
+			if ( ! isset( $helper_descriptor['entitlement_contract_version'] )
+			|| EWD_UFAQ_ENTITLEMENT_CONTRACT_VERSION !== $helper_descriptor['entitlement_contract_version'] ) {
+				return array( 'state' => 'unsupported_entitlement_contract' );
+			}
 
 			return array(
 				'state'          => $premium_active ? 'compatible' : 'compatible_premium_inactive',
@@ -157,7 +162,7 @@ if ( ! class_exists( 'ewdufaqHelperCompatibility' ) ) {
 			if ( ! current_user_can( 'manage_options' ) ) {
 				return; }
 
-			if ( ! in_array( $this->state, array( 'active_legacy_no_descriptor', 'too_old', 'unsupported_newer_api' ), true ) ) {
+			if ( ! in_array( $this->state, array( 'active_legacy_no_descriptor', 'too_old', 'unsupported_newer_api', 'unsupported_entitlement_contract' ), true ) ) {
 				return; }
 
 			if ( 'unsupported_newer_api' === $this->state ) {

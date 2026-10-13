@@ -72,8 +72,33 @@ BLOCKS
 
 .ewd-ufaq-managed-search > .components-base-control,
 .ewd-ufaq-managed-create > .components-base-control,
+.ewd-ufaq-managed-create > .ewd-ufaq-category-selector,
+.ewd-ufaq-managed-create > .ewd-ufaq-managed-create-submit,
 .ewd-ufaq-managed-create > h4 {
   flex-basis: 100%;
+}
+
+.ewd-ufaq-managed-trash-actions,
+.ewd-ufaq-category-pages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.ewd-ufaq-category-combobox .components-combobox-control__suggestions-container {
+  position: relative;
+}
+.ewd-ufaq-category-combobox .components-combobox-control__suggestions-container::after {
+  content: "";
+  position: absolute;
+  right: 12px;
+  top: 18px;
+  border: 5px solid transparent;
+  border-top-color: currentColor;
+  pointer-events: none;
+}
+.ewd-ufaq-category-combobox input {
+  padding-right: 30px;
 }
 
 .ewd-ufaq-managed-result {
@@ -93,17 +118,16 @@ BLOCKS
   color: #1e1e1e;
 }
 
-.editor-styles-wrapper .ewd-ufaq-editor-preview .ewd-ufaq-faq-title h1,
-.editor-styles-wrapper .ewd-ufaq-editor-preview .ewd-ufaq-faq-title h2,
-.editor-styles-wrapper .ewd-ufaq-editor-preview .ewd-ufaq-faq-title h3,
-.editor-styles-wrapper .ewd-ufaq-editor-preview .ewd-ufaq-faq-title h4,
-.editor-styles-wrapper .ewd-ufaq-editor-preview .ewd-ufaq-faq-title h5,
-.editor-styles-wrapper .ewd-ufaq-editor-preview .ewd-ufaq-faq-title h6,
-.wp-admin .ewd-ufaq-editor-preview .ewd-ufaq-faq-title h1,
-.wp-admin .ewd-ufaq-editor-preview .ewd-ufaq-faq-title h2,
-.wp-admin .ewd-ufaq-editor-preview .ewd-ufaq-faq-title h3,
-.wp-admin .ewd-ufaq-editor-preview .ewd-ufaq-faq-title h4,
-.wp-admin .ewd-ufaq-editor-preview .ewd-ufaq-faq-title h5,
-.wp-admin .ewd-ufaq-editor-preview .ewd-ufaq-faq-title h6 {
+/* One-column previews must occupy a whole row even under editor layout rules. */
+.ewd-ufaq-editor-preview .ewd-ufaq-faq-div.ewd-ufaq-faq-column-count-one {
+  width: 100%;
+  max-width: 100%;
+  flex-basis: 100%;
+  float: none;
+  clear: both;
+  box-sizing: border-box;
+}
+
+.ewd-ufaq-editor-preview .ewd-ufaq-faq-title .ewd-ufaq-preview-low-contrast {
   color: #1e1e1e !important;
 }

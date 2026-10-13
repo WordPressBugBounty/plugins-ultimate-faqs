@@ -148,6 +148,10 @@ class ewdufaqFAQ {
 	 * @since 2.0.0
 	 */
 	public function insert_faq() {
+			global $ewd_ufaq_controller;
+			if ( ! $ewd_ufaq_controller->permissions->check_permission( 'submit-faq' ) ) {
+				return false;
+			}
 
 		// Check if this request has already been processed. If multiple forms
 		// exist on the same page, this prevents a single submission from
@@ -320,6 +324,10 @@ class ewdufaqFAQ {
 	 * @since 2.0.0
 	 */
 	public function insert_post_data() {
+			global $ewd_ufaq_controller;
+			if ( ! $ewd_ufaq_controller->permissions->check_permission( 'submit-faq' ) ) {
+				return false;
+			}
 
 		$args = array(
 			'post_type'		=> EWD_UFAQ_FAQ_POST_TYPE,

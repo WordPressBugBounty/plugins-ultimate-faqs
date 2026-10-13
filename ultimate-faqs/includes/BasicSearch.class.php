@@ -83,8 +83,8 @@ if ( ! class_exists( 'ewdufaqBasicSearch' ) ) {
 
 		public static function query( $args, $term, $page ) {
 
-			$query       = new ewdufaqQuery( $args, 'basic_search' );
-			$query_args  = $query->prepare_args();
+			$query      = new ewdufaqQuery( $args, 'basic_search' );
+			$query_args = $query->prepare_args();
 
 			// Optional ordering metadata must not prevent otherwise valid search
 			// results from being returned. WordPress will use search relevance.
@@ -211,6 +211,18 @@ if ( ! class_exists( 'ewdufaqBasicSearch' ) ) {
 
 			$allowed   = apply_filters( 'ewd_ufaq_basic_search_preserved_query_args', array( 'lang' ) );
 			$preserved = array();
+			// Browsers replace a GET form action's query string. Preserve routing from
+			// the trusted permalink, not from arbitrary incoming routing parameters.
+			$query = wp_parse_url( self::get_form_action(), PHP_URL_QUERY );
+			$route = array();
+			if ( is_string( $query ) ) {
+				parse_str( $query, $route );
+			}
+			foreach ( $route as $key => $value ) {
+				if ( is_scalar( $value ) && ! in_array( $key, array( 'ufaq_search_term', 'ufaq_search_id' ), true ) ) {
+					$preserved[ sanitize_key( $key ) ] = sanitize_text_field( (string) $value );
+				}
+			}
 
 			foreach ( array_unique( array_map( 'sanitize_key', (array) $allowed ) ) as $key ) {
 

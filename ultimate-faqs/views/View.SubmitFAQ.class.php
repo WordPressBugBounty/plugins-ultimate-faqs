@@ -30,6 +30,10 @@ class ewdufaqViewSubmitFAQ extends ewdufaqView {
 	 * @since 2.0.0
 	 */
 	public function render() {
+		global $ewd_ufaq_controller;
+		if ( ! $ewd_ufaq_controller->permissions->check_permission( 'submit-faq' ) ) {
+			return '';
+		}
 
 		// Add any dependent stylesheets or javascript
 		$this->enqueue_assets();

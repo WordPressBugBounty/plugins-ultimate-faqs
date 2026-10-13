@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpOffice\PhpSpreadsheet\Calculation;
+namespace EwdUfaqVendor\PhpOffice\PhpSpreadsheet\Calculation;
 
 abstract class Category
 {

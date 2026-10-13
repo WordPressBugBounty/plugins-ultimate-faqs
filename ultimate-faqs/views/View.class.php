@@ -99,7 +99,9 @@ class ewdufaqView extends ewdufaqBase {
 	public function get_option( $option_name ) {
 		global $ewd_ufaq_controller;
 
-		return ! empty( $this->$option_name ) ? $this->$option_name : $ewd_ufaq_controller->settings->get_setting( $option_name );
+		$value   = ! empty( $this->$option_name ) ? $this->$option_name : $ewd_ufaq_controller->settings->get_setting( $option_name );
+		$default = isset( $ewd_ufaq_controller->settings->defaults[ $option_name ] ) ? $ewd_ufaq_controller->settings->defaults[ $option_name ] : null;
+		return $ewd_ufaq_controller->permissions->effective_setting( $option_name, $value, $default );
 	}
 
 	public function get_label( $label_name ) {

@@ -364,6 +364,29 @@
 	margin-bottom: 28px;
 }
 
+.ewd-ufaq-license-status summary {
+	cursor: pointer;
+}
+.ewd-ufaq-license-status form {
+	margin-top: 16px;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 12px;
+}
+.ewd-ufaq-license-status form:first-of-type {
+	margin-bottom: 32px;
+}
+.ewd-ufaq-license-status input[type="text"] {
+	min-height: 30px;
+	height: 30px;
+	box-sizing: border-box;
+	margin: 0;
+}
+.ewd-ufaq-license-status input[name="key"], .ewd-ufaq-license-status button[name="ewd_upgrade_to_full"] {
+	height: 40px;
+}
+
 .ewd-ufaq-dashboard-get-premium-and-trial {
 	display: flex;
 	flex-direction: column;
