@@ -130,10 +130,11 @@ class ewdufaqBlocks {
 			$ewd_ufaq_controller->register_assets();
 			wp_enqueue_style( 'ewd-ufaq-css' );
 			wp_enqueue_style( 'ewd-ufaq-blocks-css' );
-			wp_enqueue_style( 'ewd-ufaq-rrssb' );
-			wp_enqueue_style( 'ewd-ufaq-jquery-ui' );
-			if ( 'minimalist' === $ewd_ufaq_controller->settings->get_setting( 'display-style' ) ) {
-				wp_enqueue_style( 'ewd-ufaq-minimalist' );
+			$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+			if ( $screen && ( $screen->is_block_editor() || 'widgets' === $screen->id ) ) {
+				wp_enqueue_script( 'ewd-ufaq-js' );
+				$args = array( 'nonce' => wp_create_nonce( 'ewd-ufaq-js' ), 'faq_accordion' => $ewd_ufaq_controller->settings->get_setting( 'faq-accordion' ), 'category_accordion' => $ewd_ufaq_controller->settings->get_setting( 'faq-category-accordion' ), 'faq_scroll' => false );
+				wp_add_inline_script( 'ewd-ufaq-js', 'window.ajaxurl=' . wp_json_encode( admin_url( 'admin-ajax.php' ) ) . ';window.ewd_ufaq_php_data=' . wp_json_encode( apply_filters( 'ewd_ufaq_js_localize_data', $args, null ) ) . ';', 'before' );
 			}
 		}
 

@@ -11,7 +11,6 @@ require_once( EWD_UFAQ_PLUGIN_DIR . '/views/View.class.php' );
 require_once( EWD_UFAQ_PLUGIN_DIR . '/views/View.FAQ.class.php' );
 require_once( EWD_UFAQ_PLUGIN_DIR . '/views/View.FAQs.class.php' );
 require_once( EWD_UFAQ_PLUGIN_DIR . '/views/View.FAQSearch.class.php' );
-require_once( EWD_UFAQ_PLUGIN_DIR . '/views/View.SubmitFAQ.class.php' );
 
 class ewdufaqBase {
 

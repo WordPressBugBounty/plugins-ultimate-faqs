@@ -120,25 +120,7 @@ function ewd_ufaq_search_faqs_shortcode( $atts ) {
 
 		return ewdufaqBasicSearch::render( $args );
 	}
-
-	$query = new ewdufaqQuery( $args );
-	$query->parse_request_args();
-	$query->prepare_args();
-
-	// Render faqs
-	ewd_ufaq_load_view_files();
-
-	$faqs = new ewdufaqViewFAQSearch( $args );
-
-	$faqs->set_faqs( $query->get_faqs() );
-	
-	$ewd_ufaq_controller->shortcode_printing = true;
-
-	$output = $faqs->render();
-
-	$ewd_ufaq_controller->shortcode_printing = false;
-
-	return $output;
+	return class_exists( 'ewdufaqEWDPHSearch', false ) ? ewdufaqEWDPHSearch::shortcode( $args ) : ewdufaqBasicSearch::render( $args );
 }
 add_shortcode( 'ultimate-faq-search', 'ewd_ufaq_search_faqs_shortcode' );
 
@@ -165,41 +147,7 @@ function ewd_ufaq_submit_faq_shortcode( $atts ) {
 	// Extract the shortcode attributes
 	$args = shortcode_atts( $submit_faq_atts, $atts );
 
-	// Handle FAQ submission
-	if ( isset( $_POST['submit_question'] ) ) {
-
-		$args['faq_submitted'] = true;
-
-		$faq = new ewdufaqFAQ();
-		$success = $faq->insert_faq();
-
-		if ( $success ) {
-
-			$args['update_message'] = ! empty( $args['success_message'] ) ? $args['success_message'] : $ewd_ufaq_controller->settings->get_setting( 'label-thank-you-submit' );
-		}
-		else {
-
-			$args['update_message'] = '';
-
-			foreach ( $faq->validation_errors as $validation_error ) {
-
-				$args['update_message'] .= '<br />' . $validation_error['message'];
-			}
-		}
-	}
-
-	// Render faq
-	ewd_ufaq_load_view_files();
-
-	$submit_faq = new ewdufaqViewSubmitFAQ( $args );
-
-	$ewd_ufaq_controller->shortcode_printing = true;
-
-	$output = $submit_faq->render();
-
-	$ewd_ufaq_controller->shortcode_printing = false;
-
-	return $output;
+	return apply_filters( 'ewd_ufaq_submit_output', '', $args );
 }
 add_shortcode( 'submit-question', 'ewd_ufaq_submit_faq_shortcode' );
 
@@ -338,32 +286,21 @@ function ewd_ufaq_load_view_files() {
 if ( ! function_exists( 'ewd_ufaq_validate_captcha' ) ) {
 function ewd_ufaq_validate_captcha() {
 
-	$modifiedcode = intval( $_POST['ewd_ufaq_modified_captcha'] );
-	$usercode = intval( $_POST['ewd_ufaq_captcha'] );
-
-	$code = ewd_ufaq_decrypt_catpcha_code( $modifiedcode );
-
-	$validate_captcha = $code == $usercode ? 'Yes' : 'No';
-
-	return $validate_captcha;
+	return class_exists( 'ewdufaqEWDPHSubmission', false ) ? ewdufaqEWDPHSubmission::validate_captcha() : 'No';
 }
 }
 
 if ( ! function_exists( 'ewd_ufaq_encrypt_captcha_code' ) ) {
 function ewd_ufaq_encrypt_captcha_code( $code ) {
 	
-	$modifiedcode = ($code + 5) * 3;
-
-	return $modifiedcode;
+	return class_exists( 'ewdufaqEWDPHSubmission', false ) ? ewdufaqEWDPHSubmission::encrypt_captcha( $code ) : false;
 }
 }
 
-if ( ! function_exists( 'ewd_ufaq_encrypt_captcha_code' ) ) {
+if ( ! function_exists( 'ewd_ufaq_decrypt_catpcha_code' ) ) {
 function ewd_ufaq_decrypt_catpcha_code( $modifiedcode ) {
 	
-	$code = ($modifiedcode / 3) - 5;
-
-	return $code;
+	return class_exists( 'ewdufaqEWDPHSubmission', false ) ? ewdufaqEWDPHSubmission::decrypt_captcha( $modifiedcode ) : false;
 }
 }
 

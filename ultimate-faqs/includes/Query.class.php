@@ -55,6 +55,7 @@ class ewdufaqQuery {
 
 	// Max number of pages of faqs matching the query
 	public $max_page;
+	private $prepared = false;
 
 	/**
 	 * Instantiate the query with an array of arguments
@@ -101,10 +102,6 @@ class ewdufaqQuery {
 		global $ewd_ufaq_controller;
 
 		$args = $this->args;
-			if ( isset( $args['orderby'] ) && 'set_order' === $args['orderby']
-			&& ! $ewd_ufaq_controller->permissions->check_permission( 'ordering' ) ) {
-				$args['orderby'] = 'title';
-			}
 
 		$args['include_children'] = ( ! empty( $args['include_children'] ) and strtolower( $args['include_children'] ) != 'yes' ) ? false : true;
 
@@ -114,7 +111,10 @@ class ewdufaqQuery {
 		
 		if ( ! empty( $args['faq_page'] ) ) { $args['paged'] = $args['faq_page']; }
 
-		if ( ! empty( $args['post__in'] ) ) { $args['post__in'] = is_array( $args['post__in'] ) ? $args['post__in'] : json_decode( str_replace( array( '&lsqb;', '&rsqb;' ), array( '[', ']' ) ) ); }
+		if ( ! empty( $args['post__in'] ) && ! is_array( $args['post__in'] ) ) {
+			$decoded_ids = is_string( $args['post__in'] ) ? json_decode( str_replace( array( '&lsqb;', '&rsqb;' ), array( '[', ']' ), $args['post__in'] ), true ) : null;
+			$args['post__in'] = is_array( $decoded_ids ) ? array_values( array_filter( array_map( 'absint', array_filter( $decoded_ids, 'is_scalar' ) ) ) ) : array();
+		}
 
 		$explicit_post_ids = ! empty( $args['post__in_string'] )
 			? array_values(
@@ -224,43 +224,19 @@ class ewdufaqQuery {
 
 		if ( empty( $explicit_post_ids ) && ! empty( $args['orderby'] ) ) {
 
-			if ( $args['orderby'] == 'rating' or $args['orderby'] == 'popular' ) { $orderby['meta_value_num'] = $args['order']; }
+			if ( $args['orderby'] == 'popular' ) { $orderby['meta_value_num'] = $args['order']; }
 			elseif ( $args['orderby'] == 'date' ) { $orderby['date'] = $args['order']; }
 			elseif ( $args['orderby'] == 'title' ) { $orderby['title'] = $args['order']; }
-			elseif ( $args['orderby'] == 'set_order' ) { $orderby['meta_value_num'] = $args['order']; }
 		}
 
-		if ( empty( $explicit_post_ids ) && $args['orderby'] == 'rating' ) { $args['meta_key'] = 'FAQ_Total_Score'; }
-		elseif ( empty( $explicit_post_ids ) && $args['orderby'] == 'popular' ) { $args['meta_key'] = 'ufaq_view_count'; }
-			elseif ( empty( $explicit_post_ids ) && 'set_order' === $args['orderby'] ) {
-				// Manual ordering must not filter out reusable FAQs which have no rank.
-				$manual_order_query = array(
-					'relation'          => 'OR',
-					'ufaq_manual_order' => array(
-						'key'     => 'ufaq_order',
-						'compare' => 'EXISTS',
-						'type'    => 'NUMERIC',
-					),
-					'ufaq_unordered'    => array(
-						'key'     => 'ufaq_order',
-						'compare' => 'NOT EXISTS',
-					),
-				);
-				$args['meta_query'] = empty( $args['meta_query'] )
-					? $manual_order_query
-					: array(
-						'relation' => 'AND',
-						$args['meta_query'],
-						$manual_order_query,
-					);
-				unset( $args['meta_key'], $orderby['meta_value_num'] );
-				$orderby['ufaq_manual_order'] = $args['order'];
-				$orderby['ID']                = $args['order'];
-			}
+		if ( empty( $explicit_post_ids ) && isset( $args['orderby'] ) && $args['orderby'] == 'popular' ) { $args['meta_key'] = 'ufaq_view_count'; }
 		
 		if ( empty( $explicit_post_ids ) && ! empty( $orderby ) ) { $args['orderby'] = $orderby; }
 
+		$args = apply_filters( 'ewd_ufaq_query_args', $args, $this->context, $this );
+		if ( isset( $args['orderby'] ) && in_array( $args['orderby'], array( 'set_order', 'rating' ), true ) ) { $args['orderby'] = array( 'title' => $args['order'] ); }
 		$this->args = $args;
+		$this->prepared = true;
 
 		return $this->args;
 	}
@@ -274,37 +250,37 @@ class ewdufaqQuery {
 
 		$args = array();
 
-		if ( isset( $_REQUEST['faq_page'] ) ) { 
+		if ( isset( $_REQUEST['faq_page'] ) && is_scalar( $_REQUEST['faq_page'] ) ) { 
 
 			$args['faq_page'] = intval( $_REQUEST['faq_page'] ); 
 		}
 
-		if ( isset( $_REQUEST['search_string'] ) ) { 
+		if ( isset( $_REQUEST['search_string'] ) && is_scalar( $_REQUEST['search_string'] ) ) { 
 
-			$args['search_string'] = sanitize_text_field( stripslashes( $_REQUEST['search_string'] ) ); 
+			$args['search_string'] = sanitize_text_field( stripslashes( (string) $_REQUEST['search_string'] ) ); 
 		}
 
-		if ( isset( $_REQUEST['post_count'] ) ) { 
+		if ( isset( $_REQUEST['post_count'] ) && is_scalar( $_REQUEST['post_count'] ) ) { 
 
 			$args['post_count'] = sanitize_text_field( $_REQUEST['post_count'] ); 
 		}
 
-		if ( isset( $_REQUEST['orderby'] ) ) { 
+		if ( isset( $_REQUEST['orderby'] ) && is_scalar( $_REQUEST['orderby'] ) ) { 
 
 			$args['orderby'] = sanitize_text_field( $_REQUEST['orderby'] ); 
 		}
 
-		if ( isset( $_REQUEST['order'] ) ) { 
+		if ( isset( $_REQUEST['order'] ) && is_scalar( $_REQUEST['order'] ) ) { 
 
 			$args['order'] = sanitize_text_field( $_REQUEST['order'] ); 
 		}
 
-		if ( isset( $_REQUEST['include_category'] ) ) { 
+		if ( isset( $_REQUEST['include_category'] ) && is_scalar( $_REQUEST['include_category'] ) ) { 
 
 			$args['include_category'] = sanitize_text_field( $_REQUEST['include_category'] ); 
 		}
 
-		if ( isset( $_REQUEST['exclude_category'] ) ) { 
+		if ( isset( $_REQUEST['exclude_category'] ) && is_scalar( $_REQUEST['exclude_category'] ) ) { 
 
 			$args['exclude_category'] = sanitize_text_field( $_REQUEST['exclude_category'] ); 
 		}
@@ -314,7 +290,7 @@ class ewdufaqQuery {
 			$args['include_category'] = get_query_var( 'ufaq_category_slug' ); 
 		}
 
-		if ( isset( $_REQUEST['include_tag'] ) ) { 
+		if ( isset( $_REQUEST['include_tag'] ) && is_scalar( $_REQUEST['include_tag'] ) ) { 
 
 			$args['include_tag'] = sanitize_text_field( $_REQUEST['include_tag'] ); 
 		}
@@ -325,6 +301,7 @@ class ewdufaqQuery {
 		}
 
 		$this->args = array_merge( $this->args, $args ); 
+		$this->prepared = false;
 	}
 
 	/**
@@ -336,7 +313,7 @@ class ewdufaqQuery {
 
 		$faqs = array();
 
-		$args = apply_filters( 'ewd_ufaq_query_args', $this->args, $this->context ); 
+		$args = $this->prepared ? $this->args : $this->prepare_args();
 		
 		$query = new WP_Query( $args );
 		

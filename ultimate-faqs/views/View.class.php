@@ -70,6 +70,41 @@ class ewdufaqView extends ewdufaqBase {
 	 * @param string template Type of template to load (eg - reviews, review)
 	 */
 	function find_template( $template ) {
+		global $ewd_ufaq_controller;
+		$paid = array(
+			'faq-custom-fields' => 'fields',
+			'faq-ratings' => 'premium',
+			'faq-social-media' => 'premium',
+			'faq-social-media-email' => 'premium',
+			'faq-social-media-facebook' => 'premium',
+			'faq-social-media-linkedin' => 'premium',
+			'faq-social-media-pinterest' => 'premium',
+			'faq-social-media-twitter' => 'premium',
+			'faqs-pagination' => 'premium',
+			'faqs-list-header' => 'premium',
+			'faqs-category-list-header' => 'premium',
+			'faqs-search' => 'search',
+			'faqs-search-submit' => 'search',
+			'submit-faq' => 'submit-faq',
+			'submit-faq-captcha' => 'submit-faq',
+			'submit-faq-custom-field-checkbox' => 'submit-faq',
+			'submit-faq-custom-field-date' => 'submit-faq',
+			'submit-faq-custom-field-datetime' => 'submit-faq',
+			'submit-faq-custom-field-radio' => 'submit-faq',
+			'submit-faq-custom-field-select' => 'submit-faq',
+			'submit-faq-custom-field-text' => 'submit-faq',
+			'submit-faq-custom-field-textarea' => 'submit-faq',
+			'submit-faq-field-author-email' => 'submit-faq',
+			'submit-faq-field-author' => 'submit-faq',
+			'submit-faq-field-faq-answer' => 'submit-faq',
+			'submit-faq-field-faq-question' => 'submit-faq',
+			'submit-faq-submitted-faq-message' => 'submit-faq',
+		);
+		if ( ! is_string( $template ) || ( 0 === strpos( $template, 'submit-faq' ) && ! isset( $paid[ $template ] ) ) ) { return false; }
+		$capability = isset( $paid[ $template ] ) ? $paid[ $template ] : '';
+		if ( $capability && ( ! isset( $ewd_ufaq_controller->permissions ) || ! $ewd_ufaq_controller->permissions->check_permission( $capability ) ) ) {
+			return false;
+		}
 
 		$this->template_dirs = array(
 			get_stylesheet_directory() . '/' . EWD_UFAQ_TEMPLATE_DIR . '/',
@@ -77,14 +112,18 @@ class ewdufaqView extends ewdufaqBase {
 			EWD_UFAQ_PLUGIN_DIR . '/' . EWD_UFAQ_TEMPLATE_DIR . '/'
 		);
 		
-		$this->template_dirs = apply_filters( 'ewd_ufaq_template_directories', $this->template_dirs );
+		$this->template_dirs = apply_filters( 'ewd_ufaq_template_directories', $this->template_dirs, $template, $this );
 
 		foreach ( $this->template_dirs as $dir ) {
+			// Never execute an obsolete paid default left by a merge-style update.
+			// Child/parent and explicitly supplied integration directories still work.
+			if ( $capability && rtrim( wp_normalize_path( $dir ), '/' ) === wp_normalize_path( EWD_UFAQ_PLUGIN_DIR . '/' . EWD_UFAQ_TEMPLATE_DIR ) ) { continue; }
 			if ( file_exists( $dir . $template . '.php' ) ) {
 				return $dir . $template . '.php';
 			}
 		}
 
+		if ( $capability ) { do_action( 'ewd_ufaq_missing_paid_template', $template ); }
 		return false;
 	}
 
@@ -109,7 +148,8 @@ class ewdufaqView extends ewdufaqBase {
 
 		if ( empty( $this->label_defaults ) ) { $this->set_label_defaults(); }
 
-		return ! empty( $ewd_ufaq_controller->settings->get_setting( $label_name ) ) ? $ewd_ufaq_controller->settings->get_setting( $label_name ) : $this->label_defaults[ $label_name ];
+		$default = isset( $this->label_defaults[ $label_name ] ) ? $this->label_defaults[ $label_name ] : '';
+		return apply_filters( 'ewd_ufaq_custom_label', $default, $label_name, $this );
 	}
 
 	public function set_label_defaults() {
@@ -149,82 +189,12 @@ class ewdufaqView extends ewdufaqBase {
 	}
 
 	public function add_custom_styling() {
-		global $ewd_ufaq_controller;
-
-		$heading_type = $ewd_ufaq_controller->settings->get_setting( 'styling-faq-heading-type' );
-		$category_heading_type = $ewd_ufaq_controller->settings->get_setting( 'styling-category-heading-type' );
-
-		$css = '';
-
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-toggle-background-color' ) != '' ) { $css .= '.ewd-ufaq-post-margin-symbol { background-color: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-toggle-background-color' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-toggle-font-color' ) != '' ) { $css .= '.ewd-ufaq-post-margin-symbol { color: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-toggle-font-color' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-toggle-border-size' ) != '' ) { $css .= '.ewd-ufaq-post-margin-symbol { border-width: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-toggle-border-size' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-toggle-border-color' ) != '' ) { $css .= '.ewd-ufaq-post-margin-symbol { border-color: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-toggle-border-color' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-toggle-border-radius' ) != '' ) { $css .= '.ewd-ufaq-post-margin-symbol { border-radius: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-toggle-border-radius' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-toggle-symbol-size' ) != '' ) { $css .= '.ewd-ufaq-faq-title .ewd-ufaq-post-margin-symbol span { font-size: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-toggle-symbol-size' ) . ' !important; }'; }
-			
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-category-toggle-background-color' ) != '' ) { $css .= '.ewd-ufaq-category-post-margin-symbol { background-color: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-category-toggle-background-color' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-category-toggle-font-color' ) != '' ) { $css .= '.ewd-ufaq-category-post-margin-symbol { color: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-category-toggle-font-color' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-category-toggle-border-size' ) != '' ) { $css .= '.ewd-ufaq-category-post-margin-symbol { border-width: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-category-toggle-border-size' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-category-toggle-border-color' ) != '' ) { $css .= '.ewd-ufaq-category-post-margin-symbol { border-color: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-category-toggle-border-color' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-category-toggle-border-radius' ) != '' ) { $css .= '.ewd-ufaq-category-post-margin-symbol { border-radius: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-category-toggle-border-radius' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-category-toggle-symbol-size' ) != '' ) { $css .= '.ewd-ufaq-faq-category-title .ewd-ufaq-category-post-margin-symbol span { font-size: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-category-toggle-symbol-size' ) . ' !important; }'; }
-			
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-block-background-color' ) != '' ) { 
-
-				$css .= ".ewd-ufaq-faq-display-style-block.ewd-ufaq-post-active, .ewd-ufaq-faq-display-style-block.ewd-ufaq-post-active a,.ewd-ufaq-faq-display-style-block:hover, .ewd-ufaq-faq-display-style-block:hover a, .ewd-ufaq-faq-display-style-block:hover $heading_type { background-color: " . $ewd_ufaq_controller->settings->get_setting( 'styling-block-background-color' ) . ' !important; }';
-				$css .= ".ewd-ufaq-faq-display-style-border_block.ewd-ufaq-post-active, .ewd-ufaq-faq-display-style-border_block:hover, .ewd-ufaq-faq-display-style-border_block:hover $heading_type { background-color: " . $ewd_ufaq_controller->settings->get_setting( 'styling-block-background-color' ) . ' !important; }';
-				$css .= ".ewd-ufaq-faq-display-style-border_block .ewd-ufaq-faq-body { border-color: " . $ewd_ufaq_controller->settings->get_setting( 'styling-block-background-color' ) . ' !important; }';
-				$css .= ".ewd-ufaq-faq-display-style-border_block .comment-reply-title, .ewd-ufaq-faq-display-style-border_block:hover .comment-reply-title { background-color: transparent !important; }";
-			}
-
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-block-font-color' ) != '' ) { 
-
-				$css .= ".ewd-ufaq-faq-display-style-block:hover .ewd-ufaq-post-margin-symbol, .ewd-ufaq-category-post-margin-symbol, .ewd-ufaq-faq-display-style-block:hover $heading_type { color: " . $ewd_ufaq_controller->settings->get_setting( 'styling-block-font-color' ) . ' !important; }';
-				$css .= ".ewd-ufaq-faq-display-style-border_block:hover .ewd-ufaq-post-margin-symbol, .ewd-ufaq-category-post-margin-symbol, .ewd-ufaq-faq-display-style-border_block:hover $heading_type { color: " . $ewd_ufaq_controller->settings->get_setting( 'styling-block-font-color' ) . ' !important; }';
-			}
-
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-list-font' ) != '' ) { $css .= '.ewd-ufaq-faq-header-title a { font-family: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-list-font' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-list-font-size' ) != '' ) { $css .= '.ewd-ufaq-faq-header-title a { font-size: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-list-font-size' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-list-font-color' ) != '' ) { $css .= '.ewd-ufaq-faq-header-title a { color: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-list-font-color' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-list-margin' ) != '' ) { $css .= '.ewd-ufaq-faq-header-title a { margin: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-list-margin' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-list-padding' ) != '' ) { $css .= '.ewd-ufaq-faq-header-title a { padding: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-list-padding' ) . ' !important; }'; }
-
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-question-font' ) != '' ) { $css .= "div.ewd-ufaq-faq-title $heading_type { font-family: " . $ewd_ufaq_controller->settings->get_setting( 'styling-question-font' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-question-font-size' ) != '' ) { $css .= "div.ewd-ufaq-faq-title $heading_type { font-size: " . $ewd_ufaq_controller->settings->get_setting( 'styling-question-font-size' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-question-font-color' ) != '' ) { $css .= "div.ewd-ufaq-faq-title $heading_type { color: " . $ewd_ufaq_controller->settings->get_setting( 'styling-question-font-color' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-question-margin' ) != '' ) { $css .= "div.ewd-ufaq-faq-title $heading_type { margin: " . $ewd_ufaq_controller->settings->get_setting( 'styling-question-margin' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-question-padding' ) != '' ) { $css .= "div.ewd-ufaq-faq-title $heading_type { padding: " . $ewd_ufaq_controller->settings->get_setting( 'styling-question-padding' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-question-icon-top-margin' ) != '' ) { $css .= ".ewd-ufaq-post-margin-symbol { margin-top: " . $ewd_ufaq_controller->settings->get_setting( 'styling-question-icon-top-margin' ) . ' !important; }'; }
-			
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-answer-font' ) != '' ) { $css .= 'div.ewd-ufaq-faq-post p { font-family: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-answer-font' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-answer-font-size' ) != '' ) { $css .= 'div.ewd-ufaq-faq-post p { font-size: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-answer-font-size' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-answer-font-color' ) != '' ) { $css .= 'div.ewd-ufaq-faq-post p { color: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-answer-font-color' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-answer-margin' ) != '' ) { $css .= 'div.ewd-ufaq-faq-post p { margin: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-answer-margin' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-answer-padding' ) != '' ) { $css .= 'div.ewd-ufaq-faq-post p { padding: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-answer-padding' ) . ' !important; }'; }
-
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-postdate-font' ) != '' ) { $css .= 'div.ewd-ufaq-author-date { font-family: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-postdate-font' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-postdate-font-size' ) != '' ) { $css .= 'div.ewd-ufaq-author-date { font-size: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-postdate-font-size' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-postdate-font-color' ) != '' ) { $css .= 'div.ewd-ufaq-author-date { color: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-postdate-font-color' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-postdate-margin' ) != '' ) { $css .= 'div.ewd-ufaq-author-date { margin: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-postdate-margin' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-postdate-padding' ) != '' ) { $css .= 'div.ewd-ufaq-author-date { padding: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-postdate-padding' ) . ' !important; }'; }
-
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-category-heading-font' ) != '' ) { $css .= "div.ewd-ufaq-faq-category-title $category_heading_type { font-family: " . $ewd_ufaq_controller->settings->get_setting( 'styling-category-heading-font' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-category-heading-font-size' ) != '' ) { $css .= "div.ewd-ufaq-faq-category-title $category_heading_type { font-size: " . $ewd_ufaq_controller->settings->get_setting( 'styling-category-heading-font-size' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-category-heading-font-color' ) != '' ) { $css .= "div.ewd-ufaq-faq-category-title $category_heading_type { color: " . $ewd_ufaq_controller->settings->get_setting( 'styling-category-heading-font-color' ) . ' !important; }'; }
-			
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-category-font' ) != '' ) { $css .= 'div.ewd-ufaq-faq-categories, div.ewd-ufaq-faq-tags { font-family: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-category-font' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-category-font-size' ) != '' ) { $css .= 'div.ewd-ufaq-faq-categories, div.ewd-ufaq-faq-tags { font-size: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-category-font-size' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-category-font-color' ) != '' ) { $css .= 'div.ewd-ufaq-faq-categories, div.ewd-ufaq-faq-tags { color: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-category-font-color' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-category-margin' ) != '' ) { $css .= 'div.ewd-ufaq-faq-categories, div.ewd-ufaq-faq-tags { margin: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-category-margin' ) . ' !important; }'; }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'styling-category-padding' ) != '' ) { $css .= 'div.ewd-ufaq-faq-categories, div.ewd-ufaq-faq-tags { padding: ' . $ewd_ufaq_controller->settings->get_setting( 'styling-category-padding' ) . ' !important; }'; }
-
-			$css .= $ewd_ufaq_controller->settings->get_setting( 'custom-css' );
-
-		if( ! empty( $css ) ) {
-			echo '<style>';
-				echo $css;
-			echo '</style>';
+		// The Basic settings Custom CSS box is a Free feature, distinct from paid
+		// per-element styling controls. Keep it effective without Helper or rights.
+		$css = $this->get_option( 'custom-css' );
+		$css = apply_filters( 'ewd_ufaq_custom_styles', is_string( $css ) ? $css : '', $this );
+		if ( is_string( $css ) && '' !== $css ) {
+			echo '<style>' . str_ireplace( '</style', '', $css ) . '</style>';
 		}
 	}
 

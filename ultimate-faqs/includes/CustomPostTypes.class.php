@@ -36,7 +36,6 @@ class ewdufaqCustomPostTypes {
 		add_filter( 'handle_bulk_actions-edit-ufaq', 	array( $this, 'handle_reset_view_count_bulk_action' ), 10, 3 );
 
 		// Possibly notify FAQ submitted if user-submitted
-		add_action( 'pre_post_update',	array( $this, 'maybe_notify_author_on_update' ), 10, 2 );
 
 		// Sort taxonomy tables by custom ordering, if no other ordering set
 		//add_action( 'terms_clauses', array( $this, 'sort_categories_by_order' ), 10, 2 );
@@ -214,10 +213,6 @@ class ewdufaqCustomPostTypes {
 		$user = wp_get_current_user();
 		$faq_author = $faq_author ? $faq_author : $user->display_name;
 
-
-		$up_votes = get_post_meta( $post->ID, 'FAQ_Up_Votes', true );
-		$down_votes = get_post_meta( $post->ID, 'FAQ_Down_Votes', true );
-
 		?>
 	
 		<input type="hidden" name="ewd_ufaq_nonce" value="<?php echo esc_attr($this->nonce); ?>">
@@ -229,113 +224,8 @@ class ewdufaqCustomPostTypes {
 			<input type='text' id='ewd-ufaq-post-author' name='faq_author' value='<?php echo esc_attr( $faq_author ); ?>' size='25' />
 		</div>
 
-		<?php if ( $ewd_ufaq_controller->settings->get_setting( 'faq-ratings' ) ) { ?>
-
-			<div class='ewd-ufaq-meta-field'>
-				<label class='ewd-ufaq-meta-label' for='review_karma'>
-					<?php _e( 'Up Votes:', 'ultimate-faqs' ); ?>
-				</label>
-				<input type='text' id='ewd-ufaq-review-karma' name='up_votes' value='<?php echo esc_attr( $up_votes ); ?>' size='25' />
-				<label class='ewd-ufaq-meta-label' for='review_karma'>
-					<?php _e( 'Down Votes:', 'ultimate-faqs' ); ?>
-				</label>
-				<input type='text' id='ewd-ufaq-review-karma' name='down_votes' value='<?php echo esc_attr( $down_votes ); ?>' size='25' />
-			</div>
-
-		<?php } ?>
-
-		<?php $custom_fields = ewd_ufaq_decode_infinite_table_setting( $ewd_ufaq_controller->settings->get_setting( 'faq-fields' ) ); ?>
-
-		<?php foreach ( $custom_fields as $faq_field ) { ?>
-
-			<?php $field_value = get_post_meta( $post->ID, "Custom_Field_" . $faq_field->id, true ); ?>
-
-			<div class='ewd-ufaq-meta-field'>
-				<label class='ewd-ufaq-score-label' for='<?php echo esc_attr( $faq_field->name ); ?>'>
-					<?php echo esc_html( $faq_field->name ) ?>
-				</label>
-
-					<?php $options = explode( ',', $faq_field->options ); ?>
-
-					<?php if ( $faq_field->type == 'textarea' ) { ?>
-	
-							<textarea id='ewd-ufaq-<?php echo esc_attr( $faq_field->name ); ?>' name='EWD_UFAQ_Custom_Field_<?php echo esc_attr( $faq_field->id ); ?>'>
-								<?php echo esc_html( $field_value ); ?>
-							</textarea>
-	
-					<?php } elseif ( $faq_field->type == 'select' ) { ?>
-						<?php if ( ! empty( $options ) ) { ?>
-	
-							<select name='EWD_UFAQ_Custom_Field_<?php echo esc_attr( $faq_field->id ); ?>'>
-								<?php foreach ( $options as $option ) { ?>
-	
-									<option value='<?php echo esc_attr( $option ); ?>' <?php echo ( $option == $field_value ? 'selected' : '' ); ?> >
-										<?php echo esc_html( $option ); ?>
-									</option>
-								<?php } ?>
-							</select>
-	
-						<?php } ?>
-					<?php } elseif ( $faq_field->type == 'checkbox' ) { ?>
-						<?php $field_value = is_array( $field_value ) ? $field_value : array(); ?>
-						<?php if ( ! empty( $options ) ) { ?>
-	
-							<div class='ewd-ufaq-fields-page-radio-checkbox-container'>
-								<?php foreach ( $options as $option ) { ?>
-	
-									<div class='ewd-ufaq-fields-page-radio-checkbox-each'>
-										<input type='checkbox' name='EWD_UFAQ_Custom_Field_<?php echo esc_attr( $faq_field->id ); ?>[]' value='<?php echo esc_attr( $option ); ?>' <?php echo ( in_array( $option, $field_value ) ? 'checked' : '' ); ?> />
-										<?php echo esc_html( $option ); ?>
-									</div>
-								<?php } ?>
-							</div>
-	
-						<?php } ?>
-					<?php } elseif ( $faq_field->type == 'radio' ) { ?>
-						<?php if ( ! empty( $options ) ) { ?>
-	
-							<div class='ewd-ufaq-fields-page-radio-checkbox-container'>
-								<?php foreach ( $options as $option ) { ?>
-	
-									<div class='ewd-ufaq-fields-page-radio-checkbox-each'>
-										<input type='radio' name='EWD_UFAQ_Custom_Field_<?php echo esc_attr( $faq_field->id ); ?>' value='<?php echo esc_attr( $option ); ?>' <?php echo ( $option == $field_value ? 'checked' : '' ); ?> />
-										<?php echo esc_html( $option ); ?>
-									</div>
-								<?php } ?>
-							</div>
-	
-						<?php } ?>
-					<?php } elseif ( $faq_field->type == 'date' ) { ?>
-	
-						<input type='date' class='ewd-ufaq-jquery-datepicker' id='ewd-ufaq-<?php echo esc_attr( $faq_field->name ); ?>' name='EWD_UFAQ_Custom_Field_<?php echo esc_attr( $faq_field->id ); ?>' value='<?php echo esc_attr( $field_value ); ?>' />
-	
-					<?php } elseif ( $faq_field->type == 'datetime' ) { ?>
-	
-						<input type='datetime-local' id='ewd-ufaq-<?php echo esc_attr( $faq_field->name ); ?>' name='EWD_UFAQ_Custom_Field_<?php echo esc_attr( $faq_field->id ); ?>' value='<?php echo esc_attr( $field_value ); ?>' />
-					
-					<?php } elseif ( $faq_field->type == 'file' ) { ?>
-
-						<div class='ewd-ufaq-fields-page-file-preview'>
-
-							<span>
-								<?php _e( 'Current File:',  'ultimate-faqs' ); ?> <?php echo ! empty( $field_value ) ? esc_html( basename( $field_value ) ) : ''; ?>
-							</span>
-
-						</div>
-
-						<input type='file' id='ewd-ufaq-<?php echo esc_attr( $faq_field->name ); ?>' name='EWD_UFAQ_Custom_Field_<?php echo esc_attr( $faq_field->id ); ?>' />
-
-					<?php } else { ?>
-	
-						<input type='text' id='ewd-ufaq-<?php echo esc_attr( $faq_field->name ); ?>' name='EWD_UFAQ_Custom_Field_<?php echo esc_attr( $faq_field->id ); ?>' value='<?php echo esc_attr( $field_value ); ?>' size='25' />
-	
-					<?php } ?>
-
-				</div>
-
-			<?php 
-			}
-		} 
+		<?php do_action( 'ewd_ufaq_admin_meta_fields', $post );
+	} 
 
 	/**
 	 * Add in a link to the plugin documentation
@@ -356,6 +246,7 @@ class ewdufaqCustomPostTypes {
 	 */
 	public function save_meta( $post_id ) {
 		global $ewd_ufaq_controller;
+		if ( EWD_UFAQ_FAQ_POST_TYPE !== get_post_type( $post_id ) ) { return $post_id; }
 
 		// Verify nonce
 		if ( ! isset( $_POST['ewd_ufaq_nonce'] ) || ! wp_verify_nonce( $_POST['ewd_ufaq_nonce'], basename( __FILE__ ) ) ) {
@@ -375,37 +266,8 @@ class ewdufaqCustomPostTypes {
 		} elseif ( ! current_user_can( 'edit_post', $post_id ) ) {
 			return $post_id;
 		}
-
-		if ( ! get_post_meta( $post_id, 'ufaq_order', true ) ) { update_post_meta( $post_id, 'ufaq_order', 9999 ); }
-
-		if ( isset( $_POST['faq_author'] ) ) 	{ update_post_meta( $post_id, 'EWD_UFAQ_Post_Author', sanitize_text_field( $_POST['faq_author'] ) ); }
-		if ( isset( $_POST['up_votes'] ) ) 		{ update_post_meta( $post_id, 'FAQ_Up_Votes', sanitize_text_field( $_POST['up_votes'] ) ); }
-		if ( isset( $_POST['down_votes'] ) ) 	{ update_post_meta( $post_id, 'FAQ_Down_Votes', sanitize_text_field( $_POST['down_votes'] ) ); }
-
-		$custom_fields = ewd_ufaq_decode_infinite_table_setting( $ewd_ufaq_controller->settings->get_setting( 'faq-fields' ) );
-
-		foreach ( $custom_fields as $faq_field ) { 
-			
-			$input_name = 'EWD_UFAQ_Custom_Field_' . $faq_field->id;
-
-			if ( $faq_field->type == 'file' ) {
-
-				if ( empty( $_FILES[ $input_name ]['name'] ) ) { continue; }
-
-				$uploaded_file = wp_handle_upload( $_FILES[ $input_name ], array( 'test_form' => false ) );
-				$field_value = $uploaded_file['url'];
-			}
-			elseif ( $faq_field->type == 'checkbox' ) {
-
-				$field_value = ( isset( $_POST[ $input_name ] ) and is_array( $_POST[ $input_name ] ) ) ? array_map( 'sanitize_text_field', $_POST[ $input_name ] ) : array();
-			}
-			else {
-				
-				$field_value = sanitize_text_field( $_POST[ $input_name ] );
-			}
-
-			update_post_meta( $post_id, 'Custom_Field_' . $faq_field->id, $field_value );
-		}
+if ( isset( $_POST['faq_author'] ) ) 	{ update_post_meta( $post_id, 'EWD_UFAQ_Post_Author', sanitize_text_field( $_POST['faq_author'] ) ); }
+		do_action( 'ewd_ufaq_save_admin_fields', $post_id );
 	}
 
 	/**
@@ -612,18 +474,7 @@ class ewdufaqCustomPostTypes {
 	 * @since 2.4.0
 	 */
 	public function sort_categories_by_order( $clauses, $taxonomies ) {
-		global $wpdb;
-
-		if ( ! in_array( EWD_UFAQ_FAQ_CATEGORY_TAXONOMY, $taxonomies ) ) { return $clauses; }
-		if ( ! empty( $clauses['orderby'] ) and $clauses['orderby'] != 'ORDER BY t.name' ) { return $clauses; }
-
-		$clauses['join'] .= ' INNER JOIN ' . $wpdb->prefix . 'termmeta AS tm ON t.term_id = tm.term_id';
-
-		$clauses['where'] .= ' AND tm.meta_key = "ufaq_category_order"';
-
-		$clauses['orderby'] = 'ORDER BY tm.meta_value+0';
-
-		return $clauses;
+		return class_exists( 'ewdufaqEWDPHOrdering', false ) ? ewdufaqEWDPHOrdering::sort_categories_by_order( $clauses, $taxonomies ) : $clauses;
 	}
 
 	/**
@@ -631,23 +482,7 @@ class ewdufaqCustomPostTypes {
 	 * @since 2.4.0
 	 */
 	public function maybe_notify_author_on_update( $post_id, $data ) {
-		global $ewd_ufaq_controller;
-
-		if ( get_post_type( $post_id ) != EWD_UFAQ_FAQ_POST_TYPE ) { return; }
-
-		if ( empty( $ewd_ufaq_controller->settings->get_setting( 'submit-faq-updates' ) ) ) { return; }
-
-		remove_action( 'pre_post_update',	array( $this, 'maybe_notify_author_on_update' ) );
-
-		$post = get_post( $post_id );
-
-		if ( $ewd_ufaq_controller->settings->get_setting( 'submit-faq-updates' ) == 'first_answer' and ! empty( $post->post_content ) ) { return; }
-		
-		$faq = new ewdufaqFAQ();
-
-		$faq->load_post( $post );
-
-		$ewd_ufaq_controller->notifications->user_question_updated( $faq );
+		if ( class_exists( 'ewdufaqEWDPHSubmissionNotifications', false ) ) { return ewdufaqEWDPHSubmissionNotifications::maybe_notify_author_on_update( $post_id, $data ); }
 	}
 }
 } // endif;

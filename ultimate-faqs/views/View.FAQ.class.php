@@ -217,16 +217,8 @@ class ewdufaqViewFAQ extends ewdufaqView {
 	 *
 	 * @since 2.0.0
 	 */
-	public function maybe_print_custom_fields() {
-		global $ewd_ufaq_controller;
-		
-		if ( empty( $ewd_ufaq_controller->settings->get_setting( 'faq-fields' ) ) ) { return; }
-		
-		$template = $this->find_template( 'faq-custom-fields' );
-		
-		if ( $template ) {
-			include( $template );
-		}
+	public function maybe_print_custom_fields()  {
+		echo apply_filters( 'ewd_ufaq_render_paid_element', '', 'maybe_print_custom_fields', $this );
 	}
 
 	/**
@@ -268,16 +260,8 @@ class ewdufaqViewFAQ extends ewdufaqView {
 	 *
 	 * @since 2.0.0
 	 */
-	public function maybe_print_ratings() {
-		global $ewd_ufaq_controller;
-		
-		if ( ! $ewd_ufaq_controller->settings->get_setting( 'faq-ratings' ) ) { return; }
-		
-		$template = $this->find_template( 'faq-ratings' );
-		
-		if ( $template ) {
-			include( $template );
-		}
+	public function maybe_print_ratings()  {
+		echo apply_filters( 'ewd_ufaq_render_paid_element', '', 'maybe_print_ratings', $this );
 	}
 
 	/**
@@ -288,20 +272,8 @@ class ewdufaqViewFAQ extends ewdufaqView {
 	 *
 	 * @since 2.0.0
 	 */
-	public function maybe_print_social_media() {
-		global $ewd_ufaq_controller;
-		
-		if ( empty( $ewd_ufaq_controller->settings->get_setting( 'social-media' ) ) ) { return; }
-
-		if ( ! is_array( $ewd_ufaq_controller->settings->get_setting( 'social-media' ) ) ) { return; } 
-
-		if ( sizeof( $ewd_ufaq_controller->settings->get_setting( 'social-media' ) ) == 1 and in_array( '', $ewd_ufaq_controller->settings->get_setting( 'social-media' ) ) ) { return; }
-		
-		$template = $this->find_template( 'faq-social-media' );
-		
-		if ( $template ) {
-			include( $template );
-		}
+	public function maybe_print_social_media()  {
+		echo apply_filters( 'ewd_ufaq_render_paid_element', '', 'maybe_print_social_media', $this );
 	}
 
 	/**
@@ -360,14 +332,8 @@ class ewdufaqViewFAQ extends ewdufaqView {
 	 *
 	 * @since 2.0.0
 	 */
-	public function print_social_media_buttons() {
-		global $ewd_ufaq_controller;
-		
-		if ( in_array( 'facebook', $ewd_ufaq_controller->settings->get_setting( 'social-media' ) ) ) { $this->print_facebook_button(); }
-		if ( in_array( 'twitter', $ewd_ufaq_controller->settings->get_setting( 'social-media' ) ) ) { $this->print_twitter_button(); }
-		if ( in_array( 'linkedin', $ewd_ufaq_controller->settings->get_setting( 'social-media' ) ) ) { $this->print_linkedin_button(); }
-		if ( in_array( 'pinterest', $ewd_ufaq_controller->settings->get_setting( 'social-media' ) ) ) { $this->print_pinterest_button(); }
-		if ( in_array( 'email', $ewd_ufaq_controller->settings->get_setting( 'social-media' ) ) ) { $this->print_email_button(); }
+	public function print_social_media_buttons()  {
+		echo apply_filters( 'ewd_ufaq_render_paid_element', '', 'print_social_media_buttons', $this );
 	}
 
 	/**
@@ -375,13 +341,8 @@ class ewdufaqViewFAQ extends ewdufaqView {
 	 *
 	 * @since 2.0.0
 	 */
-	public function print_facebook_button() {
-		
-		$template = $this->find_template( 'faq-social-media-facebook' );
-		
-		if ( $template ) {
-			include( $template );
-		}
+	public function print_facebook_button()  {
+		echo apply_filters( 'ewd_ufaq_render_paid_element', '', 'print_facebook_button', $this );
 	}
 
 	/**
@@ -389,13 +350,8 @@ class ewdufaqViewFAQ extends ewdufaqView {
 	 *
 	 * @since 2.0.0
 	 */
-	public function print_twitter_button() {
-		
-		$template = $this->find_template( 'faq-social-media-twitter' );
-		
-		if ( $template ) {
-			include( $template );
-		}
+	public function print_twitter_button()  {
+		echo apply_filters( 'ewd_ufaq_render_paid_element', '', 'print_twitter_button', $this );
 	}
 
 	/**
@@ -403,13 +359,8 @@ class ewdufaqViewFAQ extends ewdufaqView {
 	 *
 	 * @since 2.0.0
 	 */
-	public function print_linkedin_button() {
-		
-		$template = $this->find_template( 'faq-social-media-linkedin' );
-		
-		if ( $template ) {
-			include( $template );
-		}
+	public function print_linkedin_button()  {
+		echo apply_filters( 'ewd_ufaq_render_paid_element', '', 'print_linkedin_button', $this );
 	}
 
 	/**
@@ -417,13 +368,8 @@ class ewdufaqViewFAQ extends ewdufaqView {
 	 *
 	 * @since 2.0.0
 	 */
-	public function print_pinterest_button() {
-		
-		$template = $this->find_template( 'faq-social-media-pinterest' );
-		
-		if ( $template ) {
-			include( $template );
-		}
+	public function print_pinterest_button()  {
+		echo apply_filters( 'ewd_ufaq_render_paid_element', '', 'print_pinterest_button', $this );
 	}
 
 	/**
@@ -431,13 +377,8 @@ class ewdufaqViewFAQ extends ewdufaqView {
 	 *
 	 * @since 2.0.0
 	 */
-	public function print_email_button() {
-		
-		$template = $this->find_template( 'faq-social-media-email' );
-		
-		if ( $template ) {
-			include( $template );
-		}
+	public function print_email_button()  {
+		echo apply_filters( 'ewd_ufaq_render_paid_element', '', 'print_email_button', $this );
 	}
 
 	/**
@@ -458,7 +399,8 @@ class ewdufaqViewFAQ extends ewdufaqView {
 	public function get_order_elements() {
 		global $ewd_ufaq_controller;
 
-		return is_array( $ewd_ufaq_controller->settings->get_setting( 'faq-elements-order' ) ) ? $ewd_ufaq_controller->settings->get_setting( 'faq-elements-order' ) : json_decode( $ewd_ufaq_controller->settings->get_setting( 'faq-elements-order' ) );
+		$elements = array( 'categories' => 'Categories', 'body' => 'Body', 'author_date' => 'Author/Date', 'tags' => 'Tags', 'permalink' => 'Permalink', 'comments' => 'Comments', 'back_to_top' => 'Back to Top' );
+		return apply_filters( 'ewd_ufaq_faq_elements_order', $elements, $this );
 	}
 
   	/**
@@ -466,11 +408,9 @@ class ewdufaqViewFAQ extends ewdufaqView {
 	 *
 	 * @since 2.0.0
 	 */
-  	public function get_color_block_shape() {
-  		global $ewd_ufaq_controller;
-
-  		return 'ewd-ufaq-' . $ewd_ufaq_controller->settings->get_setting( 'color-block-shape' );
-  	}
+	public function get_color_block_shape()  {
+		return class_exists( 'ewdufaqEWDPHPresentation', false ) ? ewdufaqEWDPHPresentation::get_color_block_shape( $this ) : '';
+	}
 
 	/**
 	 * Returns the selected toggle symbol
@@ -499,30 +439,17 @@ class ewdufaqViewFAQ extends ewdufaqView {
 	 *
 	 * @since 2.0.0
 	 */
-  	public function get_custom_fields() {
-  		global $ewd_ufaq_controller;
-
-  		return ewd_ufaq_decode_infinite_table_setting( $ewd_ufaq_controller->settings->get_setting( 'faq-fields' ) );
-  	}
+	public function get_custom_fields()  {
+		return class_exists( 'ewdufaqEWDPHPresentation', false ) ? ewdufaqEWDPHPresentation::get_custom_fields( $this ) : array();
+	}
 
 	/**
 	 * Returns the value for a given custom field
 	 *
 	 * @since 2.0.0
 	 */
-  	public function get_custom_field_value( $custom_field ) {
-
-  		$value = get_post_meta( $this->faq->post->ID, 'Custom_Field_' . $custom_field->id, true );
-
-  		if ( $custom_field->type == 'file' ) {
-
-  			return ! empty( $value ) ? '<a href="' . esc_attr( $value ) . '">' . strrpos( $value, '/' ) ? esc_html( substr( $value, strrpos( $value, '/' ) + 1 ) ) : esc_html( $value ) . '</a>' : '';
-  		} 
-		elseif ( $custom_field->type == 'link' ) {
-
-			return ! empty( $value ) ? '<a href="' . esc_attr( $value ) . '" target="_blank">' . esc_attr( $value ) . '</a>' : '';
-		} 
-		else { return $value; }
+	public function get_custom_field_value( $custom_field )  {
+		return class_exists( 'ewdufaqEWDPHPresentation', false ) ? ewdufaqEWDPHPresentation::get_custom_field_value( $this, $custom_field ) : '';
 	}
 
 	/**
@@ -533,7 +460,7 @@ class ewdufaqViewFAQ extends ewdufaqView {
   	public function get_categories_label() {
   		global $ewd_ufaq_controller;
 
-  		return $ewd_ufaq_controller->settings->get_setting( 'label-categories' ) ? $ewd_ufaq_controller->settings->get_setting( 'label-categories' ) : ( sizeOf( $this->faq->categories ) == 1 ? __( 'Category:', 'ultimate-faqs' ) : __( 'Categories:', 'ultimate-faqs' ) );
+		return apply_filters( 'ewd_ufaq_custom_label', count( $this->faq->categories ) === 1 ? __( 'Category:', 'ultimate-faqs' ) : __( 'Categories:', 'ultimate-faqs' ), 'label-categories', $this );
   	}
 
   	/**
@@ -557,7 +484,7 @@ class ewdufaqViewFAQ extends ewdufaqView {
   	public function get_tags_label() {
   		global $ewd_ufaq_controller;
 
-  		return $ewd_ufaq_controller->settings->get_setting( 'label-tags' ) ? $ewd_ufaq_controller->settings->get_setting( 'label-tags' ) : ( sizeOf( $this->faq->tags ) == 1 ? __( 'Tag:', 'ultimate-faqs' ) : __( 'Tags:', 'ultimate-faqs' ) );
+		return apply_filters( 'ewd_ufaq_custom_label', count( $this->faq->tags ) === 1 ? __( 'Tag:', 'ultimate-faqs' ) : __( 'Tags:', 'ultimate-faqs' ), 'label-tags', $this );
   	}
 
   	/**
@@ -578,94 +505,72 @@ class ewdufaqViewFAQ extends ewdufaqView {
 	 *
 	 * @since 2.0.0
 	 */
-  	public function get_thumbs_up_image() {
-  		global $ewd_ufaq_controller;
-
-  		$img_url = ( $ewd_ufaq_controller->settings->get_setting( 'thumbs-up-image' ) and $ewd_ufaq_controller->settings->get_setting( 'thumbs-up-image' ) != 'http://' ) ? $ewd_ufaq_controller->settings->get_setting( 'thumbs-up-image' ) : EWD_UFAQ_PLUGIN_URL . '/assets/img/Thumbs-up-icon.png';
-
-  		return '<img src="' . esc_url( $img_url ) . '" alt="' . __( "Thumbs Up Icon", "ultimate-faqs" ) . '">';
-  	}
+	public function get_thumbs_up_image()  {
+		return class_exists( 'ewdufaqEWDPHPresentation', false ) ? ewdufaqEWDPHPresentation::get_thumbs_up_image( $this ) : '';
+	}
 
   	/**
 	 * Returns the positive vote count
 	 *
 	 * @since 2.0.0
 	 */
-  	public function get_up_votes() {
-
-  		return get_post_meta( $this->faq->post->ID, "FAQ_Up_Votes", true ) ? get_post_meta( $this->faq->post->ID, "FAQ_Up_Votes", true ) : 0;
-  	}
+	public function get_up_votes()  {
+		return class_exists( 'ewdufaqEWDPHPresentation', false ) ? ewdufaqEWDPHPresentation::get_up_votes( $this ) : 0;
+	}
 
   	/**
 	 * Returns an image with a custom thumbs down rating image, or the default one if unavailable
 	 *
 	 * @since 2.0.0
 	 */
-  	public function get_thumbs_down_image() {
-  		global $ewd_ufaq_controller;
-
-  		$img_url = ( $ewd_ufaq_controller->settings->get_setting( 'thumbs-down-image' ) and $ewd_ufaq_controller->settings->get_setting( 'thumbs-down-image' ) != 'http://' ) ? $ewd_ufaq_controller->settings->get_setting( 'thumbs-down-image' ) : EWD_UFAQ_PLUGIN_URL . '/assets/img/Thumbs-down-icon.png';
-
-  		return '<img src="' . esc_url( $img_url ) . '" alt="' . __( "Thumbs Down Icon", "ultimate-faqs" ) . '">';
-  	}
+	public function get_thumbs_down_image()  {
+		return class_exists( 'ewdufaqEWDPHPresentation', false ) ? ewdufaqEWDPHPresentation::get_thumbs_down_image( $this ) : '';
+	}
 
   	/**
 	 * Returns the negative vote count
 	 *
 	 * @since 2.0.0
 	 */
-  	public function get_down_votes() {
-
-  		return get_post_meta( $this->faq->post->ID, "FAQ_Down_Votes", true ) ? get_post_meta( $this->faq->post->ID, "FAQ_Down_Votes", true ) : 0;
-  	}
+	public function get_down_votes()  {
+		return class_exists( 'ewdufaqEWDPHPresentation', false ) ? ewdufaqEWDPHPresentation::get_down_votes( $this ) : 0;
+	}
 
 	/**
 	 * Returns a link to this FAQ for Twitter
 	 *
 	 * @since 2.0.0
 	 */
-  	public function get_social_twitter_link() {
-
-  		$text = __( 'Check out this helpful FAQ', 'ultimate-faqs' ) . ': ';
-
-  		return 'https://twitter.com/intent/tweet?text=' . urlencode( $text ) . urlencode( $this->faq->post->post_title ) . urlencode( ' | ' ) . urlencode( $this->permalink );
-  	}
+	public function get_social_twitter_link()  {
+		return class_exists( 'ewdufaqEWDPHPresentation', false ) ? ewdufaqEWDPHPresentation::get_social_twitter_link( $this ) : '';
+	}
 
 	/**
 	 * Returns a link to this FAQ for LinkedIn
 	 *
 	 * @since 2.0.0
 	 */
-  	public function get_social_linkedin_link() {
-
-  		$text = __( 'Check out this helpful FAQ', 'ultimate-faqs' );
-
-  		return 'http://www.linkedin.com/shareArticle?mini=true&amp;url=' . $this->permalink . "&amp;title=" . urlencode( $text ) . "&amp;summary=" . urlencode( $this->faq->post->post_title );
-  	}
+	public function get_social_linkedin_link()  {
+		return class_exists( 'ewdufaqEWDPHPresentation', false ) ? ewdufaqEWDPHPresentation::get_social_linkedin_link( $this ) : '';
+	}
 
 	/**
 	 * Returns a link to this FAQ for Pinterest
 	 *
 	 * @since 2.0.0
 	 */
-  	public function get_social_pinterest_link() {
-
-  		$text = __( 'Check out this helpful FAQ', 'ultimate-faqs' ) . ': ';
-
-  		return 'http://pinterest.com/pin/create/button/?url=' . $this->permalink . "&amp;description=" . urlencode( $text ) . urlencode( $this->faq->post->post_title );
-  	}
+	public function get_social_pinterest_link()  {
+		return class_exists( 'ewdufaqEWDPHPresentation', false ) ? ewdufaqEWDPHPresentation::get_social_pinterest_link( $this ) : '';
+	}
 
 	/**
 	 * Returns a link to this FAQ that can be emailed
 	 *
 	 * @since 2.0.0
 	 */
-  	public function get_social_email_mailto_link() {
-
-  		$subject = __( 'Check out this helpful FAQ', 'ultimate-faqs' );
-
-  		return 'mailto:?subject=' . urlencode( $subject ) . "&amp;body=" . urlencode( $this->faq->post->post_title ) . urlencode( ' | ' ) . urlencode( $this->permalink );
-  	}
+	public function get_social_email_mailto_link()  {
+		return class_exists( 'ewdufaqEWDPHPresentation', false ) ? ewdufaqEWDPHPresentation::get_social_email_mailto_link( $this ) : '';
+	}
 
 	/**
 	 * Get the initial submit faq css classes
@@ -678,9 +583,9 @@ class ewdufaqViewFAQ extends ewdufaqView {
 			$classes,
 			array(
 				'ewd-ufaq-faq-div',
-				'ewd-ufaq-faq-column-count-' . $ewd_ufaq_controller->settings->get_setting( 'number-of-columns' ),
-				'ewd-ufaq-faq-responsive-columns-' . $ewd_ufaq_controller->settings->get_setting( 'responsive-columns' ),
-				'ewd-ufaq-faq-display-style-' . $ewd_ufaq_controller->settings->get_setting( 'display-style' ),
+				'ewd-ufaq-faq-column-count-one',
+				'ewd-ufaq-faq-responsive-columns-',
+				'ewd-ufaq-faq-display-style-default',
 			)
 		);
 
@@ -728,11 +633,7 @@ class ewdufaqViewFAQ extends ewdufaqView {
 		$this->faq_preview = apply_filters( 'the_content', $this->faq->post->post_excerpt );
 		$this->date = get_the_date( '', $this->faq->post->ID );
 		
-		if ( ! empty( $this->search_string ) and $ewd_ufaq_controller->settings->get_setting( 'highlight-search-term' ) ) {
-
-			$this->faq_title  = $this->highlight_across_tags( $this->faq_title,  $this->search_string );
-			$this->faq_answer = $this->highlight_across_tags( $this->faq_answer, $this->search_string );
-		}
+		do_action( 'ewd_ufaq_faq_display_variables', $this );
 		
 		remove_filter( 'siteorigin_panels_filter_content_enabled', array( $this, 'disable_site_origin_page_builder' ) );
 
@@ -745,120 +646,8 @@ class ewdufaqViewFAQ extends ewdufaqView {
 	 *
 	 * @since 2.0.0
 	 */
-	public function highlight_across_tags( $html, $term, $class = 'ewd-ufaq-highlight-search-term' ) {
-
-		$term = trim( $term );
-		if ( $term === '' ) { return $html; }
-
-		$pattern = '/' . preg_quote( $term, '/' ) . '/iu';
-
-		// Parse HTML
-		$dom = new DOMDocument( '1.0', 'UTF-8' );
-		libxml_use_internal_errors( true );
-		$dom->loadHTML( '<?xml encoding="utf-8" ?>' . $html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD );
-		libxml_clear_errors();
-
-		$xpath = new DOMXPath( $dom );
-
-		// Collect all text nodes in document order and build a flat text map
-		$nodes  = array();
-		$full   = '';
-		$offset = 0;
-
-		// Include empty text nodes too (a match might begin/end at their edges)
-		foreach ( $xpath->query( '//text()' ) as $t ) {
-			$text    = isset( $t->nodeValue ) ? $t->nodeValue : '';
-			$len     = mb_strlen( $text, 'UTF-8' );
-			$nodes[] = array( 'node' => $t, 'start' => $offset, 'end' => $offset + $len );
-			$full   .= $text;
-			$offset += $len;
-		}
-
-		if ( $full === '' || empty( $nodes ) ) {
-			// Nothing to do
-			$result = $dom->saveHTML();
-			return preg_replace( '/^<\?xml.*?\?>/u', '', $result ) ? preg_replace( '/^<\?xml.*?\?>/u', '', $result ) : $html;
-		}
-
-		// Find matches in the flattened text
-		if ( ! preg_match_all( $pattern, $full, $m, PREG_OFFSET_CAPTURE ) ) {
-			$result = $dom->saveHTML();
-			return preg_replace( '/^<\?xml.*?\?>/u', '', $result ) ? preg_replace( '/^<\?xml.*?\?>/u', '', $result ) : $html;
-		}
-
-		// Build match list (convert byte offsets to Unicode codepoint offsets)
-		$matches = array();
-		foreach ( $m[0] as $mm ) {
-			$match_text = $mm[0];
-			$start_byte = $mm[1];
-
-			$pre    = mb_substr( $full, 0, $start_byte, 'UTF-8' );
-			$start  = mb_strlen( $pre, 'UTF-8' );
-			$length = mb_strlen( $match_text, 'UTF-8' );
-
-			$matches[] = array( 'start' => $start, 'length' => $length );
-		}
-
-		if ( empty( $matches ) ) {
-			$result = $dom->saveHTML();
-			return preg_replace( '/^<\?xml.*?\?>/u', '', $result ) ? preg_replace( '/^<\?xml.*?\?>/u', '', $result ) : $html;
-		}
-
-		// Process matches from right to left so earlier offsets aren't invalidated
-		usort(
-			$matches,
-			function( $a, $b ) {
-				if ( $a['start'] === $b['start'] ) { return 0; }
-				return ( $a['start'] < $b['start'] ) ? 1 : -1;
-			}
-		);
-
-		foreach ( $matches as $match ) {
-			$m_start = $match['start'];
-			$m_end   = $match['start'] + $match['length'];
-
-			// Walk text nodes and wrap overlapping slices
-			foreach ( $nodes as $entry ) {
-
-				/** @var DOMText $text_node */
-				$text_node = $entry['node'];
-				$n_start   = $entry['start'];
-				$n_end     = $entry['end'];
-
-				// No overlap?
-				if ( $m_end <= $n_start || $m_start >= $n_end ) { continue; }
-
-				// Local offsets in this node
-				$local_start = max( 0, $m_start - $n_start );
-				$local_end   = min( $n_end, $m_end ) - $n_start;
-
-				// Split into [before][target][after]
-				// Note: DOMText::splitText uses UTF-16 offsets internally but PHP maps by characters.
-				// Using mb_* derived offsets aligns with DOM for BMP; for safety we keep to mb_strlen logic.
-				if ( $local_end < mb_strlen( $text_node->data, 'UTF-8' ) ) {
-					$after_node = $text_node->splitText( $local_end );
-				} else {
-					$after_node = null;
-				}
-
-				$target_node = $text_node;
-				if ( $local_start > 0 ) {
-					$target_node = $text_node->splitText( $local_start );
-				}
-
-				// Wrap the target slice
-				$span = $dom->createElement( 'span' );
-				$span->setAttribute( 'class', $class );
-				$target_node->parentNode->replaceChild( $span, $target_node );
-				$span->appendChild( $target_node );
-			}
-		}
-
-		// Return HTML without the XML declaration we prepended
-		$result = $dom->saveHTML();
-		$result = preg_replace( '/^<\?xml.*?\?>/u', '', $result );
-
-		return $result ? $result : $html;
+	public function highlight_across_tags( $html, $term, $class = 'ewd-ufaq-highlight-search-term' )  {
+		return class_exists( 'ewdufaqEWDPHPresentation', false ) ? ewdufaqEWDPHPresentation::highlight_across_tags( $this, $html, $term, $class ) : $html;
 	}
 
 	/**
@@ -1081,15 +870,21 @@ class ewdufaqViewFAQ extends ewdufaqView {
 	 * @since 2.0.0
 	 */
 	public function enqueue_assets() {
+		global $ewd_ufaq_controller;
+		if ( ! $ewd_ufaq_controller->get_front_end_php_data( 'ewd-ufaq-js', 'ewd_ufaq_php_data' ) ) {
+			$args = array( 'nonce' => wp_create_nonce( 'ewd-ufaq-js' ), 'faq_accordion' => $ewd_ufaq_controller->settings->get_setting( 'faq-accordion' ), 'category_accordion' => $ewd_ufaq_controller->settings->get_setting( 'faq-category-accordion' ), 'faq_scroll' => $ewd_ufaq_controller->settings->get_setting( 'scroll-to-top' ) );
+			$ewd_ufaq_controller->add_front_end_php_data( 'ewd-ufaq-js', 'ewd_ufaq_php_data', apply_filters( 'ewd_ufaq_js_localize_data', $args, $this ) );
+		}
 		
-		wp_enqueue_style( 'ewd-ufaq-rrssb' );
-		wp_enqueue_style( 'ewd-ufaq-jquery-ui' );
 		wp_enqueue_style( 'ewd-ufaq-css' );
 
-		wp_enqueue_style( 'ewd-ufaq-rrssb' );
-		wp_enqueue_style( 'ewd-ufaq-jquery-ui' );
-
 		wp_enqueue_script( 'ewd-ufaq-js' );
+		do_action( 'ewd_ufaq_view_assets', $this );
 
+	}
+	public function get_body_classes() {
+		$classes = array( 'ewd-ufaq-faq-body' );
+		if ( ! $this->display_all_answers ) { $classes[] = 'ewd-ufaq-hidden'; }
+		return apply_filters( 'ewd_ufaq_faq_body_classes', $classes, $this );
 	}
 }

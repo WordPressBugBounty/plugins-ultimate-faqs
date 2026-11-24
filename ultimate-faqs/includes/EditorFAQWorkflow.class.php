@@ -213,12 +213,6 @@ if ( ! class_exists( 'ewdufaqEditorFAQWorkflow' ) ) {
 				$this->send_error( 'create_failed', __( 'WordPress did not publish the new FAQ.', 'ultimate-faqs' ), 500 );
 			}
 
-			if ( false === update_post_meta( $post_id, 'ufaq_order', 9999 ) ) {
-
-				wp_delete_post( $post_id, true );
-				$this->send_error( 'create_failed', __( 'The new FAQ could not be initialized for display.', 'ultimate-faqs' ), 500 );
-			}
-
 			// This short-lived receipt authorizes rollback of this creation request only.
 			// It is not stored on the FAQ or in the block's saved attributes.
 			$token      = wp_generate_password( 32, false, false );

@@ -3,7 +3,7 @@
  * Plugin Name: Ultimate FAQ Accordion Plugin
  * Plugin URI: https://www.etoilewebdesign.com/plugins/ultimate-faq/
  * Description: Full-featured FAQ and accordion plugin with advanced search, simple UI and easy-to-use Gutenberg blocks and shortcodes.
- * Version: 2.6.0
+ * Version: 2.7.0
  * Author: Etoile Web Design
  * Author URI: https://www.etoilewebdesign.com/
  * License: GPLv3
@@ -13,7 +13,7 @@
  * Requires at least: 6.0
  * Requires PHP: 7.4
  * WC requires at least: 7.1
- * WC tested up to: 11.2
+ * WC tested up to: 11.3
  */
 
 if ( ! defined( 'ABSPATH' ) )
@@ -66,10 +66,10 @@ class ewdufaqInit {
 		define( 'EWD_UFAQ_PLUGIN_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
 		define( 'EWD_UFAQ_PLUGIN_FNAME', plugin_basename( __FILE__ ) );
 		define( 'EWD_UFAQ_TEMPLATE_DIR', 'ewd-ufaq-templates' );
-			define( 'EWD_UFAQ_VERSION', '2.6.0' );
-			define( 'EWD_UFAQ_HELPER_API_VERSION', 2 );
-			define( 'EWD_UFAQ_MIN_HELPER_VERSION', '0.2.0' );
-			define( 'EWD_UFAQ_MAX_HELPER_API_VERSION', 2 );
+			define( 'EWD_UFAQ_VERSION', '2.7.0' );
+			define( 'EWD_UFAQ_HELPER_API_VERSION', 3 );
+			define( 'EWD_UFAQ_MIN_HELPER_VERSION', '0.3.0' );
+			define( 'EWD_UFAQ_MAX_HELPER_API_VERSION', 3 );
 			define( 'EWD_UFAQ_ENTITLEMENT_CONTRACT_VERSION', 1 );
 		define( 'EWD_UFAQ_FAQ_POST_TYPE', 'ufaq' );
 		define( 'EWD_UFAQ_FAQ_CATEGORY_TAXONOMY', 'ufaq-category' );
@@ -101,17 +101,15 @@ class ewdufaqInit {
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/EditorFAQWorkflow.class.php' );
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/InstallationWalkthrough.class.php' );
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/Notifications.class.php' );
-		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/OrderingTable.class.php' );
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/Permissions.class.php' );
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/Query.class.php' );
+		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/RetainedData.class.php' );
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/ReviewAsk.class.php' );
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/Settings.class.php' );
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/template-functions.php' );
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/UltimateWPMail.class.php' );
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/Upgrades.class.php' );
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/Widgets.class.php' );
-		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/WooCommerce.class.php' );
-		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/WPForms.class.php' );
 	}
 
 	/**
@@ -132,10 +130,9 @@ class ewdufaqInit {
 		$this->notifications = new ewdufaqNotifications();
 		$this->permissions 	 = new ewdufaqPermissions();
 		$this->settings 	 = new ewdufaqSettings(); 
+		ewdufaqRetainedData::instance();
 		$this->helper_compatibility = new ewdufaqHelperCompatibility();
 			// Register adapters regardless of initial entitlement; check at execution time.
-			$this->woocommerce = new ewdufaqWooCommerce();
-			$this->wpforms     = new ewdufaqWPForms();
 
 		new ewdufaqAJAX();
 		new ewdufaqAnalyticsBridge();
@@ -143,7 +140,6 @@ class ewdufaqInit {
 		new ewdufaqBlocks();
 		new ewdufaqEditorFAQWorkflow();
 		if ( function_exists( 'register_block_pattern' ) ) { new ewdufaqPatterns(); }
-		new ewdufaqOrderingTable();
 		new ewdufaqUltimateWPMail();
 		new ewdufaqUpgrades();
 		new ewdufaqWidgetManager();
@@ -352,7 +348,7 @@ class ewdufaqInit {
 		wp_enqueue_script( 'jquery-ui-core' );
 		wp_enqueue_script( 'jquery-ui-sortable' );
 
-		wp_register_script( 'ewd-ufaq-admin-js', EWD_UFAQ_PLUGIN_URL . '/assets/js/ewd-ufaq-admin.js', array( 'jquery', 'jquery-ui-sortable' ), EWD_UFAQ_VERSION, true );
+		wp_register_script( 'ewd-ufaq-admin-js', EWD_UFAQ_PLUGIN_URL . '/assets/js/ewd-ufaq-admin.js', array( 'jquery' ), EWD_UFAQ_VERSION, true );
 
 		$args = array(
 			'nonce' => wp_create_nonce( 'ewd-ufaq-admin-js' ),
@@ -370,11 +366,7 @@ class ewdufaqInit {
 	 */
 	public function register_assets() {
 
-		wp_register_style( 'ewd-ufaq-rrssb', EWD_UFAQ_PLUGIN_URL . '/assets/css/rrssb-min.css', array(), EWD_UFAQ_VERSION );
-		wp_register_style( 'ewd-ufaq-jquery-ui', EWD_UFAQ_PLUGIN_URL . '/assets/css/jquery-ui.min.css', array(), EWD_UFAQ_VERSION );
-		
 		wp_register_style( 'ewd-ufaq-css', EWD_UFAQ_PLUGIN_URL . '/assets/css/ewd-ufaq.css', array(), EWD_UFAQ_VERSION );
-		wp_register_style( 'ewd-ufaq-minimalist', EWD_UFAQ_PLUGIN_URL . '/assets/css/ewd-ufaq-minimalist.css', array(), EWD_UFAQ_VERSION );
 
 		wp_register_script( 'ewd-ufaq-js', EWD_UFAQ_PLUGIN_URL . '/assets/js/ewd-ufaq.js', array( 'jquery', 'jquery-ui-core' ), EWD_UFAQ_VERSION, true );
 	}

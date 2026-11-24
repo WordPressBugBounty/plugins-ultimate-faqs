@@ -63,42 +63,7 @@ jQuery( document ).ready( function( $ ) {
 	} );
 } );
 
-jQuery(document).ready(function($) {
-
-	$( '.ewd-ufaq-list' ).sortable({
-		items: '.ewd-ufaq-item',
-		opacity: 0.6,
-		cursor: 'move',
-		axis: 'y',
-		update: function() {
-				var order = jQuery( this ).sortable( 'serialize' ) 
-				  + '&action=ewd_ufaq_update_faq_order'
-				  + '&nonce='+ewd_ufaq_php_data.nonce;
-				jQuery.post( ajaxurl, order, function( response ) {} );
-		}
-	});
-
-	if ( jQuery( 'input[name="taxonomy"]' ).length && jQuery( 'input[name="taxonomy"]' ).val() == 'ufaq-category' ) {
-
-    	jQuery( 'table.wp-list-table tbody' ).sortable({
-    		items: 'tr.level-0',
-    		opacity: 0.6,
-    		cursor: 'move',
-    		update: function() {
-
-				var params = {
-					nonce: ewd_ufaq_php_data.nonce,
-					action: 'ewd_ufaq_update_category_order'
-				};
-
-				var query_string = jQuery( this ).sortable('serialize');
-				var data = jQuery.param( params ) + '&' + query_string;
-
-				jQuery.post( ajaxurl, data, function( response ) {});
-    		}
-    	})
-    }
-});
+// Helper owns explicit one-record order edits; partial sortable lists are never submitted.
 
 jQuery(document).ready(function($) {
 
@@ -107,24 +72,7 @@ jQuery(document).ready(function($) {
 	$( 'input[name="ewd-ufaq-settings[faq-order-by]"][value="set_order"]' ).prop( 'disabled', true );
 });
 
-jQuery(document).ready(function($){
-
-	$( '.sap-new-admin-add-button' ).on( 'click', function() {
-
-		setTimeout( ewd_ufaq_field_added_handler, 500);
-	});
-});
-
-function ewd_ufaq_field_added_handler() {
-
-	var highest = 0;
-	jQuery( '.sap-infinite-table input[data-name="id"]' ).each( function() {
-		highest = Math.max( highest, this.value );
-	});
-
-	jQuery( '.sap-infinite-table  tbody tr:last-of-type span.sap-infinite-table-hidden-value' ).html( highest + 1 );
-	jQuery( '.sap-infinite-table  tbody tr:last-of-type input[data-name="id"]' ).val( highest + 1 );
-}
+// Helper owns custom-field input behavior.
 
 // Reset button for search term statistics
 jQuery( document ).ready( function() {

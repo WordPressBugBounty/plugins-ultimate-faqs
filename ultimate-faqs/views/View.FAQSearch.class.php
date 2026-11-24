@@ -25,47 +25,7 @@ class ewdufaqViewFAQSearch extends ewdufaqViewFAQs {
 	 * @since 2.0.0
 	 */
 	public function render() {
-		global $ewd_ufaq_controller;
-
-		// Add any dependent stylesheets or javascript
-		$this->enqueue_assets();
-
-		if ( empty( $this->show_on_load ) ) {
-			$this->faqs = array();
-		}
-		else {
-			$this->add_schema_data();
-		}
-
-		$this->set_faqs_options();
-
-		$this->create_faq_data();
-
-		// Add css classes to the slider
-		$this->classes = $this->get_classes();
-
-		ob_start();
-
-		$this->add_custom_styling();
-
-		$template = $this->find_template( 'faqs-search' );
-		if ( $template ) {
-			include( $template );
-		}
-
-		$template = $this->find_template( 'faqs' );
-		if ( $template ) {
-			include( $template );
-		}
-
-		$output = ob_get_clean();
-
-		if ( $ewd_ufaq_controller->settings->get_setting( 'display-style' ) == 'list' ){
-
-			$output = $this->replace_list_header( $output );
-		}
-
-		return apply_filters( 'ewd_ufaq_search_faqs_output', $output, $this );
+		return class_exists( 'ewdufaqEWDPHSearch', false ) ? ewdufaqEWDPHSearch::render( $this ) : ewdufaqBasicSearch::render( get_object_vars( $this ) );
 	}
 
 	/**
@@ -87,14 +47,7 @@ class ewdufaqViewFAQSearch extends ewdufaqViewFAQs {
 	 * @since 2.0.0
 	 */
 	public function maybe_print_search_submit() {
-		global $ewd_ufaq_controller;
-
-		if ( $ewd_ufaq_controller->settings->get_setting( 'auto-complete-titles' ) ) { return; }
-
-		$template = $this->find_template( 'faqs-search-submit' );
-		if ( $template ) {
-			include( $template );
-		}
+		if ( class_exists( 'ewdufaqEWDPHSearch', false ) ) { ewdufaqEWDPHSearch::maybe_print_search_submit( $this ); }
 	}
 
 	/**
@@ -108,13 +61,13 @@ class ewdufaqViewFAQSearch extends ewdufaqViewFAQs {
 			$classes,
 			array(
 				'ewd-ufaq-faq-list',
-				'ewd-ufaq-page-type-' . $ewd_ufaq_controller->settings->get_setting( 'page-type' ),
-				'ewd-ufaq-category-tabs-' . $ewd_ufaq_controller->settings->get_setting( 'category-tabs' ),
+				'ewd-ufaq-page-type-distinct',
+				'ewd-ufaq-category-tabs-',
 				'ewd-ufaq-search'
 			)
 		);
 
-		if ( $ewd_ufaq_controller->settings->get_setting( 'faq-category-accordion' ) or $ewd_ufaq_controller->settings->get_setting( 'category-tabs' ) ) {
+		if ( $ewd_ufaq_controller->settings->get_setting( 'faq-category-accordion' ) ) {
 			$classes[] = 'ewd-ufaq-faq-category-title-accordion';
 		}
 

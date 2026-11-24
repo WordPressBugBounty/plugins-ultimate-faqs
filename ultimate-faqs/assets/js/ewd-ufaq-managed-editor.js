@@ -362,14 +362,6 @@
 				.then( function() { setBusy( false ); endWrite(); } );
 		}
 
-		function moveFaq( id, offset ) {
-			if ( busy || isSaving || trashRequests.current[ id ] ) { return; }
-			var from = selectedIds.indexOf( id );
-			var to = from + offset;
-			if ( from < 0 || to < 0 || to >= selectedIds.length ) { return; }
-			var next = selectedIds.slice();
-			next.splice( from, 1 ); next.splice( to, 0, id ); setIds( next );
-		}
 
 		var selected = selectedIds.map( function( id, index ) {
 			var record = records[ id ];
@@ -386,8 +378,7 @@
 				partials[ id ] ? el( Notice, { status: 'warning', isDismissible: false }, partials[ id ].message,
 					el( Button, { isSecondary: true, disabled: busy || isSaving, onClick: function() { retryCategories( id ); } }, __( 'Retry category assignment', 'ultimate-faqs' ) ) ) : null,
 				el( 'div', { className: 'ewd-ufaq-managed-actions' },
-					config.canOrderFaqs ? el( Button, { isSmall: true, disabled: busy || isSaving || trashing[ id ] || index === 0, onClick: function() { moveFaq( id, -1 ); } }, __( 'Up', 'ultimate-faqs' ) ) : null,
-					config.canOrderFaqs ? el( Button, { isSmall: true, disabled: busy || isSaving || trashing[ id ] || index === selectedIds.length - 1, onClick: function() { moveFaq( id, 1 ); } }, __( 'Down', 'ultimate-faqs' ) ) : null,
+					typeof window.ewdUfaqManagedOrderControls === 'function' ? window.ewdUfaqManagedOrderControls( { id: id, index: index, ids: selectedIds, setIds: setIds, disabled: busy || isSaving || trashing[id] } ) : null,
 					el( Button, { isSmall: true, disabled: busy || isSaving || trashing[ id ], onClick: function() { removeFaq( id ); } }, __( 'Remove', 'ultimate-faqs' ) ),
 					record && record.can_delete ? el( Button, { isSmall: true, isDestructive: true, disabled: busy || isSaving || trashing[ id ], onClick: function() { setTrashId( id ); } }, trashing[ id ] ? __( 'Moving FAQ to Trash…', 'ultimate-faqs' ) : __( 'Move FAQ to Trash', 'ultimate-faqs' ) ) : null
 				)

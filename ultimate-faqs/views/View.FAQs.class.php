@@ -133,10 +133,7 @@ class ewdufaqViewFAQs extends ewdufaqView {
 		}
 		$output = ob_get_clean();
 
-		if ( $ewd_ufaq_controller->settings->get_setting( 'display-style' ) == 'list' ){
-
-			$output = $this->replace_list_header( $output );
-		}
+		$output = apply_filters( 'ewd_ufaq_rendered_list_output', $output, $this );
 
 		return apply_filters( 'ewd_ufaq_faqs_output', $output, $this );
 	}
@@ -179,12 +176,8 @@ class ewdufaqViewFAQs extends ewdufaqView {
 	 *
 	 * @since 2.0.0
 	 */
-	public function maybe_print_header() {
-		global $ewd_ufaq_controller;
-		
-		if ( $ewd_ufaq_controller->settings->get_setting( 'display-style' ) != 'list' ) { return; }
-		
-		echo '%list_header_placeholder%';
+	public function maybe_print_header()  {
+		echo apply_filters( 'ewd_ufaq_render_paid_element', '', 'maybe_print_header', $this );
 	}
 
 	/**
@@ -217,12 +210,7 @@ class ewdufaqViewFAQs extends ewdufaqView {
 
 			$args[ 'orderby' ] = $this->category_orderby;
 		}
-		elseif ( ! empty( $this->category_orderby ) ) {
-
-			$args[ 'meta_key' ] = 'ufaq_category_order';
-			$args[ 'orderby' ] = 'meta_value_num';
-
-		}
+		$args = apply_filters( 'ewd_ufaq_category_query_args', $args, $this );
 
 		$categories = get_terms( $args ); 
 
@@ -417,15 +405,8 @@ class ewdufaqViewFAQs extends ewdufaqView {
 	 *
 	 * @since 2.0.0
 	 */
-	public function maybe_print_pagination() {
-
-		if ( $this->max_page <= 1 ) { return; }
-
-		$template = $this->find_template( 'faqs-pagination' );
-		
-		if ( $template ) {
-			include( $template );
-		}
+	public function maybe_print_pagination()  {
+		echo apply_filters( 'ewd_ufaq_render_paid_element', '', 'maybe_print_pagination', $this );
 	}
 
 	/**
@@ -433,20 +414,8 @@ class ewdufaqViewFAQs extends ewdufaqView {
 	 *
 	 * @since 2.0.0
 	 */
-	public function replace_list_header( $output ) {
-
-		if ( $this->group_by_category ) { $template = $this->find_template( 'faqs-category-list-header' ); }
-		else { $template = $this->find_template( 'faqs-list-header' ); }
-		
-		ob_start();
-
-		if ( $template ) {
-			include( $template );
-		}
-
-		$list_header = ob_get_clean();
-
-		return str_replace( '%list_header_placeholder%', $list_header, $output );
+	public function replace_list_header( $output )  {
+		return class_exists( 'ewdufaqEWDPHPresentation', false ) ? ewdufaqEWDPHPresentation::replace_list_header( $this, $output ) : $output;
 	}
 
 	/**
@@ -502,8 +471,8 @@ class ewdufaqViewFAQs extends ewdufaqView {
 			$classes,
 			array(
 				'ewd-ufaq-faq-list',
-				'ewd-ufaq-page-type-' . $ewd_ufaq_controller->settings->get_setting( 'page-type' ),
-				'ewd-ufaq-category-tabs-' . $ewd_ufaq_controller->settings->get_setting( 'category-tabs' )
+				'ewd-ufaq-page-type-distinct',
+				'ewd-ufaq-category-tabs-'
 			)
 		);
 
@@ -563,7 +532,7 @@ class ewdufaqViewFAQs extends ewdufaqView {
 		$this->faq_count = count( $this->faqs );
 		$this->max_page = ceil( $this->faq_count / $this->faqs_per_page );
 
-		if ( ! $this->group_by_category and $ewd_ufaq_controller->settings->get_setting( 'display-style' ) != 'list' ) { return; }
+		if ( ! apply_filters( 'ewd_ufaq_needs_category_data', (bool) $this->group_by_category, $this ) ) { return; }
 
 		$args = array(
 			'taxonomy'		=> EWD_UFAQ_FAQ_CATEGORY_TAXONOMY,
@@ -575,12 +544,7 @@ class ewdufaqViewFAQs extends ewdufaqView {
 
 			$args[ 'orderby' ] = $this->category_orderby;
 		}
-		elseif ( ! empty( $this->category_orderby ) ) {
-
-			$args[ 'meta_key' ] = 'ufaq_category_order';
-			$args[ 'orderby' ] = 'meta_value_num';
-
-		}
+		$args = apply_filters( 'ewd_ufaq_category_query_args', $args, $this );
 
 		$categories = get_terms( $args ); 
 
@@ -716,7 +680,7 @@ class ewdufaqViewFAQs extends ewdufaqView {
 	public function display_category_toggle_symbol() {
 		global $ewd_ufaq_controller;
 
-		if ( empty( $ewd_ufaq_controller->settings->get_setting( 'styling-category-toggle-symbol' ) ) ) { return false; }
+		if ( ! $this->get_category_toggle_symbol() ) { return false; }
 
 		if ( empty( $ewd_ufaq_controller->settings->get_setting( 'faq-category-toggle' ) ) ) { return false; }
 
@@ -731,7 +695,7 @@ class ewdufaqViewFAQs extends ewdufaqView {
   	public function get_color_block_shape() {
   		global $ewd_ufaq_controller;
 
-  		return 'ewd-ufaq-' . $ewd_ufaq_controller->settings->get_setting( 'color-block-shape' );
+		return class_exists( 'ewdufaqEWDPHPresentation', false ) ? ewdufaqEWDPHPresentation::get_color_block_shape( $this ) : '';
   	}
 
   	/**
@@ -739,11 +703,9 @@ class ewdufaqViewFAQs extends ewdufaqView {
 	 *
 	 * @since 2.4.3
 	 */
-  	public function get_category_toggle_symbol() {
-  		global $ewd_ufaq_controller;
-
-  		return strtolower( $ewd_ufaq_controller->settings->get_setting( 'styling-category-toggle-symbol' ) );
-  	}
+	public function get_category_toggle_symbol()  {
+		return class_exists( 'ewdufaqEWDPHPresentation', false ) ? ewdufaqEWDPHPresentation::get_category_toggle_symbol( $this ) : '';
+	}
 
 	/**
 	 * Add in default options if not overwritten by shortcode attributes
@@ -789,80 +751,23 @@ class ewdufaqViewFAQs extends ewdufaqView {
 	 * @since 2.0.0
 	 */
 	public function enqueue_assets() {
-		global $ewd_ufaq_controller, $wp_scripts;
-
-		wp_enqueue_style( 'ewd-ufaq-rrssb' );
-		wp_enqueue_style( 'ewd-ufaq-jquery-ui' );
+		global $ewd_ufaq_controller;
 		wp_enqueue_style( 'ewd-ufaq-css' );
-		if ( $ewd_ufaq_controller->settings->get_setting( 'display-style' ) == 'minimalist' ) {
-			wp_enqueue_style( 'ewd-ufaq-minimalist' );
-		}
-
-		wp_enqueue_style( 'ewd-ufaq-rrssb' );
-		wp_enqueue_style( 'ewd-ufaq-jquery-ui' );
-
-		$handle = 'ewd-ufaq-js';
+		wp_enqueue_script( 'ewd-ufaq-js' );
 		$args = array(
-			'faq_accordion'         => isset( $this->faq_accordion ) ? $this->faq_accordion : $ewd_ufaq_controller->settings->get_setting( 'faq-accordion' ),
-			'category_accordion'    => isset( $this->category_accordion ) ? $this->category_accordion : $ewd_ufaq_controller->settings->get_setting( 'faq-category-accordion' ),
-			'faq_scroll'            => $ewd_ufaq_controller->settings->get_setting( 'scroll-to-top' ),
-			'reveal_effect'         => $ewd_ufaq_controller->settings->get_setting( 'reveal-effect' ),
-			'retrieving_results'    => $ewd_ufaq_controller->settings->get_setting( 'label-retrieving-results' ),
-			'highlight_search_term' => $ewd_ufaq_controller->settings->get_setting( 'highlight-search-term' ),
-			'save_search_terms'     => $ewd_ufaq_controller->settings->get_setting( 'save-search-terms' ),
-			'autocomplete_question' => $ewd_ufaq_controller->settings->get_setting( 'auto-complete-titles' ),
-			'question_titles'       => $this->get_faq_titles(),
-			'display_faq'           => 0,
-			'nonce'                 => wp_create_nonce( $handle ),
+			'faq_accordion' => isset( $this->faq_accordion ) ? $this->faq_accordion : $ewd_ufaq_controller->settings->get_setting( 'faq-accordion' ),
+			'category_accordion' => isset( $this->category_accordion ) ? $this->category_accordion : $ewd_ufaq_controller->settings->get_setting( 'faq-category-accordion' ),
+			'faq_scroll' => $ewd_ufaq_controller->settings->get_setting( 'scroll-to-top' ),
+			'display_faq' => 0,
+			'nonce' => wp_create_nonce( 'ewd-ufaq-js' ),
 		);
-
-		if ( ! empty( get_query_var( 'single_faq' ) ) ) {
-
+		if ( get_query_var( 'single_faq' ) ) {
 			$faq = get_page_by_path( get_query_var( 'single_faq' ), OBJECT, EWD_UFAQ_FAQ_POST_TYPE );
-			$args['display_faq'] = $faq->ID;
+			$args['display_faq'] = $faq instanceof WP_Post ? $faq->ID : 0;
+		} elseif ( isset( $_GET['Display_FAQ'] ) && is_scalar( $_GET['Display_FAQ'] ) ) {
+			$args['display_faq'] = absint( $_GET['Display_FAQ'] );
 		}
-		elseif ( isset( $_GET['Display_FAQ'] ) ) {
-			$args['display_faq'] = intval( $_GET['Display_FAQ'] );
-		}
-
-		// Fetch any existing script data
-		$prev_question_titles = $ewd_ufaq_controller->get_front_end_php_data( $handle, 'question_titles' );
-
-		if ( ! empty( $prev_question_titles ) ) {
-			$args['question_titles'] = array_merge( $prev_question_titles, $args['question_titles'] );
-			$args['question_titles'] = array_unique( $args['question_titles'] );
-		}
-
-		$ewd_ufaq_controller->add_front_end_php_data( $handle, 'question_titles', $args['question_titles'] );
-
-		wp_enqueue_script( $handle );
-		
-		$ewd_ufaq_controller->add_front_end_php_data( $handle, 'ewd_ufaq_php_data', apply_filters( 'ewd_ufaq_js_localize_data', $args ) );
-
-		wp_enqueue_script( 'jquery-ui-core' );
-
-		if ( $ewd_ufaq_controller->settings->get_setting( 'auto-complete-titles' ) ) {
-
-			wp_enqueue_script( 'jquery-ui-autocomplete' );
-		}
-
-		if ( $ewd_ufaq_controller->settings->get_setting( 'reveal-effect' ) != 'none' ) {
-
-			wp_enqueue_script( 'jquery-effects-core' );
-			wp_enqueue_script( 'jquery-ui-autocomplete' );
-
-			if ( $ewd_ufaq_controller->settings->get_setting( 'reveal-effect' ) == 'blind' ) { wp_enqueue_script( 'jquery-effects-blind' ); }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'reveal-effect' ) == 'bounce' ) { wp_enqueue_script( 'jquery-effects-bounce' ); }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'reveal-effect' ) == 'clip' ) { wp_enqueue_script( 'jquery-effects-clip' ); }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'reveal-effect' ) == 'drop' ) { wp_enqueue_script( 'jquery-effects-drop' ); }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'reveal-effect' ) == 'explode' ) { wp_enqueue_script( 'jquery-effects-explode' ); }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'reveal-effect' ) == 'fade' ) { wp_enqueue_script( 'jquery-effects-fade' ); }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'reveal-effect' ) == 'fold' ) { wp_enqueue_script( 'jquery-effects-fold' ); }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'reveal-effect' ) == 'highlight' ) { wp_enqueue_script( 'jquery-effects-highlight' ); }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'reveal-effect' ) == 'pulsate' ) { wp_enqueue_script( 'jquery-effects-pulsate' ); }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'reveal-effect' ) == 'shake' ) { wp_enqueue_script( 'jquery-effects-shake' ); }
-			if ( $ewd_ufaq_controller->settings->get_setting( 'reveal-effect' ) == 'slide' ) { wp_enqueue_script( 'jquery-effects-slide' ); }
-		}
-
+		$ewd_ufaq_controller->add_front_end_php_data( 'ewd-ufaq-js', 'ewd_ufaq_php_data', apply_filters( 'ewd_ufaq_js_localize_data', $args, $this ) );
+		do_action( 'ewd_ufaq_view_assets', $this );
 	}
 }

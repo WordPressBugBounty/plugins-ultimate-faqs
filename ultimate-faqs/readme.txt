@@ -3,7 +3,7 @@ Contributors: rustaurius
 Tags: faq, faqs, woocommerce faq, accordion, faq block
 Requires at least: 6.0
 Tested up to: 7.1
-Stable tag: 2.6.0
+Stable tag: 2.7.0
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -239,25 +239,16 @@ For more info on installing and activating the plugin, and on the walk-through, 
 
 == Changelog ==
 
-= 2.6.0 (2026-10-12) =
-- Added the ability to assign FAQ categories when creating FAQs directly in the Display FAQs block.
-- Added a separate "Move FAQ to Trash" action in the block editor, distinct from removing an FAQ from a page.
-- Improved FAQ library management and selection for sites with larger numbers of FAQs.
-- Improved validation, reliability, and error handling for FAQ import/export operations.
-- Updated Premium license validation and entitlement handling, including improved license status, recovery, and compatibility checks.
-- Improved preservation of existing FAQ content and settings when Premium access is unavailable.
-
-= 2.5.0 (2026-09-20) =
-- <strong>This is a major update with many changes, including some big changes. We suggest testing this update in a staging environment before updating your live environment. Or wait a few days before updating in the event that an issue is identified that requires a fix/new update.</strong>
-- Added the ability to create and manage FAQs directly in the Display FAQs block.
-- Added new local analytics functionality that can identify content gaps and use AI to suggest or automatically generate new FAQs to fill the gaps. You need to specify an AI provider in WP Settings > Connectors for this to work.
-- Updated the search functionality available in the free version.
-- Hardened public counters and AI Assist privacy, validation, and error handling.
-- Updated the bundled PhpSpreadsheet runtime to the PHP 7.4-compatible 1.30.6 security release and hardened CSV/XLS/XLSX imports.
+= 2.7.0 (2026-11-24) =
+- **If you are using the premium version, please make sure to also update the EWD Premium Helper plugin to version 0.3.1 at the same time.**
+- Several updates have been made to separate and streamline the functionality of the premium version via the EWD Premium Helper plugin.
+- The FAQ order table has been revamped to allow for setting an order number and to allow ordering of categories.
+- WooCommerce FAQ selection: Added paged search and category browsing for large libraries.
+- TranslatePress compatibility: Prevent language prefixes from incorrectly changing the licensed site identity.
 
 [See changelog for all versions](https://www.etoilewebdesign.com/changelogs/ultimate-faqs.txt).
 
 == Upgrade Notice ==
 
-= 2.6.0 =
-This update includes changes to the functionality that lets you create FAQs directly in the block, as well as to the interaction between this plugin and the Premium Helper. If you make use of this functionality in the block or your site uses the Premium Helper, we recommend testing the update on a staging site before updating your production site.
+= 2.7.0 =
+Several updates have been made to separate and streamline the functionality of the premium version via the EWD Premium Helper plugin. If you are using the premium version, please make sure to also update the EWD Premium Helper plugin to version 0.3.1 at the same time.

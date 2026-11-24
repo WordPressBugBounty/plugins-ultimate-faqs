@@ -97,6 +97,9 @@ class ewdufaqSettings {
 			if ( 'faq-order-by' === $setting && isset( $raw[ $setting ] ) && 'set_order' === $raw[ $setting ] ) {
 				$required = 'ordering';
 			}
+			if ( 'category-order-by' === $setting && isset( $raw[ $setting ] ) && 'manual' === $raw[ $setting ] ) {
+				$required = 'ordering';
+			}
 			if ( '' !== $required && is_object( $ewd_ufaq_controller ) && isset( $ewd_ufaq_controller->permissions )
 			&& ! $ewd_ufaq_controller->permissions->check_permission( $required ) ) {
 				return isset( $this->defaults[ $setting ] ) ? $this->defaults[ $setting ] : null;

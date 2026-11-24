@@ -17,8 +17,21 @@ if ( ! class_exists( 'ewdufaqHelperCompatibility' ) ) {
 
 			add_action( 'plugins_loaded', array( $this, 'refresh' ), 100 );
 			add_action( 'admin_notices', array( $this, 'display_admin_notice' ) );
+			add_action( 'admin_notices', array( $this, 'display_obsolete_package_notice' ) );
 
 			$this->refresh();
+		}
+		/** Detect known remnants only; never execute or automatically delete customer files. */
+		public function display_obsolete_package_notice() {
+			if ( ! current_user_can( 'manage_options' ) || ! function_exists( 'get_current_screen' ) ) { return; }
+			$screen = get_current_screen();
+			if ( ! $screen || ( 'plugins' !== $screen->id && EWD_UFAQ_FAQ_POST_TYPE !== $screen->post_type && false === strpos( $screen->id, 'ewd-ufaq' ) ) ) { return; }
+			foreach ( array( 'includes/WooCommerce.class.php', 'includes/WPForms.class.php', 'includes/OrderingTable.class.php', 'views/View.SubmitFAQ.class.php', 'lib/PHPSpreadsheet/vendor/autoload.php', 'lib/FPDF/fpdf.php', 'assets/js/ewd-ufaq-analytics.js', 'assets/js/ewd-ufaq-wc-admin.js', 'assets/css/ewd-ufaq-minimalist.css', 'assets/css/jquery-ui.min.css', 'ewd-ufaq-templates/faq-ratings.php', 'ewd-ufaq-templates/submit-faq.php' ) as $file ) {
+				if ( is_file( EWD_UFAQ_PLUGIN_DIR . '/' . $file ) ) {
+					echo '<div class="notice notice-warning"><p>' . esc_html__( 'Ultimate FAQs contains obsolete files from an earlier version. Back up the site, then replace the complete ultimate-faqs plugin directory with the approved release ZIP instead of merging files. Keep uploads and theme overrides. Ask your host to reset its PHP opcode cache if necessary. No files have been deleted automatically.', 'ultimate-faqs' ) . '</p></div>';
+					return;
+				}
+			}
 		}
 
 		/**
@@ -84,6 +97,16 @@ if ( ! class_exists( 'ewdufaqHelperCompatibility' ) ) {
 			if ( empty( $helper_descriptor ) || ! is_array( $helper_descriptor ) ) {
 
 				return array( 'state' => 'active_legacy_no_descriptor' );
+			}
+			foreach ( array( 'api_version', 'supported_free_api_min', 'supported_free_api_max', 'entitlement_contract_version' ) as $field ) {
+				if ( ! isset( $helper_descriptor[ $field ] ) || ! is_int( $helper_descriptor[ $field ] ) || $helper_descriptor[ $field ] < 1 ) {
+					return array( 'state' => 'unsupported_entitlement_contract' );
+				}
+			}
+			if ( ! isset( $helper_descriptor['plugin_version'] ) || ! is_string( $helper_descriptor['plugin_version'] )
+				|| ! preg_match( '/^[0-9]+\.[0-9]+\.[0-9]+(?:[-+][A-Za-z0-9.-]+)?$/', $helper_descriptor['plugin_version'] )
+				|| $helper_descriptor['supported_free_api_min'] > $helper_descriptor['supported_free_api_max'] ) {
+				return array( 'state' => 'unsupported_entitlement_contract' );
 			}
 
 			$helper_version = isset( $helper_descriptor['plugin_version'] ) ? $helper_descriptor['plugin_version'] : '0';

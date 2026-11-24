@@ -8,6 +8,12 @@ if ( !defined( 'ABSPATH' ) )
 
 if ( !class_exists( 'ewdufaqAIAssist' ) ) {
 class ewdufaqAIAssist {
+	public static function limits( $operation ) {
+		$defaults = array( 'sources' => 1, 'faqs' => 1 );
+		$limits = apply_filters( 'ewd_ufaq_legacy_ai_limits', $defaults, $operation );
+		foreach ( $defaults as $key => $value ) { if ( ! is_array( $limits ) || ! isset( $limits[ $key ] ) || ! is_int( $limits[ $key ] ) || $limits[ $key ] < 1 ) { return $defaults; } }
+		return array_intersect_key( $limits, $defaults );
+	}
 
 	public function __construct() {
 
@@ -40,6 +46,7 @@ class ewdufaqAIAssist {
 		global $ewd_ufaq_controller;
 
 		if ( ! isset( $post_type ) or $post_type != EWD_UFAQ_FAQ_POST_TYPE ) { return; }
+		$limits = self::limits( 'render' );
 
 		$args = array(
 			'posts_per_page'	=> -1,
@@ -95,7 +102,7 @@ class ewdufaqAIAssist {
 
 						<select id='ewd-ufaq-ai-faqs-count'>
 
-							<?php for ( $i = 1; $i <= ( ! $ewd_ufaq_controller->permissions->check_permission( 'premium' ) ? 1 : 20 ) ; $i++ ) { ?>
+							<?php for ( $i = 1; $i <= $limits['faqs']; $i++ ) { ?>
 
 								<option value='<?php echo $i; ?>'>
 									<?php echo $i; ?>
@@ -105,7 +112,7 @@ class ewdufaqAIAssist {
 
 						</select>
 
-						<?php if ( ! $ewd_ufaq_controller->permissions->check_permission( 'premium' ) ) { ?>
+						<?php if ( 1 === $limits['faqs'] ) { ?>
 
 							<div class='ewd-ufaq-ai-no-premium-explanation'>
 								The premium version of the Ultimate FAQ plugin is required to generate more than 1 FAQ and to use more than 1 post's content. <a href="https://www.etoilewebdesign.com/license-payment/?Selected=UFAQ&Quantity=1&utm_source=ufaq_admin&utm_content=ai_modal" target="_blank"><?php _e( 'Purchase here', 'ultimate-faqs' ); ?></a>.
@@ -121,7 +128,7 @@ class ewdufaqAIAssist {
 							<?php _e( 'Page Content to Condense', 'ultimate-faqs' ); ?>
 						</label>
 
-						<select id='ewd-ufaq-ai-faqs-content' <?php echo ( $ewd_ufaq_controller->permissions->check_permission( 'premium' ) ? 'multiple=\'multiple\'' : '' ); ?>>
+						<select id='ewd-ufaq-ai-faqs-content' <?php echo $limits['sources'] > 1 ? 'multiple="multiple"' : ''; ?>>
 
 							<?php foreach ( $content_options as $post_type => $posts ){ ?>
 
@@ -231,10 +238,10 @@ class ewdufaqAIAssist {
 			wp_send_json_error( array( 'error' => __( 'Confirm the external content transfer before generating FAQs.', 'ultimate-faqs' ) ), 400 );
 		}
 
-		$is_premium = $ewd_ufaq_controller->permissions->check_permission( 'premium' );
+		$limits = self::limits( 'retrieve' );
 		$selected_posts = array_values( array_unique( array_filter( array_map( 'absint', $selected_raw ) ) ) );
-		$selected_posts = array_slice( $selected_posts, 0, $is_premium ? 20 : 1 );
-		$faq_count = min( max( 1, isset( $_POST['faq_count'] ) ? absint( $_POST['faq_count'] ) : 1 ), $is_premium ? 20 : 1 );
+		$selected_posts = array_slice( $selected_posts, 0, $limits['sources'] );
+		$faq_count = min( max( 1, isset( $_POST['faq_count'] ) ? absint( $_POST['faq_count'] ) : 1 ), $limits['faqs'] );
 		$set_categories = isset( $_POST['set_categories'] ) && 'yes' === sanitize_text_field( wp_unslash( $_POST['set_categories'] ) );
 
 		if ( empty( $selected_posts ) ) {
@@ -398,7 +405,8 @@ class ewdufaqAIAssist {
 			wp_send_json_error( array( 'error' => __( 'You are not allowed to publish FAQs.', 'ultimate-faqs' ) ), 403 );
 		}
 
-		$limit = $ewd_ufaq_controller->permissions->check_permission( 'premium' ) ? 20 : 1;
+		$limits = self::limits( 'publish' );
+		$limit = $limits['faqs'];
 		$faqs = array_slice( $this->sanitize_faqs( $faqs_raw ), 0, $limit );
 		foreach ( $faqs as $faq ) {
 

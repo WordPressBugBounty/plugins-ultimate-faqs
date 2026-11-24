@@ -12,8 +12,7 @@ class ewdufaqNotifications {
 
 	public function __construct() {
 		
-		add_action( 'ewd_ufaq_insert_faq', array( $this, 'admin_notification_email' ) );
-		add_action( 'ewd_ufaq_insert_faq', array( $this, 'user_submission_email' ) );
+		// Public compatibility facade; Helper owns paid mail hooks and implementation.
 	}
 
 	/**
@@ -21,40 +20,8 @@ class ewdufaqNotifications {
 	 *
 	 * @since 2.0.0
 	 */
-	public function admin_notification_email( $faq ) {
-		global $ewd_ufaq_controller;
-
-		if ( ! $ewd_ufaq_controller->settings->get_setting( 'admin-question-notification' ) ) { return; }
-
-		$admin_emails = $ewd_ufaq_controller->settings->get_setting( 'admin-notification-email' ) ? explode( ',', $ewd_ufaq_controller->settings->get_setting( 'admin-notification-email' ) ) : (array) get_option( 'admin_email' );
-	
-		$faq_link = site_url() . '/wp-admin/post.php?post=' . $faq->ID . '&action=edit';
-	
-		$subject_line = __( 'New Question Received', 'ultimate-faqs' );
-	
-		$message_body = __( 'Hello Admin,', 'ultimate-faqs' ) . '<br/><br/>';
-		$message_body .= __( 'You\'ve received a new question titled ', 'ultimate-faqs' ) . $faq->question . '.<br/><br/>';
-		
-		if ( ! empty( $faq->answer ) ) {
-
-			$message_body .= __( 'The answer reads:<br>', 'ultimate-faqs' );
-			$message_body .= esc_html( $faq->answer ) . '<br><br><br>';
-		}
-		
-		$message_body .= __( 'You can view the question in the admin area by going to the following link:<br>', 'ultimate-faqs' );
-		$message_body .= '<a href=\'' . $faq_link . '\'>' . __( 'See the FAQ', 'ultimate-faqs' ) . '</a><br/><br/>';
-		$message_body .= __( 'Have a great day,', 'ultimate-faqs' ) . '<br/><br/>';
-		$message_body .= __( 'Ultimate FAQs Team', 'ultimate-faqs' );
-	
-		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
-
-			$success = false;
-		foreach ( $admin_emails as $admin_email ) {
-
-			$success = wp_mail( $admin_email, $subject_line, $message_body, $headers );
-		}
-
-		return $success;
+	public function admin_notification_email( $faq )  {
+		return class_exists( 'ewdufaqEWDPHSubmissionNotifications', false ) ? ewdufaqEWDPHSubmissionNotifications::admin_notification_email( $this, $faq ) : false;
 	}
 
 	/**
@@ -62,45 +29,8 @@ class ewdufaqNotifications {
 	 *
 	 * @since 2.0.0
 	 */
-	public function user_submission_email( $faq ) {
-		global $ewd_ufaq_controller;
-
-		if ( ! $ewd_ufaq_controller->settings->get_setting( 'submit-faq-email' ) ) { return; }
-
-		$params = array(
-			'email_id' => $ewd_ufaq_controller->settings->get_setting( 'submit-faq-email' ),
-			'email_address' => $faq->faq_author_email,
-			'post_id' => $faq->ID
-		);
-		
-		if ( function_exists( 'ewd_uwpm_send_email' ) ) {
-			 
-			ewd_uwpm_send_email( $params );
-		}
-		else {
-
-			$author_emails = $faq->faq_author_email ? explode( ',', $faq->faq_author_email ) : array();
-	
-			$subject_line = apply_filters( 'ewd_ufaq_user_question_submitted_subject_line', __( 'New Question', 'ultimate-faqs' ) );
-
-			$message_body = __( 'Hello,', 'ultimate-faqs' ) . '<br/><br/>';
-			$message_body .= sprintf( __( 'Thank you for submitting your FAQ, %s. ', 'ultimate-faqs' ), $faq->question ) . '<br/><br/>';
-			$message_body .= get_bloginfo( 'name' );
-
-			$message_body = apply_filters( 'ewd_ufaq_user_question_submitted_message_body', $message_body );
-
-			$headers = array( 'Content-Type: text/html; charset=UTF-8' );
-
-				$success = false;
-			foreach ( $author_emails as $author_email ) {
-
-				if ( ! filter_var( $author_email, FILTER_VALIDATE_EMAIL ) ) { continue;}
-
-				$success = wp_mail( $author_email, $subject_line, $message_body, $headers );
-			}
-
-			return $success;
-		}
+	public function user_submission_email( $faq )  {
+		return class_exists( 'ewdufaqEWDPHSubmissionNotifications', false ) ? ewdufaqEWDPHSubmissionNotifications::user_submission_email( $this, $faq ) : false;
 	}
 
 	/**
@@ -108,29 +38,8 @@ class ewdufaqNotifications {
 	 *
 	 * @since 2.4.0
 	 */
-	public function user_question_updated( $faq ) {
-
-		$author_emails = $faq->faq_author_email ? explode( ',', $faq->faq_author_email ) : array();
-	
-		$subject_line = apply_filters( 'ewd_ufaq_user_question_answered_subject_line', __( 'New Question Answer', 'ultimate-faqs' ) );
-	
-		$message_body = __( 'Hello,', 'ultimate-faqs' ) . '<br/><br/>';
-		$message_body .= sprintf( __( 'Your FAQ, %s, has received a new question answer: ', 'ultimate-faqs' ), $faq->question ) . '<br/><br/>' . $faq->answer . '<br/><br/>';
-		$message_body .= __( 'Thank You,', 'ultimate-faqs' ) . '<br/><br/>';
-
-		$message_body = apply_filters( 'ewd_ufaq_user_question_answered_message_body', $message_body, $faq );
-
-		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
-
-			$success = false;
-		foreach ( $author_emails as $author_email ) {
-
-			if ( ! filter_var( $author_email, FILTER_VALIDATE_EMAIL ) ) { continue;}
-
-			$success = wp_mail( $author_email, $subject_line, $message_body, $headers );
-		}
-
-		return $success;
+	public function user_question_updated( $faq )  {
+		return class_exists( 'ewdufaqEWDPHSubmissionNotifications', false ) ? ewdufaqEWDPHSubmissionNotifications::user_question_updated( $this, $faq ) : false;
 	}
 }
 } // endif;

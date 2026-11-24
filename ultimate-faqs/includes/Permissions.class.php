@@ -124,6 +124,8 @@ if ( ! class_exists( 'ewdufaqPermissions' ) ) {
 			$capability = self::setting_permission( $setting );
 			if ( 'faq-order-by' === $setting && 'set_order' === $value ) {
 				$capability = 'ordering'; }
+			if ( 'category-order-by' === $setting && 'manual' === $value ) {
+				$capability = 'ordering'; }
 			return '' !== $capability && ! $this->check_permission( $capability ) ? $fallback : $value;
 		}
 

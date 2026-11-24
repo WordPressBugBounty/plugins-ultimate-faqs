@@ -6,7 +6,7 @@
 
 	<?php $this->maybe_print_faq_preview(); ?>
 
-	<div class='ewd-ufaq-faq-body<?php echo ( ! $this->display_all_answers ? ' ewd-ufaq-hidden' : '' ); ?><?php echo ( $ewd_ufaq_controller->settings->get_setting( 'compact-faq-meta' ) ? ' ewd-ufaq-compact-faq-meta' : '' ); ?>' >
+	<div <?php echo ewd_format_classes( $this->get_body_classes() ); ?>>
 
 		<?php foreach ( $this->get_order_elements() as $element => $label ) { ?>
 
