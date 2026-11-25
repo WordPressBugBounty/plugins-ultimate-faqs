@@ -3,7 +3,7 @@
  * Plugin Name: Ultimate FAQ Accordion Plugin
  * Plugin URI: https://www.etoilewebdesign.com/plugins/ultimate-faq/
  * Description: Full-featured FAQ and accordion plugin with advanced search, simple UI and easy-to-use Gutenberg blocks and shortcodes.
- * Version: 2.7.0
+ * Version: 2.7.1
  * Author: Etoile Web Design
  * Author URI: https://www.etoilewebdesign.com/
  * License: GPLv3
@@ -66,7 +66,7 @@ class ewdufaqInit {
 		define( 'EWD_UFAQ_PLUGIN_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
 		define( 'EWD_UFAQ_PLUGIN_FNAME', plugin_basename( __FILE__ ) );
 		define( 'EWD_UFAQ_TEMPLATE_DIR', 'ewd-ufaq-templates' );
-			define( 'EWD_UFAQ_VERSION', '2.7.0' );
+			define( 'EWD_UFAQ_VERSION', '2.7.1' );
 			define( 'EWD_UFAQ_HELPER_API_VERSION', 3 );
 			define( 'EWD_UFAQ_MIN_HELPER_VERSION', '0.3.0' );
 			define( 'EWD_UFAQ_MAX_HELPER_API_VERSION', 3 );
@@ -90,6 +90,7 @@ class ewdufaqInit {
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/Ajax.class.php' );
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/AnalyticsBridge.class.php' );
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/BasicSearch.class.php' );
+		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/BlackFriday2026Notice.class.php' );
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/Blocks.class.php' );
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/Patterns.class.php' );
 		require_once( EWD_UFAQ_PLUGIN_DIR . '/includes/CustomPostTypes.class.php' );
@@ -122,6 +123,7 @@ class ewdufaqInit {
 	protected function instantiate() {
 
 		new ewdufaqDashboard();
+		new ewdufaqBlackFriday2026Notice();
 		new ewdufaqDeactivationSurvey();
 		new ewdufaqInstallationWalkthrough();
 		new ewdufaqReviewAsk();

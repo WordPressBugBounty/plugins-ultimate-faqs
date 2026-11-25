@@ -3,7 +3,7 @@ Contributors: rustaurius
 Tags: faq, faqs, woocommerce faq, accordion, faq block
 Requires at least: 6.0
 Tested up to: 7.1
-Stable tag: 2.7.0
+Stable tag: 2.7.1
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -238,6 +238,9 @@ For more info on installing and activating the plugin, and on the walk-through, 
 - [Our Support Center](https://www.etoilewebdesign.com/support-center/)
 
 == Changelog ==
+
+= 2.7.1 (2026-11-25) =
+- Update for premium helper compatibility. 
 
 = 2.7.0 (2026-11-24) =
 - **If you are using the premium version, please make sure to also update the EWD Premium Helper plugin to version 0.3.1 at the same time.**
